@@ -77,17 +77,21 @@ export default function SellerChatsPage() {
       fetchMessages(selectedChat._id);
       
       // Subscribe to Pusher
-      const channel = pusherClient.subscribe(`conversation-${selectedChat._id}`);
-      channel.bind("new-message", (data: Message) => {
-        setMessages((prev) => [...prev, data]);
-        // Update last message in the list
-        setConversations(prev => prev.map(c => 
-          c._id === selectedChat._id ? { ...c, lastMessage: data.message, updatedAt: new Date().toISOString() } : c
-        ).sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()));
-      });
+      if (pusherClient) {
+        const channel = pusherClient.subscribe(`conversation-${selectedChat._id}`);
+        channel.bind("new-message", (data: Message) => {
+          setMessages((prev) => [...prev, data]);
+          // Update last message in the list
+          setConversations(prev => prev.map(c => 
+            c._id === selectedChat._id ? { ...c, lastMessage: data.message, updatedAt: new Date().toISOString() } : c
+          ).sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()));
+        });
+      }
 
       return () => {
-        pusherClient.unsubscribe(`conversation-${selectedChat._id}`);
+        if (pusherClient) {
+          pusherClient.unsubscribe(`conversation-${selectedChat._id}`);
+        }
       };
     }
   }, [selectedChat]);

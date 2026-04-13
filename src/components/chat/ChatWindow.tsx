@@ -65,14 +65,18 @@ export default function ChatWindow({
     fetchMessages();
 
     // Subscribe to Pusher channel
-    const channel = pusherClient.subscribe(`conversation-${conversationId}`);
-    channel.bind("new-message", (data: Message) => {
-      setMessages((prev) => [...prev, data]);
-      scrollToBottom();
-    });
+    if (pusherClient) {
+      const channel = pusherClient.subscribe(`conversation-${conversationId}`);
+      channel.bind("new-message", (data: Message) => {
+        setMessages((prev) => [...prev, data]);
+        scrollToBottom();
+      });
+    }
 
     return () => {
-      pusherClient.unsubscribe(`conversation-${conversationId}`);
+      if (pusherClient) {
+        pusherClient.unsubscribe(`conversation-${conversationId}`);
+      }
     };
   }, [conversationId]);
 
