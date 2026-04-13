@@ -1,0 +1,55 @@
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: shopix_mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    restart: always
+
+  nextjs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - MONGODB_URL
+        - JWT_SECRET
+        - Refresh_Key
+        - GMAIL
+        - PASSWORD
+        - NEXTAUTH_URL
+        - NEXTAUTH_SECRET
+        - GOOGLE_CLIENT_ID
+        - GOOGLE_CLIENT_SECRET
+        - CLOUDINARY_CLOUD_NAME
+        - CLOUDINARY_API_KEY
+        - CLOUDINARY_API_SECRET
+        - STRIPE_PUBLISH_KEY
+        - STRIPE_SECRET_KEY
+        - NEXT_PUBLIC_STRIPE_PUBLISH_KEY
+        - GROQ_API_KEY
+        - ADMIN_EMAIL
+        - ADMIN_PASSWORD
+        - UPSTASH_REDIS_REST_URL
+        - UPSTASH_REDIS_REST_TOKEN
+        - app_id
+        - key
+        - secret
+        - cluster
+        - NEXT_PUBLIC_PUSHER_KEY
+        - NEXT_PUBLIC_PUSHER_CLUSTER
+    container_name: shopix_app
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    environment:
+      - MONGODB_URL=${MONGODB_URL}
+      - NEXTAUTH_URL=${NEXTAUTH_URL}
+    depends_on:
+      - mongodb
+    restart: always
+
+volumes:
+  mongodb_data:

@@ -1,0 +1,17 @@
+node_modules
+.next
+.git
+.env
+.ipynb_checkpoints
+Dockerfile
+docker-compose.yml
+README.md
+.gitignore
+.prettierrc
+.prettierignore
+eslint.config.mjs
+jest.config.ts
+playwright.config.ts
+tests
+playwright-report
+test-results

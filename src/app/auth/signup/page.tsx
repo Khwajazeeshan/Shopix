@@ -1,0 +1,273 @@
+"use client";
+import React from "react";
+import Link from "next/link";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import { FiEye, FiEyeOff } from "react-icons/fi";
+import { signIn } from "next-auth/react";
+import { ArrowLeft, ShoppingBag, X } from "lucide-react";
+
+type FormData = {
+    name: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+    role: string;
+    acceptedTerms: boolean;
+};
+
+export default function Signup() {
+    const router = useRouter();
+    const [showPassword, setShowPassword] = React.useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
+    const [showTermsModal, setShowTermsModal] = React.useState(false);
+    const [modalType, setModalType] = React.useState<"terms" | "privacy">("terms");
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors, isSubmitting },
+    } = useForm<FormData>();
+
+    const onSubmit = async (data: FormData) => {
+        try {
+            if (data.password !== data.confirmPassword) {
+                return toast.error("Passwords do not match");
+            }
+            const response = await axios.post("/api/auth/signup", data);
+            if (response.data.success) {
+                toast.success(response.data.message);
+                window.location.href = "/auth/checkemail?type=signup";
+            } else {
+                toast.error(response.data.message);
+            }
+        } catch (error: any) {
+            toast.error(error.response?.data?.message || "Something went wrong during signup");
+        }
+    };
+
+    return (
+        <div className="min-h-screen relative flex items-center justify-center p-4 sm:p-6 lg:p-8 bg-background overflow-hidden font-sans">
+            {/* Background Decorations */}
+            <div className="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] bg-primary/20 blur-[120px] rounded-full point-events-none" />
+            <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-violet-500/20 blur-[120px] rounded-full point-events-none" />
+            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03] mix-blend-overlay" />
+
+            <div className="w-full max-w-lg relative z-10 animate-in fade-in slide-in-from-bottom-8 duration-700 py-10">
+                <Link 
+                    href="/" 
+                    className="absolute top-0 left-0 inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary transition-colors hover:-translate-x-1 duration-200"
+                >
+                    <ArrowLeft className="w-4 h-4" /> Back to Home
+                </Link>
+
+                <div className="bg-surface/80 backdrop-blur-xl border border-border rounded-3xl p-8 sm:p-10 shadow-2xl shadow-primary/5 mt-8">
+                    <div className="text-center mb-8">
+                        <Link href="/" className="inline-flex items-center justify-center w-14 h-14 bg-primary text-white rounded-2xl mb-6 shadow-lg shadow-primary/20">
+                            <ShoppingBag className="w-7 h-7" />
+                        </Link>
+                        <h1 className="text-3xl font-bold tracking-tight text-foreground mb-2">Create Account</h1>
+                        <p className="text-muted-foreground">Start your professional journey with Shopix Marketplace.</p>
+                    </div>
+
+                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                        <div className="space-y-1.5 focus-within:text-primary transition-colors">
+                            <label className="text-sm font-medium text-foreground">Full Name</label>
+                            <input
+                                placeholder="John Doe"
+                                className={`w-full bg-background border rounded-xl px-4 py-3 outline-none transition-all text-foreground ${
+                                    errors.name ? "border-destructive focus:ring-1 focus:ring-destructive" : "border-border focus:border-primary focus:ring-1 focus:ring-primary/50"
+                                }`}
+                                {...register("name", {
+                                    required: "Name is required",
+                                    minLength: { value: 3, message: "Min 3 characters" },
+                                })}
+                            />
+                            {errors.name?.message && <p className="text-destructive text-xs mt-1">{errors.name.message}</p>}
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="space-y-1.5 focus-within:text-primary transition-colors">
+                                <label className="text-sm font-medium text-foreground">Email Address</label>
+                                <input
+                                    placeholder="name@example.com"
+                                    className={`w-full bg-background border rounded-xl px-4 py-3 outline-none transition-all text-foreground ${
+                                        errors.email ? "border-destructive focus:ring-1 focus:ring-destructive" : "border-border focus:border-primary focus:ring-1 focus:ring-primary/50"
+                                    }`}
+                                    {...register("email", {
+                                        required: "Email is required",
+                                        pattern: {
+                                            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                            message: "Invalid email"
+                                        }
+                                    })}
+                                />
+                                {errors.email?.message && <p className="text-destructive text-xs mt-1">{errors.email.message}</p>}
+                            </div>
+
+                            <div className="space-y-1.5 focus-within:text-primary transition-colors">
+                                <label className="text-sm font-medium text-foreground">Account Role</label>
+                                <div className="relative">
+                                    <select 
+                                        className={`w-full bg-background border rounded-xl px-4 py-3 outline-none transition-all appearance-none text-foreground ${
+                                            errors.role ? "border-destructive focus:ring-1 focus:ring-destructive" : "border-border focus:border-primary focus:ring-1 focus:ring-primary/50"
+                                        }`}
+                                        {...register("role", { required: "Please select a role" })}
+                                    >
+                                        <option value="" disabled className="text-muted-foreground">Select Role</option>
+                                        <option value="customer" className="text-foreground bg-background">Customer</option>
+                                        <option value="seller" className="text-foreground bg-background">Seller</option>
+                                    </select>
+                                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-muted-foreground">
+                                        <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+                                    </div>
+                                </div>
+                                {errors.role?.message && <p className="text-destructive text-xs mt-1">{errors.role.message}</p>}
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="space-y-1.5 focus-within:text-primary transition-colors">
+                                <label className="text-sm font-medium text-foreground">Password</label>
+                                <div className="relative">
+                                    <input
+                                        type={showPassword ? "text" : "password"}
+                                        placeholder="••••••••"
+                                        className={`w-full bg-background border rounded-xl pl-4 pr-10 py-3 outline-none transition-all text-foreground ${
+                                            errors.password ? "border-destructive focus:ring-1 focus:ring-destructive" : "border-border focus:border-primary focus:ring-1 focus:ring-primary/50"
+                                        }`}
+                                        {...register("password", {
+                                            required: "Required",
+                                            minLength: { value: 6, message: "Min 6 chars" },
+                                        })}
+                                    />
+                                    <button 
+                                        type="button" 
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors p-1"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                    >
+                                        {showPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
+                                    </button>
+                                </div>
+                                {errors.password?.message && <p className="text-destructive text-xs mt-1">{errors.password.message}</p>}
+                            </div>
+
+                            <div className="space-y-1.5 focus-within:text-primary transition-colors">
+                                <label className="text-sm font-medium text-foreground">Confirm</label>
+                                <div className="relative">
+                                    <input
+                                        type={showConfirmPassword ? "text" : "password"}
+                                        placeholder="••••••••"
+                                        className={`w-full bg-background border rounded-xl pl-4 pr-10 py-3 outline-none transition-all text-foreground ${
+                                            errors.confirmPassword ? "border-destructive focus:ring-1 focus:ring-destructive" : "border-border focus:border-primary focus:ring-1 focus:ring-primary/50"
+                                        }`}
+                                        {...register("confirmPassword", { required: "Required" })}
+                                    />
+                                    <button 
+                                        type="button" 
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors p-1"
+                                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                    >
+                                        {showConfirmPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
+                                    </button>
+                                </div>
+                                {errors.confirmPassword?.message && <p className="text-destructive text-xs mt-1">{errors.confirmPassword.message}</p>}
+                            </div>
+                        </div>
+
+                        <div className="pt-2">
+                            <div className="flex items-start gap-3">
+                                <div className="flex items-center h-5 mt-0.5">
+                                    <input
+                                        type="checkbox"
+                                        id="acceptedTerms"
+                                        className="w-4 h-4 rounded border-border text-primary focus:ring-primary/50 bg-background transition-all cursor-pointer"
+                                        {...register("acceptedTerms", { required: "Terms must be accepted" })}
+                                    />
+                                </div>
+                                <label htmlFor="acceptedTerms" className="text-sm text-muted-foreground cursor-pointer leading-relaxed">
+                                    I accept the{" "}
+                                    <button 
+                                        type="button" 
+                                        className="text-primary hover:underline underline-offset-4 font-medium transition-all"
+                                        onClick={(e) => { e.preventDefault(); setModalType("terms"); setShowTermsModal(true); }}
+                                    >
+                                        Terms & Conditions
+                                    </button>
+                                    {" "}and{" "}
+                                    <button 
+                                        type="button" 
+                                        className="text-primary hover:underline underline-offset-4 font-medium transition-all"
+                                        onClick={(e) => { e.preventDefault(); setModalType("privacy"); setShowTermsModal(true); }}
+                                    >
+                                        Privacy Policy
+                                    </button>
+                                </label>
+                            </div>
+                            {errors.acceptedTerms?.message && <p className="text-destructive text-xs mt-1.5 ml-7">{errors.acceptedTerms.message}</p>}
+                        </div>
+
+                        <button 
+                            type="submit" 
+                            disabled={isSubmitting}
+                            className="w-full py-3.5 bg-foreground text-background font-bold text-base rounded-xl hover:bg-foreground/90 transition-all hover:shadow-lg active:scale-[0.98] disabled:opacity-70 flex justify-center mt-6"
+                        >
+                            {isSubmitting ? (
+                                <div className="w-6 h-6 rounded-full border-2 border-background/30 border-t-background animate-spin" />
+                            ) : "Get Started"}
+                        </button>
+                    </form>
+
+                    <p className="mt-8 text-center text-sm text-foreground">
+                        Already have an account?{" "}
+                        <Link href="/auth/login" className="text-primary font-bold hover:underline underline-offset-4 transition-all">
+                            Sign In
+                        </Link>
+                    </p>
+                </div>
+            </div>
+
+            {/* Terms Modal */}
+            {showTermsModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 opacity-100 transition-opacity">
+                    <div 
+                        className="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity" 
+                        onClick={() => setShowTermsModal(false)} 
+                    />
+                    <div className="relative bg-background rounded-2xl shadow-2xl w-full max-w-md overflow-hidden transform transition-all scale-100 opacity-100 flex flex-col">
+                        <div className="p-5 border-b border-border flex items-center justify-between bg-muted/20">
+                            <h2 className="text-lg font-bold text-foreground">
+                                {modalType === "terms" ? "Terms & Conditions" : "Privacy Policy"}
+                            </h2>
+                            <button 
+                                onClick={() => setShowTermsModal(false)} 
+                                className="p-2 flex items-center justify-center rounded-full hover:bg-muted text-muted-foreground transition-colors"
+                            >
+                                <X className="w-5 h-5" />
+                            </button>
+                        </div>
+                        <div className="p-6 space-y-4 text-muted-foreground text-sm leading-relaxed max-h-[60vh] overflow-y-auto">
+                            <p>This is a standard representation of the {modalType === 'terms' ? 'Terms & Conditions' : 'Privacy Policy'} for Shopix Marketplace.</p>
+                            <div className="space-y-3">
+                                <p><strong className="text-foreground font-semibold">1. Data Integrity:</strong> We prioritize your cryptographic safety and privacy.</p>
+                                <p><strong className="text-foreground font-semibold">2. Transaction Security:</strong> All marketplace logs are immutable and encrypted. Payment info is processed via Stripe securely.</p>
+                                <p><strong className="text-foreground font-semibold">3. User Conduct:</strong> By joining, you agree not to use systems for malicious traffic or false representations.</p>
+                                <p><strong className="text-foreground font-semibold">4. Liability:</strong> We are not responsible for account leaks due to weak passwords, though we enforce standard restrictions.</p>
+                            </div>
+                        </div>
+                        <div className="p-5 border-t border-border bg-muted/10 flex justify-end">
+                            <button 
+                                onClick={() => setShowTermsModal(false)}
+                                className="px-6 py-2.5 bg-foreground text-background font-semibold rounded-xl hover:bg-foreground/90 transition-colors"
+                            >
+                                Understood
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+}

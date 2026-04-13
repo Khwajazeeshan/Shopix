@@ -1,0 +1,1922 @@
+openapi: "3.0.0"
+info:
+  title: Shopix E-Commerce API
+  version: "1.0.0"
+  description: |
+    Full REST API documentation for the **Shopix** e-commerce platform.
+
+    ### Authentication
+    Most endpoints require a valid `Accesstoken` cookie set after login.
+    Pass credentials via the login endpoint — the server sets HttpOnly cookies automatically.
+
+  contact:
+    name: Shopix Support
+  license:
+    name: MIT
+
+servers:
+  - url: http://localhost:3000
+    description: Local Development
+
+tags:
+  - name: Auth
+    description: Registration, login, logout and account management
+  - name: User
+    description: Profile management
+  - name: Marketplace
+    description: Public product listing and search
+  - name: Products
+    description: Seller product management
+  - name: Cart
+    description: Shopping cart
+  - name: Wishlist
+    description: Saved / wishlist items
+  - name: Orders
+    description: Order placement and management
+  - name: Returns
+    description: Order return requests
+  - name: Reviews
+    description: Product reviews
+  - name: Store
+    description: Seller store management
+  - name: Chat
+    description: Real-time customer ↔ seller chat
+  - name: Notifications
+    description: In-app notifications
+  - name: Payments
+    description: Stripe payment intents
+  - name: Admin – Dashboard
+    description: Admin analytics overview
+  - name: Admin – Users
+    description: Admin user management
+  - name: Admin – Stores
+    description: Admin store review and management
+
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: Accesstoken
+
+  schemas:
+    # ─── Generic ─────────────────────────────────────────────
+    SuccessBoolean:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: string
+        message:
+          type: string
+
+    # ─── Auth ─────────────────────────────────────────────────
+    UserPublic:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        role:
+          type: string
+          enum: [customer, seller, admin]
+        isVerified:
+          type: boolean
+
+    # ─── Product ──────────────────────────────────────────────
+    Product:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        quantity:
+          type: integer
+        image:
+          type: string
+        storeId:
+          type: string
+        sellerId:
+          type: string
+        rating:
+          type: number
+        sold:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+
+    # ─── Cart ─────────────────────────────────────────────────
+    CartItem:
+      type: object
+      properties:
+        _id:
+          type: string
+        userId:
+          type: string
+        productId:
+          $ref: "#/components/schemas/Product"
+        createdAt:
+          type: string
+          format: date-time
+
+    # ─── Wishlist ─────────────────────────────────────────────
+    WishlistItem:
+      type: object
+      properties:
+        _id:
+          type: string
+        userId:
+          type: string
+        productId:
+          $ref: "#/components/schemas/Product"
+        createdAt:
+          type: string
+          format: date-time
+
+    # ─── Order ────────────────────────────────────────────────
+    Order:
+      type: object
+      properties:
+        _id:
+          type: string
+        userId:
+          type: string
+        storeId:
+          type: string
+        productId:
+          type: string
+        receiverName:
+          type: string
+        mobileNumber:
+          type: string
+        billingAddress:
+          type: string
+        quantity:
+          type: integer
+        totalAmount:
+          type: number
+        paymentMethod:
+          type: string
+          enum: [cash, stripe]
+        paymentStatus:
+          type: string
+          enum: [Pending, Paid]
+        status:
+          type: string
+          enum: [new, processing, shipped, completed, cancelled]
+        returnStatus:
+          type: string
+          enum: [none, processing, successful, failed]
+        createdAt:
+          type: string
+          format: date-time
+
+    # ─── Notification ─────────────────────────────────────────
+    Notification:
+      type: object
+      properties:
+        _id:
+          type: string
+        userId:
+          type: string
+        message:
+          type: string
+        type:
+          type: string
+          enum: [order, chat, store, return, admin]
+        link:
+          type: string
+        isRead:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+
+    # ─── Store ────────────────────────────────────────────────
+    Store:
+      type: object
+      properties:
+        _id:
+          type: string
+        sellerId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        type:
+          type: string
+        logo:
+          type: string
+        status:
+          type: string
+          enum: [pending, approved, rejected, frozen]
+        createdAt:
+          type: string
+          format: date-time
+
+    # ─── Conversation ─────────────────────────────────────────
+    Conversation:
+      type: object
+      properties:
+        _id:
+          type: string
+        customerId:
+          $ref: "#/components/schemas/UserPublic"
+        sellerId:
+          $ref: "#/components/schemas/UserPublic"
+        productId:
+          $ref: "#/components/schemas/Product"
+        lastMessage:
+          type: string
+        unreadCount:
+          type: integer
+        updatedAt:
+          type: string
+          format: date-time
+
+    # ─── Message ──────────────────────────────────────────────
+    Message:
+      type: object
+      properties:
+        _id:
+          type: string
+        conversationId:
+          type: string
+        senderId:
+          type: string
+        senderRole:
+          type: string
+          enum: [customer, seller]
+        message:
+          type: string
+        isRead:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+
+    # ─── Review ───────────────────────────────────────────────
+    Review:
+      type: object
+      properties:
+        _id:
+          type: string
+        productId:
+          type: string
+        userId:
+          type: object
+          properties:
+            _id:
+              type: string
+            name:
+              type: string
+        rating:
+          type: number
+          minimum: 1
+          maximum: 5
+        comment:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+
+# ═══════════════════════════════════════════════════════════════
+# PATHS
+# ═══════════════════════════════════════════════════════════════
+paths:
+
+  # ───────────────────────────────────────────────────────────
+  # AUTH
+  # ───────────────────────────────────────────────────────────
+  /api/auth/signup:
+    post:
+      tags: [Auth]
+      summary: Register a new user
+      description: Creates a new user account (customer or seller). Sends a verification email automatically. Rate-limited to 5 requests per IP per hour.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, email, password, role]
+              properties:
+                name:
+                  type: string
+                  example: John Doe
+                email:
+                  type: string
+                  format: email
+                  example: john@example.com
+                password:
+                  type: string
+                  format: password
+                  example: "Secret123!"
+                role:
+                  type: string
+                  enum: [customer, seller]
+                  example: customer
+      responses:
+        "201":
+          description: User created — check email to verify
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessBoolean"
+        "400":
+          description: Email already exists
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "429":
+          description: Too many requests (rate limited)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Internal server error
+
+  /api/auth/login:
+    post:
+      tags: [Auth]
+      summary: Login with email and password
+      description: Authenticates the user and sets `Accesstoken` (30 min) and `RefreshToken` (3 days) as HttpOnly cookies. Rate-limited to 5 attempts per IP+email per 12 hours.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: john@example.com
+                password:
+                  type: string
+                  format: password
+                  example: "Secret123!"
+      responses:
+        "200":
+          description: Login successful — auth cookies set
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  user:
+                    $ref: "#/components/schemas/UserPublic"
+        "401":
+          description: Incorrect password
+        "403":
+          description: Email not verified
+        "404":
+          description: User not found
+        "429":
+          description: Too many login attempts
+
+  /api/auth/logout:
+    get:
+      tags: [Auth]
+      summary: Logout current user
+      description: Clears the `Accesstoken` and `RefreshToken` cookies.
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: Logged out successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessBoolean"
+
+  /api/auth/verifyemail:
+    post:
+      tags: [Auth]
+      summary: Verify email or validate reset token
+      description: Verifies a user's email via a token from the verification link, or validates a password-reset token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [token]
+              properties:
+                token:
+                  type: string
+                  example: abc123verifytoken
+      responses:
+        "200":
+          description: Token valid (verify or forget type)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  type:
+                    type: string
+                    enum: [verify, forget]
+        "400":
+          description: Invalid or expired token
+
+  /api/auth/forgetpassword:
+    post:
+      tags: [Auth]
+      summary: Forgot password (3 modes)
+      description: |
+        Handles three flows based on the request body:
+        1. **Send reset link** – provide `email` only.
+        2. **Token-based reset** – provide `token` + `newPassword`.
+        3. **Admin direct reset** – provide `isAdminReset: true` + `newPassword` (requires admin cookie).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - title: Send Reset Email
+                  type: object
+                  required: [email]
+                  properties:
+                    email:
+                      type: string
+                      format: email
+                      example: john@example.com
+                - title: Token-based Reset
+                  type: object
+                  required: [token, newPassword]
+                  properties:
+                    token:
+                      type: string
+                    newPassword:
+                      type: string
+                      format: password
+                - title: Admin Direct Reset
+                  type: object
+                  required: [isAdminReset, newPassword]
+                  properties:
+                    isAdminReset:
+                      type: boolean
+                      example: true
+                    newPassword:
+                      type: string
+                      format: password
+      responses:
+        "201":
+          description: Reset email sent
+        "200":
+          description: Password updated successfully
+        "400":
+          description: Invalid or expired token / bad request
+        "403":
+          description: Admin only action
+        "404":
+          description: User not found
+
+  /api/auth/deleteaccount:
+    delete:
+      tags: [Auth]
+      summary: Delete own account
+      description: Permanently deletes the authenticated user's account after password verification. Admin accounts cannot be deleted.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [userId, password]
+              properties:
+                userId:
+                  type: string
+                  example: 64abc123def456
+                password:
+                  type: string
+                  format: password
+      responses:
+        "200":
+          description: Account deleted
+        "401":
+          description: Incorrect password
+        "403":
+          description: Admin accounts cannot be deleted
+        "404":
+          description: User not found
+
+  /api/auth/sync:
+    get:
+      tags: [Auth]
+      summary: Sync NextAuth session with JWT token
+      description: Used internally to sync OAuth session data with the custom JWT auth system.
+      responses:
+        "200":
+          description: Session synced
+
+  # ───────────────────────────────────────────────────────────
+  # USER PROFILE
+  # ───────────────────────────────────────────────────────────
+  /api/auth/user:
+    get:
+      tags: [User]
+      summary: Get current user profile
+      description: Returns the authenticated user's profile (password excluded).
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: User profile
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: "#/components/schemas/UserPublic"
+        "404":
+          description: User not found
+        "401":
+          description: Unauthorized
+
+    put:
+      tags: [User]
+      summary: Update current user profile
+      description: Updates the authenticated user's name and role.
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, role]
+              properties:
+                name:
+                  type: string
+                  example: Jane Doe
+                role:
+                  type: string
+                  enum: [customer, seller]
+      responses:
+        "200":
+          description: Profile updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: "#/components/schemas/UserPublic"
+        "400":
+          description: Name and role are required
+        "404":
+          description: User not found
+
+  # ───────────────────────────────────────────────────────────
+  # MARKETPLACE (PUBLIC)
+  # ───────────────────────────────────────────────────────────
+  /api/marketplace/products:
+    get:
+      tags: [Marketplace]
+      summary: Browse all public products
+      description: Returns products from approved stores only. Supports filtering, search and sorting. Max 50 results per call.
+      parameters:
+        - in: query
+          name: search
+          schema:
+            type: string
+          description: Full-text search across name, description & category
+        - in: query
+          name: category
+          schema:
+            type: string
+          description: Filter by category (case-insensitive exact match)
+        - in: query
+          name: minPrice
+          schema:
+            type: number
+          example: 0
+        - in: query
+          name: maxPrice
+          schema:
+            type: number
+          example: 1000000
+        - in: query
+          name: minRating
+          schema:
+            type: number
+          example: 0
+        - in: query
+          name: sort
+          schema:
+            type: string
+            enum: [price-asc, price-desc, newest, sold-desc, rating-desc]
+      responses:
+        "200":
+          description: List of products
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  count:
+                    type: integer
+                  products:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Product"
+        "500":
+          description: Internal server error
+
+  /api/marketplace/products/{id}:
+    get:
+      tags: [Marketplace]
+      summary: Get single product with reviews
+      description: Returns full product details plus all customer reviews. Cached for 5 minutes (ISR).
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: MongoDB product ID
+      responses:
+        "200":
+          description: Product details with reviews
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      product:
+                        $ref: "#/components/schemas/Product"
+                      reviews:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Review"
+        "404":
+          description: Product not found
+
+  # ───────────────────────────────────────────────────────────
+  # SELLER – PRODUCTS
+  # ───────────────────────────────────────────────────────────
+  /api/products:
+    get:
+      tags: [Products]
+      summary: Get seller's own products
+      description: Returns all products belonging to the authenticated seller's store.
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: List of seller products
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  products:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Product"
+        "401":
+          description: Unauthorized
+        "404":
+          description: Store not found
+
+    post:
+      tags: [Products]
+      summary: Create a new product
+      description: Adds a product to the seller's approved store. Accepts `multipart/form-data` with an image file.
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [name, description, price, quantity, image]
+              properties:
+                name:
+                  type: string
+                  example: Wireless Headphones
+                description:
+                  type: string
+                  maxLength: 25
+                  example: Clear sound quality
+                price:
+                  type: number
+                  example: 4999
+                quantity:
+                  type: integer
+                  example: 50
+                image:
+                  type: string
+                  format: binary
+      responses:
+        "201":
+          description: Product created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: "#/components/schemas/Product"
+        "400":
+          description: Validation error (e.g. description > 25 chars)
+        "401":
+          description: Unauthorized
+        "403":
+          description: Seller must have an approved store
+
+  /api/products/{id}:
+    put:
+      tags: [Products]
+      summary: Update a product
+      description: Updates fields of an existing product. Only the owning seller can update. Accepts `multipart/form-data`; image field is optional.
+      security:
+        - cookieAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                  maxLength: 25
+                price:
+                  type: number
+                quantity:
+                  type: integer
+                image:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: Product updated
+        "400":
+          description: Validation error
+        "401":
+          description: Unauthorized
+        "404":
+          description: Product not found
+
+    delete:
+      tags: [Products]
+      summary: Delete a product (or all products)
+      description: |
+        - Pass a valid **MongoDB ID** to delete a single product.
+        - Pass `all` as the ID to delete **all** products in the seller's store (requires password confirmation in body).
+        - Admins can delete any product by ID without password.
+      security:
+        - cookieAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Product MongoDB ID, or the literal string `all`
+      requestBody:
+        description: Required only when id is `all`
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  format: password
+      responses:
+        "200":
+          description: Product(s) deleted
+        "400":
+          description: Password required (for bulk delete)
+        "401":
+          description: Incorrect password / Unauthorized
+        "404":
+          description: Product or store not found
+
+  # ───────────────────────────────────────────────────────────
+  # CART
+  # ───────────────────────────────────────────────────────────
+  /api/cart:
+    get:
+      tags: [Cart]
+      summary: Get current user's cart
+      description: Returns all cart items for the authenticated user, with product and store details populated.
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: Cart items
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/CartItem"
+
+    post:
+      tags: [Cart]
+      summary: Add product to cart
+      description: Adds a product to the user's cart. Returns an error if already added.
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [productId]
+              properties:
+                productId:
+                  type: string
+                  example: 64abc123def456
+      responses:
+        "201":
+          description: Added to cart
+        "400":
+          description: Product already in cart / Product ID required
+
+    delete:
+      tags: [Cart]
+      summary: Remove item from cart
+      description: Removes a specific cart item by its item ID (not product ID).
+      security:
+        - cookieAuth: []
+      parameters:
+        - in: query
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Cart item `_id`
+      responses:
+        "200":
+          description: Item removed
+        "400":
+          description: Item ID required
+
+  # ───────────────────────────────────────────────────────────
+  # WISHLIST
+  # ───────────────────────────────────────────────────────────
+  /api/wishlist:
+    get:
+      tags: [Wishlist]
+      summary: Get wishlist items
+      description: Returns all wishlist items for the authenticated user.
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: Wishlist items
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/WishlistItem"
+
+    post:
+      tags: [Wishlist]
+      summary: Toggle wishlist item
+      description: Adds the product to the wishlist if not present. If already present, **removes** it (toggle behaviour).
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [productId]
+              properties:
+                productId:
+                  type: string
+      responses:
+        "201":
+          description: Added to wishlist
+        "200":
+          description: Removed from wishlist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  removed:
+                    type: boolean
+                    example: true
+
+    delete:
+      tags: [Wishlist]
+      summary: Remove wishlist item
+      description: Removes a specific wishlist item by its item ID.
+      security:
+        - cookieAuth: []
+      parameters:
+        - in: query
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Wishlist item `_id`
+      responses:
+        "200":
+          description: Item removed
+
+  /api/wishlist/move-to-cart:
+    post:
+      tags: [Wishlist]
+      summary: Move wishlist item to cart
+      description: Adds the product to the cart (if not already there) and removes it from the wishlist.
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [productId, wishlistId]
+              properties:
+                productId:
+                  type: string
+                wishlistId:
+                  type: string
+      responses:
+        "200":
+          description: Moved to cart
+
+  # ───────────────────────────────────────────────────────────
+  # ORDERS
+  # ───────────────────────────────────────────────────────────
+  /api/orders:
+    post:
+      tags: [Orders]
+      summary: Place a new order
+      description: Creates an order for a product, deducts inventory, sends email + in-app notifications to buyer and seller.
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [productId, receiverName, mobileNumber, billingAddress, quantity, paymentMethod]
+              properties:
+                productId:
+                  type: string
+                receiverName:
+                  type: string
+                mobileNumber:
+                  type: string
+                billingAddress:
+                  type: string
+                quantity:
+                  type: integer
+                  minimum: 1
+                paymentMethod:
+                  type: string
+                  enum: [cash, stripe]
+                stripePaymentId:
+                  type: string
+                  description: Required for stripe payments
+                paymentStatus:
+                  type: string
+                  enum: [Pending, Paid]
+      responses:
+        "200":
+          description: Order placed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  order:
+                    $ref: "#/components/schemas/Order"
+        "400":
+          description: Missing fields or insufficient stock
+        "404":
+          description: Product not found
+
+    get:
+      tags: [Orders]
+      summary: Get seller's store orders
+      description: Returns all orders for the authenticated seller's store (most recent first).
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: Seller orders
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  orders:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Order"
+        "404":
+          description: Store not found
+
+    patch:
+      tags: [Orders]
+      summary: Update order status (seller)
+      description: Allows the seller to update the status of an order. Triggers status email + in-app notification to buyer when status is `shipped`, `completed`, or `delivered`.
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [orderId, status]
+              properties:
+                orderId:
+                  type: string
+                status:
+                  type: string
+                  enum: [processing, shipped, completed, cancelled]
+      responses:
+        "200":
+          description: Order status updated
+        "400":
+          description: orderId and status required
+        "403":
+          description: Unauthorized — not seller's order
+        "404":
+          description: Order not found
+
+  /api/orders/user:
+    get:
+      tags: [Orders]
+      summary: Get buyer's own orders
+      description: Returns all orders placed by the authenticated user (buyer view).
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: User orders
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  orders:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Order"
+
+  # ───────────────────────────────────────────────────────────
+  # RETURNS
+  # ───────────────────────────────────────────────────────────
+  /api/orders/return:
+    post:
+      tags: [Returns]
+      summary: Submit a return request
+      description: Buyer submits a return request for a completed order. Optional photos can be uploaded.
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [orderId, reason]
+              properties:
+                orderId:
+                  type: string
+                reason:
+                  type: string
+                  example: Product was damaged on arrival
+                photos:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        "200":
+          description: Return request submitted
+        "400":
+          description: Invalid order state, or return already submitted
+        "403":
+          description: Unauthorized — not the buyer
+
+    get:
+      tags: [Returns]
+      summary: Get return requests for a store (seller)
+      description: Returns all orders with a return status for the given store.
+      security:
+        - cookieAuth: []
+      parameters:
+        - in: query
+          name: storeId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Return orders
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  orders:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Order"
+
+    patch:
+      tags: [Returns]
+      summary: Accept or decline return (seller)
+      description: Seller accepts or rejects a buyer's return request. Notifies buyer via email and in-app notification.
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [orderId, decision]
+              properties:
+                orderId:
+                  type: string
+                decision:
+                  type: string
+                  enum: [successful, failed]
+      responses:
+        "200":
+          description: Return decision recorded
+        "400":
+          description: Missing fields
+        "404":
+          description: Order not found
+
+  # ───────────────────────────────────────────────────────────
+  # REVIEWS
+  # ───────────────────────────────────────────────────────────
+  /api/reviews:
+    post:
+      tags: [Reviews]
+      summary: Submit a product review
+      description: Creates a review for a product and recalculates the product's average rating.
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [productId, rating, comment]
+              properties:
+                productId:
+                  type: string
+                rating:
+                  type: number
+                  minimum: 1
+                  maximum: 5
+                  example: 4
+                comment:
+                  type: string
+                  example: Great product!
+      responses:
+        "200":
+          description: Review submitted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  review:
+                    $ref: "#/components/schemas/Review"
+        "400":
+          description: All fields required
+
+  # ───────────────────────────────────────────────────────────
+  # STORE (Seller Dashboard)
+  # ───────────────────────────────────────────────────────────
+  /api/store:
+    get:
+      tags: [Store]
+      summary: Get seller's store
+      description: Returns the authenticated seller's store details.
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: Store found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  store:
+                    $ref: "#/components/schemas/Store"
+        "404":
+          description: No store found
+        "401":
+          description: Unauthorized
+
+    post:
+      tags: [Store]
+      summary: Create or re-submit store application
+      description: |
+        Creates a new store application (status `pending`). If a rejected store exists, re-submits it.
+        Notifies admin via email and in-app notification.
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [name, description, type, logo]
+              properties:
+                name:
+                  type: string
+                  minLength: 4
+                  example: My Gadget Store
+                description:
+                  type: string
+                  description: Max 100 words
+                type:
+                  type: string
+                  example: Electronics
+                logo:
+                  type: string
+                  format: binary
+      responses:
+        "201":
+          description: Store submitted for approval
+        "200":
+          description: Store re-submitted for approval
+        "400":
+          description: Validation error or store already exists
+
+  /api/store/manage:
+    get:
+      tags: [Store]
+      summary: Get seller's store settings (with email)
+      description: Returns store details including the seller's email.
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: Store settings
+
+    put:
+      tags: [Store]
+      summary: Update store details
+      description: Updates store name, description, type, or logo. Accepts `multipart/form-data`.
+      security:
+        - cookieAuth: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                type:
+                  type: string
+                logo:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: Store updated
+        "404":
+          description: Store not found
+
+    delete:
+      tags: [Store]
+      summary: Delete seller's store
+      description: Permanently deletes the store and logo from Cloudinary after password verification.
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [password]
+              properties:
+                password:
+                  type: string
+                  format: password
+      responses:
+        "200":
+          description: Store deleted
+        "401":
+          description: Incorrect password
+
+  /api/store/sales-analytics:
+    get:
+      tags: [Store]
+      summary: Get seller's sales analytics
+      description: Returns per-product sales quantity and revenue, plus total revenue. Completed, non-returned orders only.
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: Sales analytics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  totalRevenue:
+                    type: number
+                  productWiseSales:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        productId:
+                          type: string
+                        name:
+                          type: string
+                        image:
+                          type: string
+                        totalQuantity:
+                          type: integer
+                        totalRevenue:
+                          type: number
+
+  # ───────────────────────────────────────────────────────────
+  # CHAT
+  # ───────────────────────────────────────────────────────────
+  /api/chat/conversation:
+    post:
+      tags: [Chat]
+      summary: Start or retrieve conversation
+      description: Creates a new conversation between a customer and a seller about a product, or returns the existing one.
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [sellerId, productId]
+              properties:
+                sellerId:
+                  type: string
+                productId:
+                  type: string
+      responses:
+        "200":
+          description: Conversation object (created or existing)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  conversation:
+                    $ref: "#/components/schemas/Conversation"
+        "400":
+          description: sellerId and productId required
+
+  /api/chat/conversations:
+    get:
+      tags: [Chat]
+      summary: List all conversations for current user
+      description: Returns conversations where the user is either the customer or the seller, sorted by most recent. Includes unread message count per conversation.
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: List of conversations
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  conversations:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Conversation"
+
+  /api/chat/{conversationId}:
+    get:
+      tags: [Chat]
+      summary: Get messages in a conversation
+      description: Returns all messages for the given conversation, ordered oldest → newest.
+      security:
+        - cookieAuth: []
+      parameters:
+        - in: path
+          name: conversationId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Messages
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  messages:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Message"
+
+    post:
+      tags: [Chat]
+      summary: Send a message
+      description: Sends a message in the conversation, triggers Pusher real-time event, and creates an in-app notification for the recipient.
+      security:
+        - cookieAuth: []
+      parameters:
+        - in: path
+          name: conversationId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [message, senderRole]
+              properties:
+                message:
+                  type: string
+                  example: Hi, is this product still available?
+                senderRole:
+                  type: string
+                  enum: [customer, seller]
+      responses:
+        "200":
+          description: Message sent
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    $ref: "#/components/schemas/Message"
+        "400":
+          description: Message content required
+        "404":
+          description: Conversation not found
+
+    patch:
+      tags: [Chat]
+      summary: Mark messages as read
+      description: Marks all unread messages (not sent by current user) in the conversation as read.
+      security:
+        - cookieAuth: []
+      parameters:
+        - in: path
+          name: conversationId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Messages marked as read
+
+  # ───────────────────────────────────────────────────────────
+  # NOTIFICATIONS
+  # ───────────────────────────────────────────────────────────
+  /api/notifications:
+    get:
+      tags: [Notifications]
+      summary: Get notifications for current user
+      description: Returns up to 50 most recent notifications and the total unread count.
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: Notifications
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Notification"
+                  unreadCount:
+                    type: integer
+
+  /api/notifications/{id}:
+    patch:
+      tags: [Notifications]
+      summary: Mark a single notification as read
+      description: Sets `isRead: true` on the specified notification (must belong to current user).
+      security:
+        - cookieAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Notification `_id`
+      responses:
+        "200":
+          description: Notification updated
+        "404":
+          description: Notification not found
+
+  /api/notifications/mark-all-read:
+    patch:
+      tags: [Notifications]
+      summary: Mark all notifications as read
+      description: Bulk-updates all unread notifications belonging to the current user.
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: All marked as read
+
+  # ───────────────────────────────────────────────────────────
+  # PAYMENTS
+  # ───────────────────────────────────────────────────────────
+  /api/create-payment-intent:
+    post:
+      tags: [Payments]
+      summary: Create Stripe payment intent
+      description: Creates a Stripe PaymentIntent for the given amount (PKR). Returns a `clientSecret` to complete payment on the frontend.
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [amount]
+              properties:
+                amount:
+                  type: number
+                  description: Amount in PKR (not cents)
+                  example: 4999
+      responses:
+        "200":
+          description: Stripe client secret
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  clientSecret:
+                    type: string
+        "400":
+          description: Invalid amount
+
+  # ───────────────────────────────────────────────────────────
+  # ADMIN – DASHBOARD
+  # ───────────────────────────────────────────────────────────
+  /api/admin/dashboard:
+    get:
+      tags: [Admin – Dashboard]
+      summary: Admin dashboard stats
+      description: Returns total users, total stores, and monthly registration chart data for the last 6 months. Admin only.
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: Dashboard metrics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      totalUsers:
+                        type: integer
+                      totalStores:
+                        type: integer
+                      chartData:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                              example: Jan
+                            users:
+                              type: integer
+                            stores:
+                              type: integer
+                      admin:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                          email:
+                            type: string
+        "403":
+          description: Unauthorized — admin only
+
+  # ───────────────────────────────────────────────────────────
+  # ADMIN – USERS
+  # ───────────────────────────────────────────────────────────
+  /api/admin/users:
+    get:
+      tags: [Admin – Users]
+      summary: List all users (admin)
+      description: Returns all non-admin users grouped into `customers` and `sellers`. Admin only.
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: Users list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      customers:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/UserPublic"
+                      sellers:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/UserPublic"
+        "403":
+          description: Unauthorized — admin only
+
+    delete:
+      tags: [Admin – Users]
+      summary: Delete a user (admin)
+      description: Permanently deletes a user and all associated data (store, products, orders, reviews, cart). Requires admin password confirmation. Sends deletion email.
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [userId, password]
+              properties:
+                userId:
+                  type: string
+                password:
+                  type: string
+                  format: password
+                  description: Admin's own password for confirmation
+      responses:
+        "200":
+          description: User deleted
+        "400":
+          description: userId and password required
+        "401":
+          description: Incorrect admin password
+        "403":
+          description: Unauthorized — admin only
+        "404":
+          description: User not found
+
+  # ───────────────────────────────────────────────────────────
+  # ADMIN – STORES
+  # ───────────────────────────────────────────────────────────
+  /api/store/admin/review:
+    get:
+      tags: [Admin – Stores]
+      summary: List all stores for review (admin)
+      description: Returns all stores with seller info, ordered by newest first. Admin only.
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: Stores list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Store"
+        "403":
+          description: Unauthorized — admin only
+
+    put:
+      tags: [Admin – Stores]
+      summary: Approve / reject / freeze a store (admin)
+      description: Updates the store status. Sends corresponding email and in-app notification to the seller.
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [storeId, status]
+              properties:
+                storeId:
+                  type: string
+                status:
+                  type: string
+                  enum: [approved, rejected, frozen]
+      responses:
+        "200":
+          description: Store status updated
+        "400":
+          description: storeId and status required
+        "403":
+          description: Unauthorized — admin only
+        "404":
+          description: Store not found
+
+    delete:
+      tags: [Admin – Stores]
+      summary: Delete a store (admin)
+      description: Permanently deletes a store and its Cloudinary logo after admin password verification.
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [storeId, password]
+              properties:
+                storeId:
+                  type: string
+                password:
+                  type: string
+                  format: password
+      responses:
+        "200":
+          description: Store deleted
+        "401":
+          description: Incorrect admin password
+        "403":
+          description: Unauthorized — admin only
+        "404":
+          description: Store not found
+
+  /api/admin/stores/{id}:
+    get:
+      tags: [Admin – Stores]
+      summary: Get store details with products & sales (admin)
+      description: Returns a specific store's details, all its products, and total sales from completed non-returned orders. Admin only.
+      security:
+        - cookieAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Store MongoDB ID
+      responses:
+        "200":
+          description: Store details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      store:
+                        $ref: "#/components/schemas/Store"
+                      products:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Product"
+                      totalSales:
+                        type: number
+        "403":
+          description: Unauthorized — admin only
+        "404":
+          description: Store not found
