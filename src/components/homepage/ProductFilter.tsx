@@ -55,13 +55,12 @@ export default function ProductFilter({ categories, onFilterChange, maxPrice }: 
 
   return (
     <div className="relative z-40">
-      <button 
+      <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border text-sm font-medium transition-all ${
-          isOpen || activeFilterCount > 0 
-            ? "border-primary bg-primary/5 text-primary shadow-sm" 
-            : "border-border bg-background text-foreground hover:bg-muted"
-        }`}
+        className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border text-sm font-medium transition-all ${isOpen || activeFilterCount > 0
+          ? "border-primary bg-primary/5 text-primary shadow-sm"
+          : "border-border bg-background text-foreground hover:bg-muted"
+          }`}
       >
         <SlidersHorizontal className="w-4 h-4" />
         <span>Filters</span>
@@ -74,7 +73,7 @@ export default function ProductFilter({ categories, onFilterChange, maxPrice }: 
 
       {isOpen && (
         <>
-          <div 
+          <div
             className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm lg:hidden transition-opacity"
             onClick={() => setIsOpen(false)}
           />
@@ -84,7 +83,7 @@ export default function ProductFilter({ categories, onFilterChange, maxPrice }: 
                 <Filter className="w-4 h-4 text-primary" />
                 Refine Results
               </h2>
-              <button 
+              <button
                 onClick={() => setIsOpen(false)}
                 className="p-1 rounded-full hover:bg-black/5 text-muted-foreground transition-colors"
               >
@@ -102,11 +101,10 @@ export default function ProductFilter({ categories, onFilterChange, maxPrice }: 
                       <button
                         key={cat}
                         onClick={() => setSelectedCategory(selectedCategory === cat ? null : cat)}
-                        className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all border ${
-                          selectedCategory === cat 
-                            ? "bg-primary border-primary text-white shadow-sm" 
-                            : "bg-surface border-border text-muted-foreground hover:border-primary/50"
-                        }`}
+                        className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all border ${selectedCategory === cat
+                          ? "bg-primary border-primary text-white shadow-sm"
+                          : "bg-surface border-border text-muted-foreground hover:border-primary/50"
+                          }`}
                       >
                         {cat}
                       </button>
@@ -126,11 +124,10 @@ export default function ProductFilter({ categories, onFilterChange, maxPrice }: 
                       setSortByPrice(sortByPrice === 'low-high' ? null : 'low-high');
                       if (sortByPrice !== 'low-high') setShowMostSold(false);
                     }}
-                    className={`flex items-center justify-center gap-2 px-3 py-2 text-sm rounded-lg border transition-all ${
-                      sortByPrice === 'low-high'
-                        ? "border-primary bg-primary/5 text-primary font-medium"
-                        : "border-border text-muted-foreground hover:bg-muted"
-                    }`}
+                    className={`flex items-center justify-center gap-2 px-3 py-2 text-sm rounded-lg border transition-all ${sortByPrice === 'low-high'
+                      ? "border-primary bg-primary/5 text-primary font-medium"
+                      : "border-border text-muted-foreground hover:bg-muted"
+                      }`}
                   >
                     Low to High
                   </button>
@@ -139,11 +136,10 @@ export default function ProductFilter({ categories, onFilterChange, maxPrice }: 
                       setSortByPrice(sortByPrice === 'high-low' ? null : 'high-low');
                       if (sortByPrice !== 'high-low') setShowMostSold(false);
                     }}
-                    className={`flex items-center justify-center gap-2 px-3 py-2 text-sm rounded-lg border transition-all ${
-                      sortByPrice === 'high-low'
-                        ? "border-primary bg-primary/5 text-primary font-medium"
-                        : "border-border text-muted-foreground hover:bg-muted"
-                    }`}
+                    className={`flex items-center justify-center gap-2 px-3 py-2 text-sm rounded-lg border transition-all ${sortByPrice === 'high-low'
+                      ? "border-primary bg-primary/5 text-primary font-medium"
+                      : "border-border text-muted-foreground hover:bg-muted"
+                      }`}
                   >
                     High to Low
                   </button>
@@ -160,7 +156,7 @@ export default function ProductFilter({ categories, onFilterChange, maxPrice }: 
                   type="range"
                   min="0"
                   max={maxPrice || 100000}
-                  step={Math.max((maxPrice || 100000)/100, 1)}
+                  step={Math.max((maxPrice || 100000) / 100, 1)}
                   value={currentMaxPrice}
                   onChange={(e) => setCurrentMaxPrice(Number(e.target.value))}
                   className="w-full h-1.5 bg-muted rounded-lg appearance-none cursor-pointer accent-primary"
@@ -181,11 +177,10 @@ export default function ProductFilter({ categories, onFilterChange, maxPrice }: 
                     <button
                       key={star}
                       onClick={() => setSelectedRating(selectedRating === star ? null : star)}
-                      className={`flex-1 flex justify-center items-center gap-1 py-1.5 rounded-md border transition-all ${
-                        selectedRating === star
-                          ? "border-yellow-400 bg-yellow-50 text-yellow-600 font-medium"
-                          : "border-border text-muted-foreground hover:bg-muted"
-                      }`}
+                      className={`flex-1 flex justify-center items-center gap-1 py-1.5 rounded-md border transition-all ${selectedRating === star
+                        ? "border-yellow-400 bg-yellow-50 text-yellow-600 font-medium"
+                        : "border-border text-muted-foreground hover:bg-muted"
+                        }`}
                     >
                       {star}<Star className={`w-3 h-3 ${selectedRating === star ? "fill-yellow-500" : ""}`} />
                     </button>
@@ -200,11 +195,10 @@ export default function ProductFilter({ categories, onFilterChange, maxPrice }: 
                     setShowMostSold(!showMostSold);
                     if (!showMostSold) setSortByPrice(null);
                   }}
-                  className={`w-full flex items-center justify-between p-3 rounded-xl border transition-all ${
-                    showMostSold 
-                      ? "border-primary bg-primary/5 text-primary" 
-                      : "border-border bg-surface text-foreground hover:border-primary/30"
-                  }`}
+                  className={`w-full flex items-center justify-between p-3 rounded-xl border transition-all ${showMostSold
+                    ? "border-primary bg-primary/5 text-primary"
+                    : "border-border bg-surface text-foreground hover:border-primary/30"
+                    }`}
                 >
                   <span className="flex items-center gap-2 font-medium text-sm">
                     <TrendingUp className="w-4 h-4" />
@@ -219,7 +213,7 @@ export default function ProductFilter({ categories, onFilterChange, maxPrice }: 
 
             {/* Footer */}
             <div className="p-4 border-t border-border bg-muted/30">
-              <button 
+              <button
                 onClick={resetFilters}
                 className="w-full flex items-center justify-center gap-2 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
               >

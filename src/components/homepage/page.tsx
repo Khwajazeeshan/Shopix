@@ -43,6 +43,7 @@ export default function Homepage() {
     maxPrice: number;
     rating: number | null;
     mostSold: boolean;
+    mostRated: boolean;
     category: string | null;
     sortByPrice: 'low-high' | 'high-low' | null;
   }
@@ -52,6 +53,7 @@ export default function Homepage() {
     maxPrice: 1000000,
     rating: null,
     mostSold: false,
+    mostRated: false,
     category: null,
     sortByPrice: null,
   });
@@ -65,9 +67,10 @@ export default function Homepage() {
       if (currentFilters.minPrice) params.append("minPrice", currentFilters.minPrice.toString());
       if (currentFilters.maxPrice) params.append("maxPrice", currentFilters.maxPrice.toString());
       if (currentFilters.rating) params.append("minRating", currentFilters.rating.toString());
-      
+
       let sort = "newest";
       if (currentFilters.mostSold) sort = "sold-desc";
+      else if (currentFilters.mostRated) sort = "rating-desc";
       else if (currentFilters.sortByPrice === 'low-high') sort = "price-asc";
       else if (currentFilters.sortByPrice === 'high-low') sort = "price-desc";
       params.append("sort", sort);
@@ -202,7 +205,7 @@ export default function Homepage() {
       <section className="relative px-4 sm:px-6 lg:px-8 pt-20 pb-24 lg:pt-32 lg:pb-32 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/10 -z-10" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/20 blur-[120px] rounded-full -z-10 opacity-50" />
-        
+
         <div className="container mx-auto max-w-5xl text-center space-y-8 animate-in fade-in slide-in-from-bottom-12 duration-1000 zoom-in-95 fill-mode-both">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary font-medium text-sm hover:scale-105 transition-transform duration-300 border border-primary/20 shadow-sm cursor-default">
             <span className="relative flex h-2 w-2">
@@ -211,14 +214,14 @@ export default function Homepage() {
             </span>
             Season Sale Is Now Live
           </div>
-          
+
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-foreground drop-shadow-sm">
             Curated Commerce <br className="hidden md:block" />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-violet-500 to-fuchsia-500">
               For The Modern Era
             </span>
           </h1>
-          
+
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             Discover a handpicked selection of premium goods from verified global merchants. Elevate your everyday style effortlessly.
           </p>
@@ -270,6 +273,7 @@ export default function Homepage() {
                 maxPrice: absoluteMaxPrice,
                 rating: null,
                 mostSold: false,
+                mostRated: false,
                 category: null,
                 sortByPrice: null,
               })}
@@ -283,14 +287,12 @@ export default function Homepage() {
 
       {/* Main Content */}
       <section className="container mx-auto px-4 sm:px-6 lg:px-8 mb-24 flex-1">
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-center mb-8">
           <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
             <ShoppingBag className="w-6 h-6 text-primary" />
             {searchTerm ? "Search Results" : "Featured Selection"}
           </h2>
-          <span className="text-muted-foreground font-medium text-sm bg-muted px-3 py-1 rounded-full">
-            {filteredProducts.length} items
-          </span>
+
         </div>
 
         {loading ? (
@@ -316,7 +318,7 @@ export default function Homepage() {
             <button
               onClick={() => {
                 setSearchTerm("");
-                setFilters({ minPrice: 0, maxPrice: absoluteMaxPrice, rating: null, mostSold: false, category: null, sortByPrice: null });
+                setFilters({ minPrice: 0, maxPrice: absoluteMaxPrice, rating: null, mostSold: false, mostRated: false, category: null, sortByPrice: null });
               }}
               className="mt-6 px-6 py-3 bg-primary text-white rounded-full font-medium hover:bg-primary/90 transition-colors shadow-sm"
             >
@@ -326,9 +328,9 @@ export default function Homepage() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 grid-flow-dense gap-6 auto-rows-[340px]">
             {filteredProducts.map((product: any, i: number) => (
-              <Link 
-                href={`/products/productinfo?id=${product._id}`} 
-                key={product._id} 
+              <Link
+                href={`/products/productinfo?id=${product._id}`}
+                key={product._id}
                 style={{ animationDelay: `${(i % 10) * 75}ms` }}
                 className={`group flex flex-col bg-background/60 backdrop-blur-lg rounded-3xl overflow-hidden border border-border/50 hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/20 transition-all duration-500 transform hover:-translate-y-2 animate-in fade-in zoom-in-95 slide-in-from-bottom-4 fill-mode-both ${getGridItemClass(i)}`}
               >
@@ -359,24 +361,23 @@ export default function Homepage() {
                   </div>
 
                   {/* Wishlist Heart Button */}
-                  <button 
+                  <button
                     onClick={(e) => handleWishlistToggle(e, product)}
                     className="absolute top-3 right-3 z-20 p-2 rounded-full bg-white/80 backdrop-blur-md text-muted-foreground hover:text-destructive hover:bg-white transition-all shadow-sm group/heart active:scale-90"
                   >
-                    <Heart 
-                      className={`w-4 h-4 transition-colors ${
-                        wishlistItems.some(item => item.productId === product._id) 
-                        ? "fill-destructive text-destructive" 
-                        : "group-hover/heart:text-destructive"
-                      }`} 
+                    <Heart
+                      className={`w-4 h-4 transition-colors ${wishlistItems.some(item => item.productId === product._id)
+                          ? "fill-destructive text-destructive"
+                          : "group-hover/heart:text-destructive"
+                        }`}
                     />
                   </button>
-                  
+
                   {/* Quick Add Button (Hover) */}
                   <div className="absolute bottom-4 left-0 right-0 flex justify-center opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-300 px-4 z-10">
-                    <button 
+                    <button
                       onClick={(e) => handleAddToCart(e, product)}
-                      className="w-full bg-white/90 backdrop-blur-sm text-foreground shadow-lg font-medium py-2.5 rounded-xl border border-white/20 hover:bg-white flex justify-center items-center gap-2 transform active:scale-95 transition-all"
+                      className="w-full bg-white/90 backdrop-blur-sm text-gray-900 shadow-lg font-medium py-2.5 rounded-xl border border-white/20 hover:bg-white flex justify-center items-center gap-2 transform active:scale-95 transition-all"
                     >
                       <ShoppingCart className="w-4 h-4" /> Quick Add
                     </button>
@@ -391,7 +392,7 @@ export default function Homepage() {
                   <h3 className="font-semibold text-foreground text-base mb-1 line-clamp-2 group-hover:text-primary transition-colors min-h-[3rem]">
                     {product.name}
                   </h3>
-                  
+
                   <div className="flex items-center gap-2 mb-3 mt-auto pt-2">
                     <div className="flex items-center text-yellow-500 text-sm">
                       <Star className="w-4 h-4 fill-current" />
@@ -403,7 +404,7 @@ export default function Homepage() {
                       </span>
                     )}
                   </div>
-                  
+
                   <div className="flex items-center justify-between mt-auto">
                     <span className="font-bold text-lg text-foreground">
                       Rs. {product.price.toLocaleString()}
@@ -425,8 +426,8 @@ export default function Homepage() {
             <p className="text-primary-foreground/80 md:text-xl max-w-2xl mb-10">
               Join thousands of discerning shoppers and discover the perfect addition to your curated collection.
             </p>
-            <Link 
-              href="/auth/signup" 
+            <Link
+              href="/auth/signup"
               className="flex items-center gap-2 bg-white text-primary px-8 py-4 rounded-full font-bold text-lg hover:bg-slate-50 hover:scale-105 transition-all shadow-xl hover:shadow-2xl"
             >
               Create Your Account <ArrowRight className="w-5 h-5" />

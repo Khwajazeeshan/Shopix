@@ -1,10 +1,12 @@
 "use client"
 import { loadStripe } from "@stripe/stripe-js";
-import { useStripe, useElements } from "@stripe/react-stripe-js";
+import { useStripe, useElements, CardNumberElement as CardNumberElementType } from "@stripe/react-stripe-js";
 import dynamic from "next/dynamic"
 
 const Elements = dynamic(() => import('@stripe/react-stripe-js').then(mod => mod.Elements), { ssr: false })
-const CardElement = dynamic(() => import('@stripe/react-stripe-js').then(mod => mod.CardElement), { ssr: false })
+const CardNumberElement = dynamic(() => import('@stripe/react-stripe-js').then(mod => mod.CardNumberElement), { ssr: false })
+const CardExpiryElement = dynamic(() => import('@stripe/react-stripe-js').then(mod => mod.CardExpiryElement), { ssr: false })
+const CardCvcElement = dynamic(() => import('@stripe/react-stripe-js').then(mod => mod.CardCvcElement), { ssr: false })
 const StripeCheckoutForm = dynamic(() => Promise.resolve(CheckoutForm), { ssr: false })
 
 import React, { useState, useEffect, Suspense } from "react"
@@ -59,7 +61,7 @@ function CheckoutForm({ productId, productPrice, maxQuantity, onSuccess, onClose
                     toast.error("Stripe.js has not loaded yet.");
                     return;
                 }
-                const cardElement = elements.getElement('card');
+                const cardElement = elements.getElement(CardNumberElementType);
                 if (!cardElement) return;
 
                 const { data: intentData } = await axios.post("/api/create-payment-intent", { amount: totalAmount });
@@ -182,18 +184,52 @@ function CheckoutForm({ productId, productPrice, maxQuantity, onSuccess, onClose
             </div>
 
             {paymentMethod === "online" && (
-                <div className="p-4 bg-surface border border-border rounded-xl space-y-3 drop-shadow-sm">
+                <div className="p-4 bg-surface border border-border rounded-xl space-y-4 drop-shadow-sm">
                     <div className="flex items-center gap-2 text-sm font-medium text-foreground">
                         <ShieldCheck className="w-4 h-4 text-green-500" /> Secure Payment via Stripe
                     </div>
-                    <div className="bg-white px-3 py-3 rounded-lg border border-border">
-                        <CardElement options={{
-                            style: {
-                                base: { fontSize: '16px', color: '#424770', '::placeholder': { color: '#aab7c4' } },
-                                invalid: { color: '#9e2146' },
-                            },
-                        }} />
+
+                    {/* Card Number */}
+                    <div className="space-y-1.5">
+                        <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Card Number</label>
+                        <div className="bg-white dark:bg-zinc-900 px-4 py-3 rounded-xl border border-border focus-within:border-primary focus-within:ring-1 focus-within:ring-primary/50 transition-all">
+                            <CardNumberElement options={{
+                                style: {
+                                    base: { fontSize: '15px', color: '#424770', '::placeholder': { color: '#aab7c4' } },
+                                    invalid: { color: '#9e2146' },
+                                },
+                                showIcon: true,
+                            }} />
+                        </div>
                     </div>
+
+                    {/* Expiry + CVC */}
+                    <div className="grid grid-cols-2 gap-3">
+                        <div className="space-y-1.5">
+                            <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Expiry Date</label>
+                            <div className="bg-white dark:bg-zinc-900 px-4 py-3 rounded-xl border border-border focus-within:border-primary focus-within:ring-1 focus-within:ring-primary/50 transition-all">
+                                <CardExpiryElement options={{
+                                    style: {
+                                        base: { fontSize: '15px', color: '#424770', '::placeholder': { color: '#aab7c4' } },
+                                        invalid: { color: '#9e2146' },
+                                    },
+                                }} />
+                            </div>
+                        </div>
+                        <div className="space-y-1.5">
+                            <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">CVC</label>
+                            <div className="bg-white dark:bg-zinc-900 px-4 py-3 rounded-xl border border-border focus-within:border-primary focus-within:ring-1 focus-within:ring-primary/50 transition-all">
+                                <CardCvcElement options={{
+                                    style: {
+                                        base: { fontSize: '15px', color: '#424770', '::placeholder': { color: '#aab7c4' } },
+                                        invalid: { color: '#9e2146' },
+                                    },
+                                }} />
+                            </div>
+                        </div>
+                    </div>
+
+
                 </div>
             )}
 
