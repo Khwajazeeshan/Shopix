@@ -74,6 +74,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ message: "Invalid request" }, { status: 400 });
 
     } catch (error: any) {
-        return NextResponse.json({ message: "Internal server error", error: error.message }, { status: 500 });
+        const status = error.message === "Token not found" || error.message === "jwt expired" ? 401 : 500;
+        return NextResponse.json({ message: "Internal server error", error: error.message }, { status });
     }
 }

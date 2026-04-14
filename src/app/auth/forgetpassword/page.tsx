@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { ArrowLeft, KeyRound, Mail } from "lucide-react";
+import { ArrowLeft, KeyRound, Mail, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 type ForgetInputs = {
@@ -39,14 +39,14 @@ export default function ForgetPassword() {
             <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03] mix-blend-overlay pointer-events-none" />
 
             <div className="w-full max-w-md relative z-10 animate-in fade-in slide-in-from-bottom-8 duration-700 py-10">
-                <Link 
-                    href="/auth/login" 
-                    className="absolute top-0 left-0 inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors hover:-translate-x-1 duration-200"
-                >
-                    <ArrowLeft className="w-4 h-4" /> Back to Login
-                </Link>
-
-                <div className="bg-surface/80 backdrop-blur-xl border border-border rounded-3xl p-8 sm:p-10 shadow-2xl shadow-primary/5 mt-8">
+                <div className="bg-surface/80 backdrop-blur-xl border border-border rounded-3xl p-8 sm:p-10 shadow-2xl shadow-primary/5 mt-8 relative">
+                    <Link 
+                        href="/" 
+                        className="absolute top-5 right-5 p-2 rounded-full text-muted-foreground hover:bg-muted hover:text-foreground transition-all duration-200"
+                        title="Back to Home"
+                    >
+                        <X className="w-5 h-5" />
+                    </Link>
                     <div className="text-center mb-8">
                         <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 text-primary rounded-full mb-6 mx-auto shadow-inner shadow-primary/20">
                             <KeyRound className="w-8 h-8" />

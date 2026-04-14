@@ -1617,7 +1617,7 @@ paths:
     patch:
       tags: [Notifications]
       summary: Mark a single notification as read
-      description: "Sets `isRead: true` on the specified notification (must belong to current user)."
+      description: Sets `isRead: true` on the specified notification (must belong to current user).
       security:
         - cookieAuth: []
       parameters:

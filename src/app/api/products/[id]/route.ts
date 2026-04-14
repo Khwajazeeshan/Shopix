@@ -47,7 +47,7 @@ export async function PUT(
             if (product.image) {
                 await deleteFromCloudinary(product.image);
             }
-            
+
             // Upload new image
             const imageUrl = await uploadToCloudinary(file, "products");
             product.image = imageUrl;
@@ -58,7 +58,8 @@ export async function PUT(
         return NextResponse.json({ success: true, message: "Product updated successfully", data: product }, { status: 200 });
 
     } catch (error: any) {
-        return NextResponse.json({ error: error.message, success: false }, { status: 500 });
+        const status = error.message === "Token not found" || error.message === "jwt expired" ? 401 : 500;
+        return NextResponse.json({ error: error.message, success: false }, { status });
     }
 }
 
@@ -96,7 +97,7 @@ export async function DELETE(
 
             const store = await Store.findOne({ sellerId: userId });
             if (!store) {
-                 return NextResponse.json({ error: "Store not found", success: false }, { status: 404 });
+                return NextResponse.json({ error: "Store not found", success: false }, { status: 404 });
             }
             await Product.deleteMany({ storeId: store._id });
 
@@ -130,6 +131,7 @@ export async function DELETE(
         return NextResponse.json({ success: true, message: "Product deleted successfully" }, { status: 200 });
 
     } catch (error: any) {
-        return NextResponse.json({ error: error.message, success: false }, { status: 500 });
+        const status = error.message === "Token not found" || error.message === "jwt expired" ? 401 : 500;
+        return NextResponse.json({ error: error.message, success: false }, { status });
     }
 }

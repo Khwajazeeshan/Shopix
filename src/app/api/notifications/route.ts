@@ -15,6 +15,7 @@ export async function GET(request: NextRequest) {
 
         return NextResponse.json({ success: true, data: notifications, unreadCount }, { status: 200 });
     } catch (error: any) {
-        return NextResponse.json({ error: error.message, success: false }, { status: 500 });
+        const status = error.message === "Token not found" || error.message === "jwt expired" ? 401 : 500;
+        return NextResponse.json({ error: error.message, success: false }, { status });
     }
 }

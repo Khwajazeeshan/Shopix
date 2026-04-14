@@ -85,8 +85,8 @@ const reviewCommentsList = [
   "Very good product!", "Highly recommended.", "Worth the price.",
   "Good quality.", "Fast delivery, happy!", "Not bad overall.",
   "Excellent product!", "Will buy again.", "Satisfied with purchase.",
-  "Great value for money.", "Product as described.", 
-  "Better than expected!", "Average quality.", 
+  "Great value for money.", "Product as described.",
+  "Better than expected!", "Average quality.",
   "Good but pricey.", "Loved it!"
 ];
 
@@ -109,237 +109,237 @@ async function seedDatabase() {
     await Review.deleteMany({});
     console.log("Cleared all existing sellers, customers, stores, products, and reviews.");
 
-    // const hashedPassword = await bcryptjs.hash(SEED_PASSWORD, 10);
+    const hashedPassword = await bcryptjs.hash(SEED_PASSWORD, 10);
 
-    // const categories = ["Electronics", "Clothing", "Food", "Books", "General"];
-    // const storeTypes = ["Individual", "Company"] as const;
+    const categories = ["Electronics", "Clothing", "Food", "Books", "General"];
+    const storeTypes = ["Individual", "Company"] as const;
 
-    // // Create Customers
-    // console.log(`Seeding ${NUM_CUSTOMERS} customers...`);
-    // const customersToInsert = [];
-    // for (let c = 0; c < NUM_CUSTOMERS; c++) {
-    //   customersToInsert.push({
-    //     name: faker.person.fullName(),
-    //     email: faker.internet.email(),
-    //     password: hashedPassword,
-    //     isVerified: true,
-    //     role: "customer"
-    //   });
-    // }
-    // const fakeCustomers = await User.insertMany(customersToInsert);
+    // Create Customers
+    console.log(`Seeding ${NUM_CUSTOMERS} customers...`);
+    const customersToInsert = [];
+    for (let c = 0; c < NUM_CUSTOMERS; c++) {
+      customersToInsert.push({
+        name: faker.person.fullName(),
+        email: faker.internet.email(),
+        password: hashedPassword,
+        isVerified: true,
+        role: "customer"
+      });
+    }
+    const fakeCustomers = await User.insertMany(customersToInsert);
 
-    // console.log(`Seeding ${NUM_SELLERS} sellers and stores...`);
-    // let totalProductsCreated = 0;
-    // let totalReviewsCreated = 0;
+    console.log(`Seeding ${NUM_SELLERS} sellers and stores...`);
+    let totalProductsCreated = 0;
+    let totalReviewsCreated = 0;
 
-    // for (let i = 0; i < NUM_SELLERS; i++) {
-    //   // 1. Create fake seller
-    //   const seller = new User({
-    //     name: faker.person.fullName(),
-    //     email: faker.internet.email(),
-    //     password: hashedPassword,
-    //     isVerified: true,
-    //     role: "seller",
-    //   });
-    //   await seller.save();
+    for (let i = 0; i < NUM_SELLERS; i++) {
+      // 1. Create fake seller
+      const seller = new User({
+        name: faker.person.fullName(),
+        email: faker.internet.email(),
+        password: hashedPassword,
+        isVerified: true,
+        role: "seller",
+      });
+      await seller.save();
 
-    //   // 2. Create store for the seller
-    //   let storeName = faker.company.name();
-    //   // Ensure name is at least 4 characters
-    //   if (storeName.length < 4) {
-    //     storeName += " Store";
-    //   }
-    //   const store = new Store({
-    //     sellerId: seller._id,
-    //     name: storeName,
-    //     description: faker.lorem.paragraph(),
-    //     type: faker.helpers.arrayElement(storeTypes),
-    //     logo: faker.helpers.arrayElement(storeLogos),
-    //     status: "approved",
-    //   });
-    //   await store.save();
+      // 2. Create store for the seller
+      let storeName = faker.company.name();
+      // Ensure name is at least 4 characters
+      if (storeName.length < 4) {
+        storeName += " Store";
+      }
+      const store = new Store({
+        sellerId: seller._id,
+        name: storeName,
+        description: faker.lorem.paragraph(),
+        type: faker.helpers.arrayElement(storeTypes),
+        logo: faker.helpers.arrayElement(storeLogos),
+        status: "approved",
+      });
+      await store.save();
 
-    //   // 3. Create products for the store
-    //   const productsToInsert = [];
-    //   for (let j = 0; j < PRODUCTS_PER_STORE; j++) {
-    //     let desc = faker.commerce.productDescription();
-    //     // Strict 25 characters maximum for description
-    //     desc = desc.length > 25 ? desc.substring(0, 25) : desc;
+      // 3. Create products for the store
+      const productsToInsert = [];
+      for (let j = 0; j < PRODUCTS_PER_STORE; j++) {
+        let desc = faker.commerce.productDescription();
+        // Strict 25 characters maximum for description
+        desc = desc.length > 25 ? desc.substring(0, 25) : desc;
 
-    //     const productCategory = faker.helpers.arrayElement(categories);
+        const productCategory = faker.helpers.arrayElement(categories);
 
-    //     productsToInsert.push({
-    //       storeId: store._id,
-    //       sellerId: seller._id,
-    //       name: faker.commerce.productName(),
-    //       description: desc,
-    //       price: faker.number.int({ min: 100, max: 10000 }),
-    //       quantity: faker.number.int({ min: 1, max: 100 }),
-    //       image: getProductImage(productCategory),
-    //       category: productCategory,
-    //       rating: faker.number.float({ min: 1, max: 5, fractionDigits: 1 }),
-    //       sold: faker.number.int({ min: 0, max: 500 }),
-    //     });
-    //   }
+        productsToInsert.push({
+          storeId: store._id,
+          sellerId: seller._id,
+          name: faker.commerce.productName(),
+          description: desc,
+          price: faker.number.int({ min: 100, max: 10000 }),
+          quantity: faker.number.int({ min: 1, max: 100 }),
+          image: getProductImage(productCategory),
+          category: productCategory,
+          rating: faker.number.float({ min: 1, max: 5, fractionDigits: 1 }),
+          sold: faker.number.int({ min: 0, max: 500 }),
+        });
+      }
 
-    //   const insertedProducts = await Product.insertMany(productsToInsert);
-    //   totalProductsCreated += insertedProducts.length;
+      const insertedProducts = await Product.insertMany(productsToInsert);
+      totalProductsCreated += insertedProducts.length;
 
-    //   // 4. Create Random Reviews per Product
-    //   for (const product of insertedProducts) {
-    //     const reviewCount = faker.number.int({ min: 2, max: 30 });
-    //     const shuffledCustomers = faker.helpers.shuffle(fakeCustomers).slice(0, reviewCount);
-        
-    //     const reviewsToInsert = shuffledCustomers.map((customer) => ({
-    //       productId: product._id,
-    //       userId: customer._id,
-    //       rating: faker.number.int({ min: 1, max: 5 }),
-    //       comment: faker.helpers.arrayElement(reviewCommentsList)
-    //     }));
+      // 4. Create Random Reviews per Product
+      for (const product of insertedProducts) {
+        const reviewCount = faker.number.int({ min: 2, max: 30 });
+        const shuffledCustomers = faker.helpers.shuffle(fakeCustomers).slice(0, reviewCount);
 
-    //     await Review.insertMany(reviewsToInsert);
-    //     totalReviewsCreated += reviewsToInsert.length;
-    //   }
+        const reviewsToInsert = shuffledCustomers.map((customer) => ({
+          productId: product._id,
+          userId: customer._id,
+          rating: faker.number.int({ min: 1, max: 5 }),
+          comment: faker.helpers.arrayElement(reviewCommentsList)
+        }));
 
-    //   console.log(`Seeded seller ${i + 1}/${NUM_SELLERS} with Store and ${PRODUCTS_PER_STORE} products, and random reviews.`);
-    // }
+        await Review.insertMany(reviewsToInsert);
+        totalReviewsCreated += reviewsToInsert.length;
+      }
 
-    // console.log("-----------------------------------------");
-    // console.log(`🔑 Login credentials for all new sellers/customers:`);
-    // console.log(`Password: ${SEED_PASSWORD}`);
-    // console.log("-----------------------------------------");
+      console.log(`Seeded seller ${i + 1}/${NUM_SELLERS} with Store and ${PRODUCTS_PER_STORE} products, and random reviews.`);
+    }
 
-    // try {
-    //   // --- TASK 1: 50 FAKE CUSTOMERS ---
-    //   await User.deleteMany({ role: "customer" });
-    //   const fiftyCustomersData = [];
-    //   for (let c = 0; c < 50; c++) {
-    //     fiftyCustomersData.push({
-    //       name: faker.person.fullName(),
-    //       email: faker.internet.email(),
-    //       password: hashedPassword,
-    //       isVerified: true,
-    //       role: "customer"
-    //     });
-    //   }
-    //   const fiftyCustomers = await User.insertMany(fiftyCustomersData);
-    //   console.log("✅ 50 customers created");
+    console.log("-----------------------------------------");
+    console.log(`🔑 Login credentials for all new sellers/customers:`);
+    console.log(`Password: ${SEED_PASSWORD}`);
+    console.log("-----------------------------------------");
 
-    //   // --- TASK 2: FAKE ORDERS ---
-    //   await Order.deleteMany({});
-    //   const allProducts = await Product.find({});
-    //   const ordersToInsert = [];
-    //   for (const customer of fiftyCustomers) {
-    //     const numOrders = faker.number.int({ min: 2, max: 7 });
-    //     for (let i = 0; i < numOrders; i++) {
-    //       const productsCount = faker.number.int({ min: 1, max: 4 });
-    //       const shuffledProducts = faker.helpers.shuffle(allProducts).slice(0, productsCount);
-    //       for (const product of shuffledProducts) {
-    //         const qty = faker.number.int({ min: 1, max: 3 });
-    //         ordersToInsert.push({
-    //           userId: customer._id,
-    //           storeId: product.storeId,
-    //           productId: product._id,
-    //           receiverName: faker.person.fullName(),
-    //           mobileNumber: faker.phone.number(),
-    //           billingAddress: `${faker.location.streetAddress()}, ${faker.location.city()}, ${faker.location.state()}, ${faker.location.zipCode()}, ${faker.location.country()}`,
-    //           quantity: qty,
-    //           paymentMethod: faker.helpers.arrayElement(["cod", "online"]),
-    //           totalAmount: product.price * qty,
-    //           status: faker.helpers.arrayElement(["new", "progress", "completed"]),
-    //           paymentStatus: faker.helpers.arrayElement(["Pending", "Paid", "Failed"]),
-    //         });
-    //       }
-    //     }
-    //   }
-    //   const insertedOrders = await Order.insertMany(ordersToInsert);
-    //   console.log("✅ Orders created for all 50 customers");
+    try {
+      // --- TASK 1: 50 FAKE CUSTOMERS ---
+      await User.deleteMany({ role: "customer" });
+      const fiftyCustomersData = [];
+      for (let c = 0; c < 50; c++) {
+        fiftyCustomersData.push({
+          name: faker.person.fullName(),
+          email: faker.internet.email(),
+          password: hashedPassword,
+          isVerified: true,
+          role: "customer"
+        });
+      }
+      const fiftyCustomers = await User.insertMany(fiftyCustomersData);
+      console.log("✅ 50 customers created");
 
-    //   // --- TASK 3: FAKE MESSAGES ---
-    //   await Conversation.deleteMany({});
-    //   await Message.deleteMany({});
-    //   const allSellers = await User.find({ role: "seller" });
-    //   const conversationsToInsert = [];
-    //   const messagesToInsert = [];
-    //   for (const customer of fiftyCustomers) {
-    //     const numConversations = faker.number.int({ min: 1, max: 5 });
-    //     const shuffledSellers = faker.helpers.shuffle(allSellers).slice(0, numConversations);
-    //     for (const seller of shuffledSellers) {
-    //       const randomProduct = faker.helpers.arrayElement(allProducts);
-    //       const convId = new mongoose.Types.ObjectId();
-    //       const numMsgs = faker.number.int({ min: 3, max: 8 });
-    //       let lastMsgText = "";
-    //       for (let m = 0; m < numMsgs; m++) {
-    //         const isCustomer = m % 2 === 0;
-    //         const senderId = isCustomer ? customer._id : seller._id;
-    //         const senderRole = isCustomer ? "customer" : "seller";
-    //         const msgText = faker.lorem.sentence();
-    //         lastMsgText = msgText;
-    //         messagesToInsert.push({
-    //           conversationId: convId,
-    //           senderId: senderId,
-    //           senderRole: senderRole,
-    //           message: msgText,
-    //           isRead: faker.datatype.boolean(),
-    //           createdAt: faker.date.recent({ days: 30 })
-    //         });
-    //       }
-    //       conversationsToInsert.push({
-    //         _id: convId,
-    //         customerId: customer._id,
-    //         sellerId: seller._id,
-    //         productId: randomProduct._id,
-    //         lastMessage: lastMsgText
-    //       });
-    //     }
-    //   }
-    //   await Conversation.insertMany(conversationsToInsert);
-    //   const insertedMessages = await Message.insertMany(messagesToInsert);
-    //   console.log("✅ Messages created between customers and sellers");
+      // --- TASK 2: FAKE ORDERS ---
+      await Order.deleteMany({});
+      const allProducts = await Product.find({});
+      const ordersToInsert = [];
+      for (const customer of fiftyCustomers) {
+        const numOrders = faker.number.int({ min: 2, max: 7 });
+        for (let i = 0; i < numOrders; i++) {
+          const productsCount = faker.number.int({ min: 1, max: 4 });
+          const shuffledProducts = faker.helpers.shuffle(allProducts).slice(0, productsCount);
+          for (const product of shuffledProducts) {
+            const qty = faker.number.int({ min: 1, max: 3 });
+            ordersToInsert.push({
+              userId: customer._id,
+              storeId: product.storeId,
+              productId: product._id,
+              receiverName: faker.person.fullName(),
+              mobileNumber: faker.phone.number(),
+              billingAddress: `${faker.location.streetAddress()}, ${faker.location.city()}, ${faker.location.state()}, ${faker.location.zipCode()}, ${faker.location.country()}`,
+              quantity: qty,
+              paymentMethod: faker.helpers.arrayElement(["cod", "online"]),
+              totalAmount: product.price * qty,
+              status: faker.helpers.arrayElement(["new", "progress", "completed"]),
+              paymentStatus: faker.helpers.arrayElement(["Pending", "Paid", "Failed"]),
+            });
+          }
+        }
+      }
+      const insertedOrders = await Order.insertMany(ordersToInsert);
+      console.log("✅ Orders created for all 50 customers");
 
-    //   // --- TASK 4: WISHLIST ---
-    //   await Wishlist.deleteMany({});
-    //   const wishlistsToInsert = [];
-    //   for (const customer of fiftyCustomers) {
-    //     const wishProductCount = faker.number.int({ min: 3, max: 15 });
-    //     const shuffledProducts = faker.helpers.shuffle(allProducts).slice(0, wishProductCount);
-    //     for (const prod of shuffledProducts) {
-    //       wishlistsToInsert.push({
-    //         userId: customer._id,
-    //         productId: prod._id
-    //       });
-    //     }
-    //   }
-    //   await Wishlist.insertMany(wishlistsToInsert);
-    //   console.log("✅ Wishlists created for all 50 customers");
+      // --- TASK 3: FAKE MESSAGES ---
+      await Conversation.deleteMany({});
+      await Message.deleteMany({});
+      const allSellers = await User.find({ role: "seller" });
+      const conversationsToInsert = [];
+      const messagesToInsert = [];
+      for (const customer of fiftyCustomers) {
+        const numConversations = faker.number.int({ min: 1, max: 5 });
+        const shuffledSellers = faker.helpers.shuffle(allSellers).slice(0, numConversations);
+        for (const seller of shuffledSellers) {
+          const randomProduct = faker.helpers.arrayElement(allProducts);
+          const convId = new mongoose.Types.ObjectId();
+          const numMsgs = faker.number.int({ min: 3, max: 8 });
+          let lastMsgText = "";
+          for (let m = 0; m < numMsgs; m++) {
+            const isCustomer = m % 2 === 0;
+            const senderId = isCustomer ? customer._id : seller._id;
+            const senderRole = isCustomer ? "customer" : "seller";
+            const msgText = faker.lorem.sentence();
+            lastMsgText = msgText;
+            messagesToInsert.push({
+              conversationId: convId,
+              senderId: senderId,
+              senderRole: senderRole,
+              message: msgText,
+              isRead: faker.datatype.boolean(),
+              createdAt: faker.date.recent({ days: 30 })
+            });
+          }
+          conversationsToInsert.push({
+            _id: convId,
+            customerId: customer._id,
+            sellerId: seller._id,
+            productId: randomProduct._id,
+            lastMessage: lastMsgText
+          });
+        }
+      }
+      await Conversation.insertMany(conversationsToInsert);
+      const insertedMessages = await Message.insertMany(messagesToInsert);
+      console.log("✅ Messages created between customers and sellers");
 
-    //   // --- TASK 5: CART ---
-    //   await Cart.deleteMany({});
-    //   const cartsToInsert = [];
-    //   for (const customer of fiftyCustomers) {
-    //     const cartProductCount = faker.number.int({ min: 1, max: 6 });
-    //     const shuffledProducts = faker.helpers.shuffle(allProducts).slice(0, cartProductCount);
-    //     for (const prod of shuffledProducts) {
-    //       cartsToInsert.push({
-    //         userId: customer._id,
-    //         productId: prod._id
-    //       });
-    //     }
-    //   }
-    //   await Cart.insertMany(cartsToInsert);
-    //   console.log("✅ Carts created for all 50 customers");
+      // --- TASK 4: WISHLIST ---
+      await Wishlist.deleteMany({});
+      const wishlistsToInsert = [];
+      for (const customer of fiftyCustomers) {
+        const wishProductCount = faker.number.int({ min: 3, max: 15 });
+        const shuffledProducts = faker.helpers.shuffle(allProducts).slice(0, wishProductCount);
+        for (const prod of shuffledProducts) {
+          wishlistsToInsert.push({
+            userId: customer._id,
+            productId: prod._id
+          });
+        }
+      }
+      await Wishlist.insertMany(wishlistsToInsert);
+      console.log("✅ Wishlists created for all 50 customers");
 
-    //   console.log("-----------------------------------------");
-    //   console.log("👥 New Customers Created: 50");
-    //   console.log(`📦 Total Orders Created: ${insertedOrders.length}`);
-    //   console.log(`💬 Total Messages Created: ${insertedMessages.length}`);
-    //   console.log("❤️  Total Wishlists Created: 50");
-    //   console.log("🛒 Total Carts Created: 50");
-    //   console.log("-----------------------------------------");
+      // --- TASK 5: CART ---
+      await Cart.deleteMany({});
+      const cartsToInsert = [];
+      for (const customer of fiftyCustomers) {
+        const cartProductCount = faker.number.int({ min: 1, max: 6 });
+        const shuffledProducts = faker.helpers.shuffle(allProducts).slice(0, cartProductCount);
+        for (const prod of shuffledProducts) {
+          cartsToInsert.push({
+            userId: customer._id,
+            productId: prod._id
+          });
+        }
+      }
+      await Cart.insertMany(cartsToInsert);
+      console.log("✅ Carts created for all 50 customers");
 
-    // } catch (newSeedError) {
-    //   console.error("❌ Error running the new seeding code:", newSeedError);
-    // }
+      console.log("-----------------------------------------");
+      console.log("👥 New Customers Created: 50");
+      console.log(`📦 Total Orders Created: ${insertedOrders.length}`);
+      console.log(`💬 Total Messages Created: ${insertedMessages.length}`);
+      console.log("❤️  Total Wishlists Created: 50");
+      console.log("🛒 Total Carts Created: 50");
+      console.log("-----------------------------------------");
+
+    } catch (newSeedError) {
+      console.error("❌ Error running the new seeding code:", newSeedError);
+    }
 
     process.exit(0);
   } catch (error) {

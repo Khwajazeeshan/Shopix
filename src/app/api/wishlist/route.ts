@@ -34,7 +34,8 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ message: "Added to wishlist successfully", success: true }, { status: 201 });
 
     } catch (error: any) {
-        return NextResponse.json({ error: error.message, success: false }, { status: 500 });
+        const status = error.message === "Token not found" || error.message === "jwt expired" ? 401 : 500;
+        return NextResponse.json({ error: error.message, success: false }, { status });
     }
 }
 
@@ -52,7 +53,8 @@ export async function GET(request: NextRequest) {
 
         return NextResponse.json({ success: true, data: wishlistItems }, { status: 200 });
     } catch (error: any) {
-        return NextResponse.json({ error: error.message, success: false }, { status: 500 });
+        const status = error.message === "Token not found" || error.message === "jwt expired" ? 401 : 500;
+        return NextResponse.json({ error: error.message, success: false }, { status });
     }
 }
 
@@ -71,6 +73,7 @@ export async function DELETE(request: NextRequest) {
 
         return NextResponse.json({ message: "Wishlist item removed successfully", success: true }, { status: 200 });
     } catch (error: any) {
-        return NextResponse.json({ error: error.message, success: false }, { status: 500 });
+        const status = error.message === "Token not found" || error.message === "jwt expired" ? 401 : 500;
+        return NextResponse.json({ error: error.message, success: false }, { status });
     }
 }

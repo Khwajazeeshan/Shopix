@@ -13,6 +13,7 @@ import axios from "axios";
 import { Search, ShoppingBag, ArrowRight, Star, ShoppingCart, TrendingUp, Heart } from "lucide-react";
 import { addToWishlistLocal, removeFromWishlistLocal, setWishlist } from "../../redux/slices/wishlistSlice";
 import { useAppSelector } from "../../redux/hooks";
+import { useSession } from "next-auth/react";
 
 const getGridItemClass = (index: number) => {
   // Deterministic masonry / bento-grid pattern based on absolute index
@@ -25,6 +26,7 @@ const getGridItemClass = (index: number) => {
 };
 
 export default function Homepage() {
+  const { status } = useSession();
   const dispatch = useAppDispatch();
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -128,8 +130,10 @@ export default function Homepage() {
           imageUrl: item.productId.image
         }))));
       }
-    } catch (err) {
-      console.error("Wishlist fetch failed", err);
+    } catch (err: any) {
+      if (err.response?.status !== 401) {
+        console.error("Wishlist fetch failed", err);
+      }
     }
   };
 
@@ -413,21 +417,23 @@ export default function Homepage() {
       </section>
 
       {/* Modern CTA */}
-      <section className="relative overflow-hidden py-24 bg-primary text-white mt-12">
-        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
-        <div className="container mx-auto px-4 relative z-10 text-center flex flex-col items-center">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">Elevate your lifestyle today.</h2>
-          <p className="text-primary-foreground/80 md:text-xl max-w-2xl mb-10">
-            Join thousands of discerning shoppers and discover the perfect addition to your curated collection.
-          </p>
-          <Link 
-            href="/auth/signup" 
-            className="flex items-center gap-2 bg-white text-primary px-8 py-4 rounded-full font-bold text-lg hover:bg-slate-50 hover:scale-105 transition-all shadow-xl hover:shadow-2xl"
-          >
-            Create Your Account <ArrowRight className="w-5 h-5" />
-          </Link>
-        </div>
-      </section>
+      {status !== "authenticated" && (
+        <section className="relative overflow-hidden py-24 bg-primary text-white mt-12">
+          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+          <div className="container mx-auto px-4 relative z-10 text-center flex flex-col items-center">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">Elevate your lifestyle today.</h2>
+            <p className="text-primary-foreground/80 md:text-xl max-w-2xl mb-10">
+              Join thousands of discerning shoppers and discover the perfect addition to your curated collection.
+            </p>
+            <Link 
+              href="/auth/signup" 
+              className="flex items-center gap-2 bg-white text-primary px-8 py-4 rounded-full font-bold text-lg hover:bg-slate-50 hover:scale-105 transition-all shadow-xl hover:shadow-2xl"
+            >
+              Create Your Account <ArrowRight className="w-5 h-5" />
+            </Link>
+          </div>
+        </section>
+      )}
 
       <Footer />
     </div>
