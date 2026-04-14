@@ -106,12 +106,12 @@ export default function MyItemsPage() {
                                                 <div className="col-span-1 md:col-span-6 flex w-full items-start gap-4">
                                                     <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-xl overflow-hidden bg-muted border border-border flex-shrink-0">
                                                         {item.productId.image ? (
-                                                            <Image
-                                                                src={item.productId.image}
-                                                                alt={item.productId.name}
-                                                                fill
-                                                                className="object-cover"
-                                                            />
+                                                                <Image
+                                                                    src={item.productId.image}
+                                                                    alt={item.productId.name}
+                                                                    fill
+                                                                    className="object-contain p-2"
+                                                                />
                                                         ) : (
                                                             <div className="w-full h-full flex justify-center items-center"><Package className="w-8 h-8 text-muted-foreground" /></div>
                                                         )}

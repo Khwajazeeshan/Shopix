@@ -62,7 +62,22 @@ export default function NotificationsPage() {
             }
         }
         if (notif.link) {
-            router.push(notif.link)
+            let sanitizedLink = notif.link;
+            const messageLower = notif.message.toLowerCase();
+            
+            // Map old broken links to new correct ones using message context
+            if (sanitizedLink === "/orders") {
+                if (messageLower.includes("new order received") || 
+                    messageLower.includes("return request received") || 
+                    messageLower.includes("customer")) {
+                    sanitizedLink = "/store/track-orders";
+                } else {
+                    sanitizedLink = "/products/my-orders";
+                }
+            } else if (sanitizedLink === "/store/returns") {
+                sanitizedLink = "/store/return-orders";
+            }
+            router.push(sanitizedLink);
         }
     }
 

@@ -99,23 +99,23 @@ function CheckoutForm({ productId, productPrice, maxQuantity, onSuccess, onClose
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="space-y-1.5 focus-within:text-primary transition-colors">
                     <label className="text-sm font-medium text-foreground">Receiver Name</label>
-                    <input 
+                    <input
                         className="w-full bg-surface border border-border rounded-xl px-4 py-2.5 outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all text-sm"
                         placeholder="John Doe"
-                        {...register("receiverName", { required: "Name is required" })} 
+                        {...register("receiverName", { required: "Name is required" })}
                     />
                     {errors.receiverName && <p className="text-destructive text-xs mt-1">{errors.receiverName.message}</p>}
                 </div>
 
                 <div className="space-y-1.5 focus-within:text-primary transition-colors">
                     <label className="text-sm font-medium text-foreground">Mobile Number</label>
-                    <input 
+                    <input
                         className="w-full bg-surface border border-border rounded-xl px-4 py-2.5 outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all text-sm"
                         placeholder="+1 234 567 8900"
                         {...register("mobileNumber", {
                             required: "Mobile number is required",
                             minLength: { value: 10, message: "Min 10 digits" }
-                        })} 
+                        })}
                     />
                     {errors.mobileNumber && <p className="text-destructive text-xs mt-1">{errors.mobileNumber.message}</p>}
                 </div>
@@ -123,10 +123,10 @@ function CheckoutForm({ productId, productPrice, maxQuantity, onSuccess, onClose
 
             <div className="space-y-1.5 focus-within:text-primary transition-colors">
                 <label className="text-sm font-medium text-foreground">Delivery Address</label>
-                <input 
+                <input
                     className="w-full bg-surface border border-border rounded-xl px-4 py-2.5 outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all text-sm"
                     placeholder="123 Main St, Apt 4B, New York, NY 10001"
-                    {...register("billingAddress", { required: "Address is required" })} 
+                    {...register("billingAddress", { required: "Address is required" })}
                 />
                 {errors.billingAddress && <p className="text-destructive text-xs mt-1">{errors.billingAddress.message}</p>}
             </div>
@@ -137,16 +137,16 @@ function CheckoutForm({ productId, productPrice, maxQuantity, onSuccess, onClose
                     <span className="text-muted-foreground font-normal">{maxQuantity} available</span>
                 </label>
                 <div className="flex items-center gap-4 bg-surface w-fit border border-border rounded-xl p-1">
-                    <button 
-                        type="button" 
+                    <button
+                        type="button"
                         onClick={() => setValue("quantity", Math.max(1, quantity - 1))}
                         className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
                     >
                         <Minus className="w-4 h-4" />
                     </button>
                     <span className="w-8 text-center font-medium">{quantity}</span>
-                    <button 
-                        type="button" 
+                    <button
+                        type="button"
                         onClick={() => setValue("quantity", Math.min(maxQuantity, quantity + 1))}
                         className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
                     >
@@ -159,22 +159,20 @@ function CheckoutForm({ productId, productPrice, maxQuantity, onSuccess, onClose
             <div className="space-y-3 pt-2">
                 <label className="text-sm font-medium text-foreground">Payment Method</label>
                 <div className="grid grid-cols-2 gap-3">
-                    <button 
-                        type="button" 
+                    <button
+                        type="button"
                         onClick={() => setValue("paymentMethod", "cod")}
-                        className={`flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all ${
-                            paymentMethod === 'cod' ? "border-primary bg-primary/5 text-primary" : "border-border hover:border-primary/50 text-muted-foreground"
-                        }`}
+                        className={`flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all ${paymentMethod === 'cod' ? "border-primary bg-primary/5 text-primary" : "border-border hover:border-primary/50 text-muted-foreground"
+                            }`}
                     >
                         <Package className={`w-6 h-6 mb-2 ${paymentMethod === 'cod' ? "text-primary" : "text-muted-foreground"}`} />
                         <span className="text-sm font-medium">Cash on Delivery</span>
                     </button>
-                    <button 
-                        type="button" 
+                    <button
+                        type="button"
                         onClick={() => setValue("paymentMethod", "online")}
-                        className={`flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all ${
-                            paymentMethod === 'online' ? "border-primary bg-primary/5 text-primary" : "border-border hover:border-primary/50 text-muted-foreground"
-                        }`}
+                        className={`flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all ${paymentMethod === 'online' ? "border-primary bg-primary/5 text-primary" : "border-border hover:border-primary/50 text-muted-foreground"
+                            }`}
                     >
                         <CreditCard className={`w-6 h-6 mb-2 ${paymentMethod === 'online' ? "text-primary" : "text-muted-foreground"}`} />
                         <span className="text-sm font-medium">Pay Online</span>
@@ -204,8 +202,8 @@ function CheckoutForm({ productId, productPrice, maxQuantity, onSuccess, onClose
                     <p className="text-sm text-muted-foreground">Total to pay</p>
                     <p className="text-2xl font-bold text-primary">Rs. {totalAmount.toLocaleString()}</p>
                 </div>
-                <button 
-                    type="submit" 
+                <button
+                    type="submit"
                     disabled={isSubmitting || (paymentMethod === "online" && !stripe)}
                     className="w-full sm:w-auto px-8 py-3 bg-primary text-white rounded-xl font-medium shadow-md hover:shadow-lg hover:bg-primary/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
                 >
@@ -262,24 +260,24 @@ function ProductContent() {
         try {
             const response = await axios.post("/api/cart", { productId })
             if (response.data.success) {
-                dispatch(addToCart({ 
-                    id: data.product._id, 
-                    name: data.product.name, 
-                    price: data.product.price, 
-                    quantity: 1, 
-                    imageUrl: data.product.image 
+                dispatch(addToCart({
+                    id: data.product._id,
+                    name: data.product.name,
+                    price: data.product.price,
+                    quantity: 1,
+                    imageUrl: data.product.image
                 }));
                 toast.success("Added to your items!")
             }
         } catch (error: any) {
             if (error.response?.status === 401) {
                 toast.success("Temporarily added to cart. Login to sync!");
-                dispatch(addToCart({ 
-                    id: data.product._id, 
-                    name: data.product.name, 
-                    price: data.product.price, 
-                    quantity: 1, 
-                    imageUrl: data.product.image 
+                dispatch(addToCart({
+                    id: data.product._id,
+                    name: data.product.name,
+                    price: data.product.price,
+                    quantity: 1,
+                    imageUrl: data.product.image
                 }));
             } else {
                 toast.error(error.response?.data?.error || "Failed to add to cart");
@@ -363,7 +361,7 @@ function ProductContent() {
     return (
         <div className="min-h-screen bg-background flex flex-col">
             <Navbar />
-            
+
             <main className="flex-1 container mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
                 {/* Breadcrumb */}
                 <div className="mb-6 lg:mb-8">
@@ -375,19 +373,21 @@ function ProductContent() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
                     {/* Left: Product Image */}
                     <div className="flex flex-col gap-4 sticky top-24 h-fit">
-                        <div className="relative w-full aspect-[4/5] md:aspect-[1/1] bg-surface rounded-3xl overflow-hidden border border-border shadow-sm group">
+                        <div className="relative w-full aspect-square bg-surface rounded-2xl overflow-hidden border border-border shadow-md group">
                             {product.image ? (
-                                <Image 
-                                    src={product.image} 
-                                    alt={product.name} 
-                                    fill 
-                                    className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out" 
+                                <Image
+                                    src={product.image}
+                                    alt={product.name}
+                                    fill
+                                    className="object-contain p-8 group-hover:scale-105 transition-transform duration-700 ease-out"
                                 />
                             ) : (
                                 <div className="w-full h-full flex items-center justify-center bg-muted text-muted-foreground">
                                     <Package className="w-16 h-16 opacity-50" />
                                 </div>
                             )}
+                            {/* Inner shadow overlay for depth */}
+                            <div className="absolute inset-0 shadow-[inset_0_0_30px_rgba(0,0,0,0.04)] rounded-2xl pointer-events-none" />
                             {/* Badges Overlay */}
                             <div className="absolute top-4 left-4 flex flex-col gap-2">
                                 {product.sold > 50 && (
@@ -420,7 +420,7 @@ function ProductContent() {
                                     <span className="font-semibold text-foreground ml-1">{(product.rating || 0).toFixed(1)}</span>
                                 </div>
                                 <div className="w-1.5 h-1.5 rounded-full bg-border" />
-                                <button 
+                                <button
                                     onClick={() => document.getElementById('reviews')?.scrollIntoView({ behavior: 'smooth' })}
                                     className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors underline underline-offset-4"
                                 >
@@ -475,7 +475,7 @@ function ProductContent() {
                                     {product.quantity > 0 ? `${product.quantity} in stock` : 'Out of stock'}
                                 </span>
                             </div>
-                            
+
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
                                 <button
                                     onClick={() => setShowOrderModal(true)}
@@ -486,7 +486,7 @@ function ProductContent() {
                                 </button>
                                 <button
                                     onClick={handleStartChat}
-                                    className="w-full py-4 px-6 bg-secondary/10 text-secondary border border-secondary/20 font-semibold rounded-xl hover:bg-secondary/20 transition-all flex items-center justify-center gap-2"
+                                    className="w-full py-4 px-6 bg-muted text-foreground border border-border font-semibold rounded-xl hover:bg-muted/70 transition-all flex items-center justify-center gap-2"
                                 >
                                     <MessageSquare className="w-5 h-5" /> Chat with Seller
                                 </button>
@@ -495,7 +495,7 @@ function ProductContent() {
                                     disabled={isAdding || product.quantity === 0}
                                     className="w-full py-4 px-6 bg-primary/10 text-primary border border-primary/20 font-semibold rounded-xl hover:bg-primary/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
                                 >
-                                    <ShoppingBag className="w-5 h-5" /> 
+                                    <ShoppingBag className="w-5 h-5" />
                                     {isAdding ? "Adding..." : "Add to Cart"}
                                 </button>
                             </div>
@@ -529,17 +529,12 @@ function ProductContent() {
 
                 {/* Reviews Section */}
                 <div id="reviews" className="mt-24 pt-16 border-t border-border scroll-mt-20">
-                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+                    <div className="flex flex-col md:flex-row md:items-end justify-center gap-6 mb-12">
                         <div>
                             <h2 className="text-3xl font-bold text-foreground mb-2">Community Reviews</h2>
                             <p className="text-muted-foreground">Ratings and unedited feedback from verified buyers.</p>
                         </div>
-                        <button 
-                            onClick={() => setShowReviewModal(true)}
-                            className="bg-primary text-white px-6 py-3 rounded-full font-medium hover:bg-primary/90 transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 whitespace-nowrap"
-                        >
-                            <Star className="w-4 h-4" /> Write a Review
-                        </button>
+
                     </div>
 
                     {!reviews || reviews.length === 0 ? (
@@ -575,7 +570,7 @@ function ProductContent() {
                             ))}
                         </div>
                     )}
-                    
+
                     {reviews && reviews.length > 6 && (
                         <div className="mt-10 flex justify-center">
                             <button
@@ -592,9 +587,9 @@ function ProductContent() {
             {/* Review Modal */}
             {showReviewModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 opacity-100 transition-opacity">
-                    <div 
-                        className="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity" 
-                        onClick={() => setShowReviewModal(false)} 
+                    <div
+                        className="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity"
+                        onClick={() => setShowReviewModal(false)}
                     />
                     <div className="relative bg-background rounded-2xl shadow-2xl w-full max-w-md overflow-hidden transform transition-all scale-100 opacity-100 flex flex-col">
                         <div className="p-5 border-b border-border flex items-center justify-between bg-muted/20">
@@ -606,9 +601,9 @@ function ProductContent() {
                                 <p className="text-sm font-medium text-foreground mb-3 text-center">Tap a star to rate</p>
                                 <div className="flex justify-center gap-2">
                                     {[1, 2, 3, 4, 5].map((star) => (
-                                        <button 
-                                            key={star} 
-                                            type="button" 
+                                        <button
+                                            key={star}
+                                            type="button"
                                             onClick={() => setReviewRating(star)}
                                             className="p-1 transition-transform hover:scale-110 focus:outline-none"
                                         >
@@ -628,8 +623,8 @@ function ProductContent() {
                                     placeholder="What did you think of the product? Did it meet expectations?"
                                 />
                             </div>
-                            <button 
-                                type="submit" 
+                            <button
+                                type="submit"
                                 disabled={isSubmittingReview}
                                 className="w-full py-3 bg-primary text-white rounded-xl font-medium hover:bg-primary/90 transition-colors disabled:opacity-50"
                             >
@@ -643,9 +638,9 @@ function ProductContent() {
             {/* Order Modal */}
             {showOrderModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 opacity-100 transition-opacity">
-                    <div 
-                        className="absolute inset-0 bg-black/60 backdrop-blur-md transition-opacity" 
-                        onClick={() => setShowOrderModal(false)} 
+                    <div
+                        className="absolute inset-0 bg-black/60 backdrop-blur-md transition-opacity"
+                        onClick={() => setShowOrderModal(false)}
                     />
                     <div className="relative bg-background rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden transform transition-all scale-100 opacity-100 flex flex-col max-h-[90vh]">
                         <div className="px-6 py-5 border-b border-border flex items-center justify-between bg-muted/20">
@@ -679,7 +674,7 @@ function ProductContent() {
                     </div>
                 </div>
             )}
-            
+
             {/* Chat Window */}
             {showChat && chatConversationId && (
                 <ChatWindow
@@ -697,7 +692,7 @@ function ProductContent() {
                     onClose={() => setShowChat(false)}
                 />
             )}
-            
+
             <Footer />
         </div>
     )

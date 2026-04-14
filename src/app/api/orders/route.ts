@@ -89,7 +89,7 @@ export async function POST(request: NextRequest) {
                 userId: userId,
                 message: `Your order for ${product.name} has been placed successfully.`,
                 type: "order",
-                link: `/orders` // Assuming there's a /orders page for users
+                link: `/products/my-orders`
             });
 
             // 2. Notify Seller
@@ -99,7 +99,7 @@ export async function POST(request: NextRequest) {
                     userId: currentStore.sellerId,
                     message: `New order received for ${product.name} (Qty: ${quantity}).`,
                     type: "order",
-                    link: `/orders` // Assuming seller also uses /orders or similar
+                    link: `/store/track-orders`
                 });
             }
         } catch (notifError) {
@@ -201,7 +201,7 @@ export async function PATCH(request: NextRequest) {
                 userId: order.userId,
                 message: `Your order for ${order.productId.name} status is now: ${status}.`,
                 type: "order",
-                link: `/orders`
+                link: `/products/my-orders`
             });
         } catch (notifError) {
             console.error("Failed to create in-app notification:", notifError);

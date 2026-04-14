@@ -109,7 +109,7 @@ export default function WishlistPage() {
                                             src={item.productId.image}
                                             alt={item.productId.name}
                                             fill
-                                            className="object-cover group-hover:scale-110 transition-transform duration-700"
+                                            className="object-contain p-4 group-hover:scale-110 transition-transform duration-700"
                                         />
                                     ) : (
                                         <div className="w-full h-full flex items-center justify-center"><Package className="w-12 h-12 text-muted-foreground/30" /></div>

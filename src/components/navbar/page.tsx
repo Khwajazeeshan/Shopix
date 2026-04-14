@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { ShoppingBag, ShoppingCart, User, Menu, X, Store, LayoutDashboard, Heart, Bell } from "lucide-react";
+import { ShoppingBag, ShoppingCart, User, Menu, X, Store, LayoutDashboard, Heart, Bell, Package } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { ThemeToggle } from "../ThemeToggle";
 
@@ -115,6 +115,9 @@ export default function Navbar() {
                                                 </span>
                                             )}
                                         </Link>
+                                        <Link href="/products/my-orders" className="relative p-2 text-foreground hover:bg-muted rounded-full transition-colors group" title="My Orders">
+                                            <Package className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                                        </Link>
                                         <Link href="/wishlist" className="relative p-2 text-foreground hover:bg-muted rounded-full transition-colors group">
                                             <Heart className="w-5 h-5 group-hover:scale-110 transition-transform" />
                                         </Link>
@@ -145,6 +148,9 @@ export default function Navbar() {
                                     {unreadNotifications > 9 ? "9+" : unreadNotifications}
                                 </span>
                             )}
+                        </Link>
+                        <Link href="/products/my-orders" className="p-2 mr-2 text-foreground relative">
+                            <Package className="w-5 h-5" />
                         </Link>
                         <Link href="/wishlist" className="p-2 mr-2 text-foreground relative">
                             <Heart className="w-5 h-5" />
@@ -199,6 +205,14 @@ export default function Navbar() {
                                             <span>{hasStore ? "My Store" : "Create Store"}</span>
                                         </Link>
                                     )}
+                                    <Link 
+                                        href="/products/my-orders" 
+                                        className="flex items-center gap-2 text-base font-medium text-foreground px-2 py-1 hover:text-primary transition-colors"
+                                        onClick={() => setIsMobileMenuOpen(false)}
+                                    >
+                                        <Package className="w-5 h-5" />
+                                        <span>My Orders</span>
+                                    </Link>
                                     <Link 
                                         href="/auth/profile" 
                                         className="flex items-center gap-2 text-base font-medium text-foreground px-2 py-1 hover:text-primary transition-colors"

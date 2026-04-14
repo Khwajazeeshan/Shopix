@@ -88,7 +88,7 @@ export async function POST(request: NextRequest) {
                             userId: store.sellerId,
                             message: `New return request received for order #${orderId} (${product.name}).`,
                             type: "return",
-                            link: `/store/returns`
+                            link: `/store/return-orders`
                         });
                     }
                 } catch (notifError) {
@@ -178,7 +178,7 @@ export async function PATCH(request: NextRequest) {
                         userId: order.userId,
                         message: `The return request for your order #${orderId} (${product.name}) has been ${decision === "successful" ? "approved" : "rejected"}.`,
                         type: "return",
-                        link: `/orders`
+                        link: `/products/my-orders`
                     });
                 } catch (notifError) {
                     console.error("Failed to create in-app notification:", notifError);

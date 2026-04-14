@@ -36,16 +36,16 @@ export default function ProductInfo({ params }: { params: Promise<{ id: string }
     if (loading) return <Loader />
 
     if (!data) return (
-             <div className="min-h-screen bg-background flex flex-col items-center justify-center p-8 text-center">
-                 <div className="w-24 h-24 bg-muted rounded-full flex items-center justify-center mb-6">
-                     <FiPackage className="w-12 h-12 text-muted-foreground" />
-                 </div>
-                 <h1 className="text-3xl font-bold text-foreground mb-4">Product Not Found</h1>
-                 <p className="text-muted-foreground max-w-md mb-8">The item you are looking for might have been removed or does not exist.</p>
-                 <Link href="/" className="px-6 py-3 bg-primary text-white rounded-full hover:bg-primary/90 transition-colors font-medium">
-                     Back to Marketplace
-                 </Link>
-             </div>
+        <div className="min-h-screen bg-background flex flex-col items-center justify-center p-8 text-center">
+            <div className="w-24 h-24 bg-muted rounded-full flex items-center justify-center mb-6">
+                <FiPackage className="w-12 h-12 text-muted-foreground" />
+            </div>
+            <h1 className="text-3xl font-bold text-foreground mb-4">Product Not Found</h1>
+            <p className="text-muted-foreground max-w-md mb-8">The item you are looking for might have been removed or does not exist.</p>
+            <Link href="/" className="px-6 py-3 bg-primary text-white rounded-full hover:bg-primary/90 transition-colors font-medium">
+                Back to Marketplace
+            </Link>
+        </div>
     )
 
     const { product, reviews } = data
@@ -53,7 +53,7 @@ export default function ProductInfo({ params }: { params: Promise<{ id: string }
     return (
         <div className="min-h-screen bg-background flex flex-col font-sans">
             <Navbar />
-            
+
             <main className="flex-1 container mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
                 <div className="mb-6 lg:mb-8">
                     <Link href="/" className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary transition-colors hover:-translate-x-1 duration-200">
@@ -65,7 +65,7 @@ export default function ProductInfo({ params }: { params: Promise<{ id: string }
                     <div className="flex flex-col gap-4 sticky top-24 h-fit">
                         <div className="relative w-full aspect-[4/5] md:aspect-[1/1] bg-surface rounded-3xl overflow-hidden border border-border shadow-sm group">
                             {product.image ? (
-                                <Image src={product.image} alt={product.name} fill className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
+                                <Image src={product.image} alt={product.name} fill className="object-contain p-6 group-hover:scale-105 transition-transform duration-700 ease-out" />
                             ) : (
                                 <div className="w-full h-full flex items-center justify-center bg-muted text-muted-foreground">
                                     <FiPackage className="w-16 h-16 opacity-50" />
@@ -108,13 +108,13 @@ export default function ProductInfo({ params }: { params: Promise<{ id: string }
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
-                             <button className="w-full py-4 px-6 bg-foreground text-background font-semibold rounded-xl hover:bg-foreground/90 transition-all shadow-lg flex items-center justify-center gap-2 text-lg">
-                                 Order Now
-                             </button>
-                             <button className="w-full py-4 px-6 bg-primary/10 text-primary border border-primary/20 font-semibold rounded-xl hover:bg-primary/20 transition-all flex items-center justify-center gap-2 text-lg">
-                                 <FiShoppingBag className="w-5 h-5" />
-                                 Add to Cart
-                             </button>
+                            <button className="w-full py-4 px-6 bg-foreground text-background font-semibold rounded-xl hover:bg-foreground/90 transition-all shadow-lg flex items-center justify-center gap-2 text-lg">
+                                Order Now
+                            </button>
+                            <button className="w-full py-4 px-6 bg-primary/10 text-primary border border-primary/20 font-semibold rounded-xl hover:bg-primary/20 transition-all flex items-center justify-center gap-2 text-lg">
+                                <FiShoppingBag className="w-5 h-5" />
+                                Add to Cart
+                            </button>
                         </div>
                     </div>
                 </div>

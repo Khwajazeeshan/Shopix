@@ -339,7 +339,7 @@ export default function Homepage() {
                       src={product.image}
                       alt={product.name}
                       fill
-                      className="object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out"
+                      className="object-contain p-4 group-hover:scale-105 transition-transform duration-700 ease-in-out"
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-muted-foreground">No image</div>
@@ -384,11 +384,11 @@ export default function Homepage() {
                 </div>
 
                 {/* Content */}
-                <div className="p-4 flex flex-col flex-1">
+                <div className="p-4 flex flex-col">
                   <div className="text-xs text-muted-foreground uppercase tracking-wider font-semibold mb-1 truncate">
                     {product.category || "General"}
                   </div>
-                  <h3 className="font-semibold text-foreground text-base mb-1 line-clamp-1 group-hover:text-primary transition-colors">
+                  <h3 className="font-semibold text-foreground text-base mb-1 line-clamp-2 group-hover:text-primary transition-colors min-h-[3rem]">
                     {product.name}
                   </h3>
                   
