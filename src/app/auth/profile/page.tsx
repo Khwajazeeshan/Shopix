@@ -8,8 +8,7 @@ import { FiEye, FiEyeOff } from "react-icons/fi";
 import { signOut } from "next-auth/react";
 import Loader from "@/src/components/Loader"
 import Navbar from "@/src/components/navbar/page"
-import Footer from "@/src/components/footer/page"
-import { User, Shield, ShieldAlert, LogOut, Key, Trash2, Edit3, CheckCircle, AlertCircle, X, ArrowLeft } from "lucide-react"
+import { User, Shield, ShieldAlert, LogOut, Key, Trash2, Edit3, CheckCircle, AlertCircle, X, ArrowLeft, ArrowRight } from "lucide-react"
 
 export default function Profile() {
     const router = useRouter()
@@ -21,6 +20,7 @@ export default function Profile() {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false)
     const [editForm, setEditForm] = useState({ name: "", role: "" })
     const [updating, setUpdating] = useState(false)
+    const [showPasswordPopup, setShowPasswordPopup] = useState(false)
 
     useEffect(() => {
         const getUser = async () => {
@@ -123,13 +123,13 @@ export default function Profile() {
                     <div className="lg:col-span-4 space-y-8">
                         <div className="bg-surface border border-border rounded-3xl p-6 sm:p-8 shadow-sm relative overflow-hidden group">
                             <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl -z-10 translate-x-10 -translate-y-10 group-hover:bg-primary/10 transition-colors duration-500" />
-                            
+
                             <div className="flex justify-between items-center mb-6">
                                 <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
                                     <User className="w-5 h-5 text-primary" /> Profile Details
                                 </h2>
                                 {user && (
-                                    <button 
+                                    <button
                                         onClick={openEditModal}
                                         className="p-2 text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-full transition-colors tooltip"
                                         title="Edit Profile"
@@ -145,7 +145,7 @@ export default function Profile() {
                                 </div>
                                 <h3 className="text-2xl font-bold text-foreground">{user?.name || "Unknown User"}</h3>
                                 <p className="text-muted-foreground mt-1">{user?.email}</p>
-                                
+
                                 <div className="flex items-center gap-2 mt-4 bg-muted/50 px-4 py-1.5 rounded-full border border-border">
                                     {user?.isVerified ? (
                                         <><CheckCircle className="w-4 h-4 text-green-500" /> <span className="text-sm font-medium">Verified Account</span></>
@@ -176,16 +176,10 @@ export default function Profile() {
                                 <Shield className="w-5 h-5 text-primary" /> Account Security
                             </h2>
                             <p className="text-muted-foreground mb-8">Ensuring your account security is our top priority. Manage your session and credentials.</p>
-                            
+
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <button
-                                    onClick={() => {
-                                        if (user?.role === "admin") {
-                                            router.push("/auth/adminpassword?isAdminReset=true");
-                                        } else {
-                                            router.push("/auth/forgetpassword");
-                                        }
-                                    }}
+                                    onClick={() => setShowPasswordPopup(true)}
                                     className="flex flex-col items-start p-5 rounded-2xl border border-border hover:border-primary/50 hover:bg-primary/5 transition-all text-left group"
                                 >
                                     <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
@@ -195,7 +189,7 @@ export default function Profile() {
                                     <span className="text-xs text-muted-foreground">Keep your account secure with a strong password.</span>
                                 </button>
 
-                                <button 
+                                <button
                                     onClick={handleLogout}
                                     className="flex flex-col items-start p-5 rounded-2xl border border-border hover:border-destructive/50 hover:bg-destructive/5 transition-all text-left group"
                                 >
@@ -212,13 +206,13 @@ export default function Profile() {
                         {user?.role !== "admin" && (
                             <div className="bg-surface border border-red-200 dark:border-red-900/30 rounded-3xl p-6 sm:p-8 shadow-sm relative overflow-hidden">
                                 <div className="absolute top-0 right-0 w-32 h-32 bg-red-500/5 rounded-full blur-3xl -z-10 translate-x-10 -translate-y-10" />
-                                
+
                                 <h2 className="text-xl font-bold text-destructive flex items-center gap-2 mb-2">
                                     <ShieldAlert className="w-5 h-5" /> Danger Zone
                                 </h2>
                                 <p className="text-muted-foreground mb-6">Permanently remove your personal account and all its contents. Once you delete your account, there is no going back.</p>
-                                
-                                <button 
+
+                                <button
                                     onClick={() => setShowPopup(true)}
                                     className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 font-semibold rounded-xl transition-colors w-full sm:w-auto"
                                 >
@@ -229,15 +223,14 @@ export default function Profile() {
                     </div>
                 </div>
             </main>
-            
-            <Footer />
+
 
             {/* Delete Confirmation Popup */}
             {showPopup && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 opacity-100 transition-opacity">
-                    <div 
-                        className="absolute inset-0 bg-black/60 backdrop-blur-md transition-opacity" 
-                        onClick={() => { setShowPopup(false); setPassword(""); }} 
+                    <div
+                        className="absolute inset-0 bg-black/60 backdrop-blur-md transition-opacity"
+                        onClick={() => { setShowPopup(false); setPassword(""); }}
                     />
                     <div className="relative bg-background rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200">
                         <div className="p-6 text-center">
@@ -246,7 +239,7 @@ export default function Profile() {
                             </div>
                             <h2 className="text-2xl font-bold text-foreground mb-2">Confirm Deletion</h2>
                             <p className="text-muted-foreground text-sm mb-6">This action cannot be undone. Please enter your password to confirm account deletion.</p>
-                            
+
                             <div className="space-y-4 text-left">
                                 <div className="relative focus-within:text-destructive transition-colors">
                                     <input
@@ -256,8 +249,8 @@ export default function Profile() {
                                         onChange={(e) => setPassword(e.target.value)}
                                         className="w-full bg-surface border border-border rounded-xl pl-4 pr-12 py-3 outline-none focus:border-red-400 focus:ring-1 focus:ring-red-400/50 transition-all text-foreground"
                                     />
-                                    <button 
-                                        type="button" 
+                                    <button
+                                        type="button"
                                         className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground p-2"
                                         onClick={() => setShowPassword(!showPassword)}
                                     >
@@ -267,13 +260,13 @@ export default function Profile() {
                             </div>
                         </div>
                         <div className="p-5 border-t border-border bg-muted/20 flex flex-col sm:flex-row gap-3">
-                            <button 
+                            <button
                                 onClick={() => { setShowPopup(false); setPassword(""); }}
                                 className="flex-1 px-4 py-3 bg-background border border-border text-foreground font-semibold rounded-xl hover:bg-muted transition-colors"
                             >
                                 Cancel
                             </button>
-                            <button 
+                            <button
                                 onClick={HandleDeleteAccount}
                                 disabled={!password}
                                 className="flex-1 px-4 py-3 bg-red-600 text-white font-semibold rounded-xl hover:bg-red-700 disabled:opacity-50 transition-colors shadow-md shadow-red-600/20"
@@ -288,9 +281,9 @@ export default function Profile() {
             {/* Edit Profile Modal */}
             {isEditModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 opacity-100 transition-opacity">
-                    <div 
-                        className="absolute inset-0 bg-black/60 backdrop-blur-md transition-opacity" 
-                        onClick={() => setIsEditModalOpen(false)} 
+                    <div
+                        className="absolute inset-0 bg-black/60 backdrop-blur-md transition-opacity"
+                        onClick={() => setIsEditModalOpen(false)}
                     />
                     <div className="relative bg-background rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden animate-in zoom-in-95 duration-200">
                         <div className="p-5 border-b border-border flex items-center justify-between bg-muted/20">
@@ -324,21 +317,21 @@ export default function Profile() {
                                             <option value="seller">Seller</option>
                                         </select>
                                         <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-muted-foreground">
-                                            <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+                                            <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" /></svg>
                                         </div>
                                     </div>
                                 </div>
                             )}
                             <div className="pt-4 flex gap-3">
-                                <button 
-                                    type="button" 
+                                <button
+                                    type="button"
                                     onClick={() => setIsEditModalOpen(false)}
                                     className="flex-1 px-4 py-3 text-foreground border border-border font-medium rounded-xl hover:bg-muted transition-colors"
                                 >
                                     Cancel
                                 </button>
-                                <button 
-                                    type="submit" 
+                                <button
+                                    type="submit"
                                     disabled={updating || editForm.name === ""}
                                     className="flex-1 px-4 py-3 bg-primary text-white font-bold rounded-xl hover:bg-primary/90 disabled:opacity-50 transition-colors shadow-md shadow-primary/20 flex justify-center items-center"
                                 >
@@ -346,6 +339,46 @@ export default function Profile() {
                                 </button>
                             </div>
                         </form>
+                    </div>
+                </div>
+            )}
+            {/* Change Password Confirmation Popup */}
+            {showPasswordPopup && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 opacity-100 transition-opacity">
+                    <div 
+                        className="absolute inset-0 bg-black/60 backdrop-blur-md transition-opacity" 
+                        onClick={() => setShowPasswordPopup(false)} 
+                    />
+                    <div className="relative bg-background rounded-3xl shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200">
+                        <div className="p-8 text-center">
+                            <div className="w-16 h-16 bg-primary/10 text-primary rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
+                                <Key className="w-8 h-8" />
+                            </div>
+                            <h2 className="text-2xl font-black text-foreground mb-3 uppercase tracking-tight">Security Update</h2>
+                            <p className="text-muted-foreground text-sm mb-8 leading-relaxed">To update your password, you will be redirected to our secure identity portal. Do you wish to proceed?</p>
+                            
+                            <div className="flex flex-col gap-3">
+                                <button 
+                                    onClick={() => {
+                                        setShowPasswordPopup(false);
+                                        if (user?.role === "admin") {
+                                            router.push("/auth/adminpassword?isAdminReset=true");
+                                        } else {
+                                            router.push("/auth/forgetpassword");
+                                        }
+                                    }}
+                                    className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-primary text-white font-black rounded-xl hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 uppercase tracking-widest text-xs"
+                                >
+                                    Proceed to Identity Portal <ArrowRight className="w-4 h-4" />
+                                </button>
+                                <button 
+                                    onClick={() => setShowPasswordPopup(false)}
+                                    className="w-full px-6 py-4 bg-muted text-foreground border border-border font-bold rounded-xl hover:bg-muted/70 transition-all uppercase tracking-widest text-[10px]"
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             )}

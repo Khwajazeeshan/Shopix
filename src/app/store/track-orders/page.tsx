@@ -124,45 +124,45 @@ export default function TrackOrdersView() {
         <div className="min-h-screen bg-background font-sans flex flex-col items-center">
             {/* Header */}
             <header className="w-full bg-surface/80 backdrop-blur-md border-b border-border sticky top-0 z-20 px-4 sm:px-8 py-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-sm">
-                <div className="flex items-center gap-4 pl-2">
-                    <Link href="/store/dashboard" className="p-2 border border-border rounded-xl text-muted-foreground hover:text-foreground hover:bg-muted transition-colors mr-2">
-                        <FiArrowLeft className="w-5 h-5" />
+                <div className="flex items-center gap-2 sm:gap-4 pl-1 sm:pl-2">
+                    <Link href="/store/dashboard" className="p-1.5 sm:p-2 border border-border rounded-xl text-muted-foreground hover:text-foreground hover:bg-muted transition-colors mr-1">
+                        <FiArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
                     </Link>
-                    <div className="relative w-10 h-10 rounded-lg overflow-hidden border border-border bg-muted shrink-0 hidden sm:block">
+                    <div className="relative w-8 h-8 sm:w-10 sm:h-10 rounded-lg overflow-hidden border border-border bg-muted shrink-0 hidden xs:block">
                         <Image src={store.logo} alt={store.name} fill className="object-cover" />
                     </div>
                     <div>
-                        <h1 className="text-lg sm:text-xl font-bold text-foreground">{store.name}</h1>
-                        <p className="text-xs text-muted-foreground">Order Management</p>
+                        <h1 className="text-sm sm:text-xl font-black text-foreground uppercase tracking-tight">{store.name}</h1>
+                        <p className="text-[8px] sm:text-xs text-muted-foreground font-black uppercase tracking-widest hidden sm:block">Control Center</p>
                     </div>
                 </div>
 
-                <div className="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto">
-                    <div className="flex bg-muted/50 p-1.5 rounded-xl w-full sm:w-auto border border-border">
-                        <button 
+                <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
+                    <div className="flex bg-muted/50 p-1 rounded-xl w-full sm:w-auto border border-border shadow-inner">
+                        <button
                             onClick={() => setActiveTab("new")}
-                            className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all ${activeTab === 'new' ? 'bg-surface text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground hover:bg-muted'}`}
+                            className={`flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-[9px] sm:text-sm font-black uppercase tracking-widest transition-all ${activeTab === 'new' ? 'bg-surface text-foreground shadow-md' : 'text-muted-foreground hover:text-foreground'}`}
                         >
-                            <FiPackage className={activeTab === 'new' ? 'text-primary' : ''} /> 
+                            <FiPackage className={activeTab === 'new' ? 'text-primary' : ''} />
                             New
                         </button>
-                        <button 
+                        <button
                             onClick={() => setActiveTab("progress")}
-                            className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all ${activeTab === 'progress' ? 'bg-surface text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground hover:bg-muted'}`}
+                            className={`flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-[9px] sm:text-sm font-black uppercase tracking-widest transition-all ${activeTab === 'progress' ? 'bg-surface text-foreground shadow-md' : 'text-muted-foreground hover:text-foreground'}`}
                         >
-                            <FiTruck className={activeTab === 'progress' ? 'text-blue-500' : ''} /> 
-                            Progress
+                            <FiTruck className={activeTab === 'progress' ? 'text-blue-500' : ''} />
+                            Flow
                         </button>
-                        <button 
+                        <button
                             onClick={() => setActiveTab("completed")}
-                            className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all ${activeTab === 'completed' ? 'bg-surface text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground hover:bg-muted'}`}
+                            className={`flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-[9px] sm:text-sm font-black uppercase tracking-widest transition-all ${activeTab === 'completed' ? 'bg-surface text-foreground shadow-md' : 'text-muted-foreground hover:text-foreground'}`}
                         >
-                            <FiCheckCircle className={activeTab === 'completed' ? 'text-green-500' : ''} /> 
-                            Completed
+                            <FiCheckCircle className={activeTab === 'completed' ? 'text-green-500' : ''} />
+                            End
                         </button>
                     </div>
-                    
-                    <Link href="/store/return-orders" className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 bg-red-500/10 text-red-600 hover:bg-red-500 hover:text-white font-semibold rounded-xl transition-all whitespace-nowrap">
+
+                    <Link href="/store/return-orders" className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-red-500/10 text-red-600 hover:bg-red-500 hover:text-white font-black text-[10px] sm:text-sm uppercase tracking-widest rounded-xl transition-all whitespace-nowrap">
                         <FiRefreshCcw /> Returns
                         {orders.some(o => o.returnStatus === 'processing') && (
                             <span className="flex h-2 w-2 relative ml-1">
@@ -175,64 +175,56 @@ export default function TrackOrdersView() {
             </header>
 
             <main className="w-full max-w-7xl mx-auto px-4 sm:px-8 py-8 sm:py-12 flex-1">
-                <div className="mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+                <div className="mb-6 sm:mb-8 flex justify-between items-end">
                     <div>
-                        <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground capitalize mb-2">{activeTab} Orders</h2>
-                        <p className="text-muted-foreground text-sm">
-                            {activeTab === "new" && "Review and accept incoming requests"}
-                            {activeTab === "progress" && "Orders currently being processed or on their way"}
-                            {activeTab === "completed" && "Successfully delivered and closed orders"}
-                        </p>
+                        <h2 className="text-xl sm:text-3xl font-black text-foreground capitalize flex items-center gap-2 tracking-tight sm:tracking-normal">
+                            {activeTab} <span className="text-primary/50">Ledger</span>
+                        </h2>
                     </div>
-                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-surface border border-border rounded-xl">
-                        <span className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Total</span>
-                        <span className="text-lg font-bold text-foreground">{filteredOrders.length}</span>
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-surface border border-border rounded-lg shadow-sm">
+                        <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Total</span>
+                        <span className="text-sm font-black text-primary">{filteredOrders.length}</span>
                     </div>
                 </div>
 
                 {filteredOrders.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-6">
                         {filteredOrders.map((order) => (
-                            <div key={order._id} className="bg-surface border border-border rounded-3xl p-6 shadow-sm hover:shadow-md transition-all flex flex-col group relative overflow-hidden">
-                                {activeTab === "new" && <div className="absolute top-0 right-0 w-2 h-full bg-primary/80" />}
-                                {activeTab === "progress" && <div className="absolute top-0 right-0 w-2 h-full bg-blue-500/80" />}
-                                {activeTab === "completed" && <div className="absolute top-0 right-0 w-2 h-full bg-green-500/80" />}
-                                
-                                <div className="flex justify-between items-start mb-6">
-                                    <div>
-                                        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Order ID</p>
-                                        <h3 className="text-lg font-bold text-foreground">#{order._id.slice(-8).toUpperCase()}</h3>
+                            <div key={order._id} className="bg-surface border border-border rounded-xl sm:rounded-2xl p-2.5 sm:p-6 shadow-sm hover:shadow-md transition-all flex flex-col group relative overflow-hidden">
+                                {activeTab === "new" && <div className="absolute top-0 left-0 w-1 h-full bg-primary/80" />}
+                                {activeTab === "progress" && <div className="absolute top-0 left-0 w-1 h-full bg-blue-500/80" />}
+                                {activeTab === "completed" && <div className="absolute top-0 left-0 w-1 h-full bg-green-500/80" />}
+
+                                <div className="flex justify-between items-start mb-2 sm:mb-4">
+                                    <div className="min-w-0">
+                                        <p className="text-[6px] sm:text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-0.5 opacity-60">Ref</p>
+                                        <h3 className="text-[9px] sm:text-lg font-black text-foreground tracking-tighter truncate">#{order._id.slice(-6).toUpperCase()}</h3>
                                     </div>
-                                    <span className={`px-3 py-1 text-xs font-bold rounded-lg uppercase tracking-wide
-                                        ${order.status === 'new' ? 'bg-primary/10 text-primary border border-primary/20' : 
-                                          order.status === 'progress' ? 'bg-blue-500/10 text-blue-600 border border-blue-500/20' : 
-                                          'bg-green-500/10 text-green-600 border border-green-500/20'}`}>
+                                    <span className={`px-1.5 py-0.5 text-[6px] sm:text-[10px] font-black rounded border uppercase tracking-tighter
+                                        ${order.status === 'new' ? 'bg-primary/10 text-primary border-primary/20' :
+                                            order.status === 'progress' ? 'bg-blue-500/10 text-blue-600 border-blue-500/20' :
+                                                'bg-green-500/10 text-green-600 border-green-500/20'}`}>
                                         {order.status}
                                     </span>
                                 </div>
-                                
-                                <div className="space-y-3 mb-8 flex-1">
-                                    <div className="flex justify-between text-sm">
-                                        <span className="text-muted-foreground">Customer:</span>
-                                        <span className="font-semibold text-foreground truncate max-w-[150px]" title={order.receiverName}>{order.receiverName}</span>
+
+                                <div className="space-y-1 sm:space-y-2 mb-3 sm:mb-6 flex-1">
+                                    <div className="flex flex-col">
+                                        <span className="text-[6px] sm:text-[10px] text-muted-foreground font-black uppercase tracking-widest">Client</span>
+                                        <span className="font-black text-foreground text-[8px] sm:text-sm truncate uppercase">{order.receiverName}</span>
                                     </div>
-                                    <div className="flex justify-between text-sm">
-                                        <span className="text-muted-foreground">Date:</span>
-                                        <span className="font-medium text-foreground">{new Date(order.createdAt).toLocaleDateString()}</span>
-                                    </div>
-                                    <div className="flex justify-between text-sm">
-                                        <span className="text-muted-foreground">Items:</span>
-                                        <span className="font-medium text-foreground">{order.quantity} units</span>
+                                    <div className="flex justify-between items-center bg-muted/30 px-1 py-0.5 rounded sm:bg-transparent sm:px-0">
+                                        <span className="text-[6px] sm:text-[10px] text-muted-foreground font-black uppercase tracking-widest">Yield</span>
+                                        <span className="font-black text-primary text-[8px] sm:text-sm">Rs. {order.totalAmount}</span>
                                     </div>
                                 </div>
-                                
-                                <div className="pt-4 border-t border-border flex justify-between items-center mt-auto">
-                                    <span className="font-extrabold text-foreground text-lg">Rs. {order.totalAmount.toLocaleString()}</span>
-                                    <button 
+
+                                <div className="pt-2 border-t border-border mt-auto">
+                                    <button
                                         onClick={() => openOrderDetails(order)}
-                                        className="px-5 py-2.5 bg-background border border-border hover:bg-muted text-foreground font-semibold text-sm rounded-xl transition-colors shrink-0"
+                                        className="w-full py-1.5 sm:py-2.5 bg-background border border-border hover:bg-muted text-foreground font-black text-[7px] sm:text-[10px] uppercase tracking-widest rounded sm:rounded-xl transition-all flex items-center justify-center gap-1"
                                     >
-                                        View Details
+                                        <FiInfo className="w-2 h-2 sm:w-3 sm:h-3" /> Info
                                     </button>
                                 </div>
                             </div>
@@ -240,11 +232,10 @@ export default function TrackOrdersView() {
                     </div>
                 ) : (
                     <div className="bg-surface border border-dashed border-border rounded-3xl py-24 flex flex-col items-center justify-center text-center px-4">
-                        <div className={`w-20 h-20 rounded-full flex items-center justify-center mb-6 shadow-inner ${
-                            activeTab === 'new' ? 'bg-primary/10 text-primary' :
-                            activeTab === 'progress' ? 'bg-blue-500/10 text-blue-500' :
-                            'bg-green-500/10 text-green-500'
-                        }`}>
+                        <div className={`w-20 h-20 rounded-full flex items-center justify-center mb-6 shadow-inner ${activeTab === 'new' ? 'bg-primary/10 text-primary' :
+                                activeTab === 'progress' ? 'bg-blue-500/10 text-blue-500' :
+                                    'bg-green-500/10 text-green-500'
+                            }`}>
                             {activeTab === "new" && <FiPackage className="w-10 h-10" />}
                             {activeTab === "progress" && <FiTruck className="w-10 h-10" />}
                             {activeTab === "completed" && <FiCheckCircle className="w-10 h-10" />}
@@ -260,87 +251,87 @@ export default function TrackOrdersView() {
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 opacity-100 transition-opacity">
                     <div onClick={closeOrderDetails} className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" />
                     <div className="relative bg-background rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh]">
-                        
-                        <div className="p-6 border-b border-border flex justify-between items-center bg-muted/30">
+
+                        <div className="px-5 py-4 sm:p-6 border-b border-border flex justify-between items-center bg-muted/30">
                             <div>
-                                <h3 className="text-xl font-bold text-foreground flex items-center gap-2">
-                                    Order Details <span className="opacity-50 font-normal text-sm">#{selectedOrder._id.slice(-8).toUpperCase()}</span>
+                                <h3 className="text-lg sm:text-xl font-black text-foreground flex items-center gap-2 uppercase tracking-tighter">
+                                    Order Intelligence <span className="opacity-50 font-black text-[10px]">#{selectedOrder._id.slice(-8).toUpperCase()}</span>
                                 </h3>
                             </div>
-                            <button onClick={closeOrderDetails} className="p-2 bg-background border border-border rounded-full hover:bg-muted text-muted-foreground transition-colors">
+                            <button onClick={closeOrderDetails} className="p-1.5 bg-background border border-border rounded-full hover:bg-muted text-muted-foreground transition-colors">
                                 <FiX className="w-5 h-5" />
                             </button>
                         </div>
 
-                        <div className="p-6 sm:p-8 overflow-y-auto hidden-scrollbar">
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-8">
-                                <div className="space-y-4">
-                                    <h4 className="flex items-center gap-2 text-sm font-bold text-foreground uppercase tracking-wider"><FiInfo /> Customer Info</h4>
-                                    <div className="bg-surface border border-border rounded-2xl p-5 space-y-3 shadow-sm h-full">
+                        <div className="p-5 sm:p-8 overflow-y-auto hidden-scrollbar space-y-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8">
+                                <div className="space-y-3">
+                                    <h4 className="flex items-center gap-2 text-[10px] font-black text-muted-foreground uppercase tracking-widest"><FiInfo className="text-primary" /> Delivery Data</h4>
+                                    <div className="bg-surface border border-border rounded-2xl p-4 space-y-3 shadow-sm">
                                         <div>
-                                            <p className="text-xs text-muted-foreground">Name</p>
-                                            <p className="font-semibold text-foreground">{selectedOrder.receiverName}</p>
+                                            <p className="text-[8px] font-black text-muted-foreground uppercase mb-0.5 tracking-tighter">Customer Identity</p>
+                                            <p className="font-black text-foreground text-xs uppercase tracking-tight">{selectedOrder.receiverName}</p>
                                         </div>
                                         <div>
-                                            <p className="text-xs text-muted-foreground">Phone</p>
-                                            <p className="font-semibold text-foreground">{selectedOrder.mobileNumber}</p>
+                                            <p className="text-[8px] font-black text-muted-foreground uppercase mb-0.5 tracking-tighter">Communication</p>
+                                            <p className="font-black text-foreground text-xs uppercase tracking-tight">{selectedOrder.mobileNumber}</p>
                                         </div>
                                         <div>
-                                            <p className="text-xs text-muted-foreground">Shipping Address</p>
-                                            <p className="font-semibold text-foreground break-words">{selectedOrder.billingAddress}</p>
+                                            <p className="text-[8px] font-black text-muted-foreground uppercase mb-0.5 tracking-tighter">Locus</p>
+                                            <p className="font-black text-foreground text-xs uppercase tracking-tight break-words">{selectedOrder.billingAddress}</p>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div className="space-y-4">
-                                    <h4 className="flex items-center gap-2 text-sm font-bold text-foreground uppercase tracking-wider"><FiPackage /> Product Info</h4>
-                                    <div className="bg-surface border border-border rounded-2xl p-5 space-y-3 shadow-sm h-full">
+                                <div className="space-y-3">
+                                    <h4 className="flex items-center gap-2 text-[10px] font-black text-muted-foreground uppercase tracking-widest"><FiPackage className="text-primary" /> Transaction Asset</h4>
+                                    <div className="bg-surface border border-border rounded-2xl p-4 space-y-3 shadow-sm h-full">
                                         <div>
-                                            <p className="text-xs text-muted-foreground">Item</p>
-                                            <p className="font-semibold text-foreground">{selectedOrder.productId?.name || "N/A"}</p>
+                                            <p className="text-[8px] font-black text-muted-foreground uppercase mb-0.5 tracking-tighter">Inventory Item</p>
+                                            <p className="font-black text-foreground text-xs uppercase tracking-tight">{selectedOrder.productId?.name || "N/A"}</p>
                                         </div>
                                         <div>
-                                            <p className="text-xs text-muted-foreground">Quantity</p>
-                                            <p className="font-semibold text-foreground">{selectedOrder.quantity} units</p>
+                                            <p className="text-[8px] font-black text-muted-foreground uppercase mb-0.5 tracking-tighter">Units</p>
+                                            <p className="font-black text-foreground text-xs uppercase tracking-tight">{selectedOrder.quantity} units</p>
                                         </div>
                                         <div>
-                                            <p className="text-xs text-muted-foreground">Payment Method</p>
-                                            <p className="font-semibold text-foreground flex items-center gap-2">
-                                                <FiCreditCard className="text-primary" />
-                                                {selectedOrder.paymentMethod === 'cod' ? 'Cash on Delivery' : 'Online Payment'}
+                                            <p className="text-[8px] font-black text-muted-foreground uppercase mb-0.5 tracking-tighter">Modality</p>
+                                            <p className="font-black text-foreground text-xs flex items-center gap-1.5 uppercase tracking-tight">
+                                                <FiCreditCard className="text-primary/50" />
+                                                {selectedOrder.paymentMethod}
                                             </p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            
-                            <div className="bg-primary/5 border border-primary/20 rounded-2xl p-6 flex justify-between items-center mb-2">
-                                <span className="font-extrabold text-foreground uppercase tracking-wider text-sm">Total Value</span>
-                                <h2 className="text-3xl font-black text-primary">Rs. {selectedOrder.totalAmount.toLocaleString()}</h2>
+
+                            <div className="bg-primary/5 border border-primary/20 rounded-2xl p-4 sm:p-6 flex justify-between items-center">
+                                <span className="font-black text-muted-foreground uppercase tracking-[0.2em] text-[10px] sm:text-sm">Net Value</span>
+                                <h2 className="text-2xl sm:text-3xl font-black text-primary">Rs. {selectedOrder.totalAmount.toLocaleString()}</h2>
                             </div>
                         </div>
 
-                        <div className="p-6 border-t border-border bg-muted/30 flex flex-col sm:flex-row justify-between gap-4 mt-auto">
-                            <button onClick={() => window.print()} className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 border border-border bg-background hover:bg-muted text-foreground font-semibold rounded-xl transition-colors">
+                        <div className="p-5 border-t border-border bg-muted/30 flex flex-col gap-2 mt-auto">
+                            <button onClick={() => window.print()} className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 border border-border bg-background hover:bg-muted text-foreground font-black text-[10px] uppercase tracking-widest rounded-xl transition-colors">
                                 <FiPrinter /> Print Slip
                             </button>
-                            
-                            <div className="flex gap-3 w-full sm:w-auto">
+
+                            <div className="flex gap-2 w-full">
                                 {activeTab === "new" && (
                                     <>
                                         <button
                                             onClick={() => updateOrderStatus(selectedOrder._id, "cancelled")}
                                             disabled={isUpdating}
-                                            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-6 py-3 border border-border bg-background hover:bg-red-500 hover:text-white hover:border-red-500 text-foreground font-semibold rounded-xl transition-colors disabled:opacity-50"
+                                            className="px-4 py-3 border border-border bg-background hover:bg-red-500 hover:text-white hover:border-red-500 text-foreground font-black text-[10px] uppercase tracking-widest rounded-xl transition-colors disabled:opacity-50"
                                         >
-                                            <FiX /> Decline
+                                            Decline
                                         </button>
                                         <button
                                             onClick={() => updateOrderStatus(selectedOrder._id, "progress")}
                                             disabled={isUpdating}
-                                            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-white font-semibold rounded-xl hover:bg-primary/90 transition-colors shadow-md active:scale-[0.98] disabled:opacity-70 min-w-[170px]"
+                                            className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-white font-black text-[10px] uppercase tracking-widest rounded-xl hover:bg-primary/90 transition-all shadow-md active:scale-[0.98] disabled:opacity-70"
                                         >
-                                            {isUpdating ? <div className="w-5 h-5 rounded-full border-2 border-white/30 border-t-white animate-spin" /> : <><FiTruck /> Mark as Shipped</>}
+                                            {isUpdating ? <div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" /> : <><FiTruck /> Mark Shipped</>}
                                         </button>
                                     </>
                                 )}
@@ -348,9 +339,9 @@ export default function TrackOrdersView() {
                                     <button
                                         onClick={() => updateOrderStatus(selectedOrder._id, "completed")}
                                         disabled={isUpdating}
-                                        className="w-full inline-flex items-center justify-center gap-2 px-8 py-3 bg-green-500 text-white font-semibold rounded-xl hover:bg-green-600 transition-colors shadow-md active:scale-[0.98] disabled:opacity-70 min-w-[200px]"
+                                        className="w-full inline-flex items-center justify-center gap-2 px-8 py-3 bg-green-500 text-white font-black text-[10px] uppercase tracking-widest rounded-xl hover:bg-green-600 transition-colors shadow-md active:scale-[0.98] disabled:opacity-70"
                                     >
-                                        {isUpdating ? <div className="w-5 h-5 rounded-full border-2 border-white/30 border-t-white animate-spin" /> : <><FiCheckCircle /> Mark as Delivered</>}
+                                        {isUpdating ? <div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" /> : <><FiCheckCircle /> Mark Delivered</>}
                                     </button>
                                 )}
                             </div>

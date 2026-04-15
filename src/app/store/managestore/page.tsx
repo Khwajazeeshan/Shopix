@@ -131,98 +131,84 @@ export default function ManageStore() {
         <div className="min-h-screen bg-background font-sans flex flex-col items-center">
             {/* Header */}
             <header className="w-full bg-surface/80 backdrop-blur-md border-b border-border sticky top-0 z-20 px-4 sm:px-8 h-20 flex items-center shadow-sm">
-                <div className="flex items-center gap-4 w-full max-w-5xl mx-auto pl-2">
-                    <Link href="/store/dashboard" className="p-2 border border-border rounded-xl text-muted-foreground hover:text-foreground hover:bg-muted transition-colors mr-2">
-                        <FiArrowLeft className="w-5 h-5" />
+                <div className="flex items-center gap-2 sm:gap-4 w-full max-w-5xl mx-auto pl-1 sm:pl-2">
+                    <Link href="/store/dashboard" className="p-1.5 sm:p-2 border border-border rounded-xl text-muted-foreground hover:text-foreground hover:bg-muted transition-colors mr-1 sm:mr-2">
+                        <FiArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
                     </Link>
                     <div>
-                        <h1 className="text-xl sm:text-2xl font-bold text-foreground">Manage Store</h1>
-                        <p className="text-xs sm:text-sm text-muted-foreground hidden sm:block">Update configurations and details</p>
+                        <h1 className="text-lg sm:text-2xl font-black text-foreground uppercase tracking-tight sm:tracking-normal">Store Profile</h1>
+                        <p className="text-[10px] sm:text-sm text-muted-foreground hidden sm:block font-black uppercase tracking-widest">Configuration & Identity</p>
                     </div>
                 </div>
             </header>
 
             <main className="w-full max-w-5xl mx-auto px-4 sm:px-8 py-8 sm:py-12 flex-1">
                 {/* Store Profile Card */}
-                <div className="bg-surface border border-border rounded-3xl p-6 sm:p-10 shadow-sm relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 w-48 h-48 bg-primary/5 rounded-full blur-[80px] -z-10 translate-x-10 -translate-y-10 group-hover:bg-primary/10 transition-colors duration-500" />
+                <div className="bg-surface border border-border rounded-2xl sm:rounded-3xl p-4 sm:p-10 shadow-sm relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 w-32 h-32 sm:w-48 sm:h-48 bg-primary/5 rounded-full blur-[60px] sm:blur-[80px] -z-10 translate-x-10 -translate-y-10" />
                     
-                    <div className="flex flex-col md:flex-row gap-8 items-start md:items-center border-b border-border pb-8 mb-8">
-                        <div className="relative w-32 h-32 rounded-3xl overflow-hidden border-4 border-background shadow-md bg-muted shrink-0">
+                    <div className="flex flex-col md:flex-row gap-6 sm:gap-8 items-center md:items-center border-b border-border pb-6 sm:pb-8 mb-6 sm:mb-8 text-center md:text-left">
+                        <div className="relative w-24 h-24 sm:w-32 sm:h-32 rounded-2xl sm:rounded-3xl overflow-hidden border-2 sm:border-4 border-background shadow-md bg-muted shrink-0">
                             {store.logo ? (
                                 <Image src={store.logo} alt={store.name} fill className="object-cover" />
                             ) : (
-                                <div className="w-full h-full flex items-center justify-center font-bold text-4xl text-muted-foreground">{store.name[0]}</div>
+                                <div className="w-full h-full flex items-center justify-center font-black text-3xl text-muted-foreground uppercase">{store.name[0]}</div>
                             )}
                         </div>
-                        <div className="flex flex-1 flex-col sm:flex-row sm:items-start justify-between gap-4 w-full">
+                        <div className="flex flex-1 flex-col items-center md:items-start justify-between gap-4 w-full">
                             <div>
-                                <h2 className="text-3xl font-extrabold text-foreground mb-2">{store.name}</h2>
-                                <div className="inline-flex items-center gap-2 px-3 py-1 bg-green-500/10 text-green-600 rounded-full font-medium text-sm">
-                                    <FiCheckCircle className="w-4 h-4" /> Status: {store.status}
+                                <h2 className="text-2xl sm:text-3xl font-black text-foreground mb-1 uppercase tracking-tight">{store.name}</h2>
+                                <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-green-500/10 text-green-600 rounded-full font-black text-[10px] uppercase tracking-widest border border-green-500/20">
+                                    <FiCheckCircle className="w-3 h-3" /> {store.status}
                                 </div>
                             </div>
-                            <div className="flex gap-3 mt-2 sm:mt-0">
-                                <button 
-                                    onClick={() => setShowUpdateModal(true)}
-                                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary/10 text-primary hover:bg-primary hover:text-white font-semibold rounded-xl transition-all"
-                                >
-                                    <FiEdit3 className="w-4 h-4" /> Edit Profile
-                                </button>
+                            <button 
+                                onClick={() => setShowUpdateModal(true)}
+                                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-primary text-white font-black text-[10px] sm:text-sm uppercase tracking-widest rounded-xl transition-all shadow-md active:scale-95"
+                            >
+                                <FiEdit3 /> Edit Identity
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <div className="space-y-4">
+                            <h3 className="text-[10px] font-black text-muted-foreground uppercase tracking-widest border-l-2 border-primary pl-2">Executive Summary</h3>
+                            <div className="bg-muted/10 p-3 rounded-xl border border-border">
+                                <p className="text-[8px] text-muted-foreground font-black uppercase tracking-widest mb-1">Store Description</p>
+                                <p className="text-foreground leading-relaxed text-xs font-black uppercase tracking-tight">{store.description}</p>
+                            </div>
+                            <div className="bg-muted/10 p-3 rounded-xl border border-border flex justify-between items-center">
+                                <span className="text-[8px] text-muted-foreground font-black uppercase tracking-widest">Type</span>
+                                <span className="text-foreground font-black text-[10px] uppercase">{store.type}</span>
+                            </div>
+                        </div>
+
+                        <div className="space-y-4">
+                            <h3 className="text-[10px] font-black text-muted-foreground uppercase tracking-widest border-l-2 border-primary pl-2">Legal Artifacts</h3>
+                            <div className="bg-muted/10 p-3 rounded-xl border border-border flex justify-between items-center">
+                                <span className="text-[8px] text-muted-foreground font-black uppercase tracking-widest">Mail</span>
+                                <span className="text-foreground font-black text-[10px] truncate max-w-[150px]">{store.sellerEmail}</span>
+                            </div>
+                            <div className="bg-muted/10 p-3 rounded-xl border border-border flex justify-between items-center">
+                                <span className="text-[8px] text-muted-foreground font-black uppercase tracking-widest">Hash ID</span>
+                                <span className="text-muted-foreground font-black text-[8px] uppercase tracking-tighter truncate max-w-[120px]">{store._id}</span>
                             </div>
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-                        <div className="space-y-6">
-                            <h3 className="text-lg font-bold text-foreground">About the Store</h3>
-                            <div className="flex items-start gap-3">
-                                <div className="mt-1 flex items-center justify-center w-8 h-8 rounded-full bg-muted text-muted-foreground shrink-0"><FiInfo className="w-4 h-4" /></div>
-                                <div>
-                                    <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider mb-1">Description</p>
-                                    <p className="text-foreground leading-relaxed text-sm">{store.description}</p>
-                                </div>
-                            </div>
-                            <div className="flex items-center gap-3">
-                                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-muted text-muted-foreground shrink-0"><FiBriefcase className="w-4 h-4" /></div>
-                                <div>
-                                    <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider mb-1">Store Type</p>
-                                    <p className="text-foreground font-medium">{store.type}</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="space-y-6">
-                            <h3 className="text-lg font-bold text-foreground">Contact & Identity</h3>
-                            <div className="flex items-center gap-3">
-                                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-muted text-muted-foreground shrink-0"><FiMail className="w-4 h-4" /></div>
-                                <div>
-                                    <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider mb-1">Seller Email</p>
-                                    <p className="text-foreground font-medium">{store.sellerEmail}</p>
-                                </div>
-                            </div>
-                            <div className="flex items-center gap-3">
-                                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-muted text-muted-foreground shrink-0"><FiTag className="w-4 h-4" /></div>
-                                <div>
-                                    <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider mb-1">Store ID</p>
-                                    <p className="text-muted-foreground font-mono text-xs truncate max-w-[200px]">{store._id}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="border-t border-border pt-8 bg-destructive/5 -mx-6 sm:-mx-10 -mb-6 sm:-mb-10 px-6 sm:px-10 pb-6 sm:pb-10 rounded-b-3xl">
-                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div className="border-t border-border pt-6 sm:pt-8 bg-destructive/5 -mx-4 sm:-mx-10 -mb-4 sm:-mb-10 px-4 sm:px-10 pb-4 sm:pb-10 rounded-b-2xl sm:rounded-b-3xl">
+                        <div className="flex flex-col sm:flex-row justify-between items-center sm:items-center gap-4 text-center sm:text-left">
                             <div>
-                                <h3 className="text-lg font-bold text-destructive flex items-center gap-2 mb-1"><FiAlertTriangle /> Danger Zone</h3>
-                                <p className="text-muted-foreground text-sm">Once you delete your store, there is no going back</p>
+                                <h3 className="text-sm font-black text-destructive flex items-center justify-center sm:justify-start gap-2 mb-0.5 uppercase tracking-widest"><FiAlertTriangle /> Danger Protocol</h3>
+                                <p className="text-[10px] text-muted-foreground font-black uppercase tracking-widest opacity-60">Terminal store closure is irreversible</p>
                             </div>
                             <button 
                                 onClick={() => setShowDeleteModal(true)} 
                                 disabled={isDeleting}
-                                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-background border border-destructive/30 text-destructive hover:bg-destructive hover:text-white font-semibold rounded-xl transition-all shadow-sm disabled:opacity-50"
+                                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-background border border-destructive/20 text-destructive hover:bg-destructive hover:text-white font-black text-[10px] uppercase tracking-widest rounded-xl transition-all shadow-sm disabled:opacity-50"
                             >
-                                <FiTrash2 className="w-4 h-4" /> Delete Store
+                                <FiTrash2 /> Liquidate Store
                             </button>
                         </div>
                     </div>
@@ -234,48 +220,48 @@ export default function ManageStore() {
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 opacity-100 transition-opacity">
                     <div onClick={() => !isUpdating && setShowUpdateModal(false)} className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" />
                     <div className="relative bg-background rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh]">
-                        <div className="p-6 border-b border-border flex items-center justify-between bg-muted/30">
+                        <div className="px-4 py-4 sm:p-6 border-b border-border flex items-center justify-between bg-muted/30">
                             <div>
-                                <h2 className="text-xl font-bold text-foreground">Update Store Profile</h2>
-                                <p className="text-xs text-muted-foreground mt-1">Modify your storefront details</p>
+                                <h2 className="text-lg font-black text-foreground uppercase tracking-tight">Identity Update</h2>
+                                <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest opacity-60">Reconfigure storefront</p>
                             </div>
-                            <button onClick={() => setShowUpdateModal(false)} disabled={isUpdating} className="p-2 bg-background border border-border rounded-full hover:bg-muted text-muted-foreground transition-colors"><FiX className="w-5 h-5" /></button>
+                            <button onClick={() => setShowUpdateModal(false)} disabled={isUpdating} className="p-1.5 bg-background border border-border rounded-full hover:bg-muted text-muted-foreground transition-colors"><FiX className="w-5 h-5" /></button>
                         </div>
-                        <form onSubmit={handleSubmit(onUpdateSubmit)} className="p-6 sm:p-8 overflow-y-auto hidden-scrollbar space-y-6">
-                            <div className="space-y-2 focus-within:text-primary transition-colors">
-                                <label className="text-sm font-medium text-foreground">Store Banner / Logo</label>
-                                <label className="block w-full h-40 border-2 border-dashed border-border hover:border-primary/50 bg-surface rounded-2xl transition-colors cursor-pointer overflow-hidden group relative">
+                        <form onSubmit={handleSubmit(onUpdateSubmit)} className="p-4 sm:p-8 overflow-y-auto hidden-scrollbar space-y-5">
+                            <div className="space-y-1.5 focus-within:text-primary transition-colors">
+                                <label className="text-[10px] font-black text-foreground uppercase tracking-widest">Store Iconography</label>
+                                <label className="block w-full h-32 sm:h-40 border-2 border-dashed border-border hover:border-primary/50 bg-surface rounded-2xl transition-colors cursor-pointer overflow-hidden group relative">
                                     {preview ? (
                                         <>
-                                            <Image src={preview} alt="Preview" fill className="object-cover opacity-80" />
-                                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white font-medium gap-2">
-                                                <FiUploadCloud className="w-5 h-5" /> Replace Logo
+                                            <Image src={preview} alt="Preview" fill className="object-cover opacity-60 group-hover:opacity-40 transition-all" />
+                                            <div className="absolute inset-0 flex flex-col items-center justify-center text-foreground font-black text-[8px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <FiUploadCloud className="w-4 h-4 mb-1" /> Update File
                                             </div>
                                         </>
                                     ) : (
                                         <div className="flex flex-col items-center justify-center h-full text-muted-foreground group-hover:text-primary transition-colors">
-                                            <FiUploadCloud className="w-8 h-8 mb-3" />
-                                            <span className="font-medium">Click to upload new logo</span>
+                                            <FiUploadCloud className="w-6 h-6 mb-2" />
+                                            <span className="text-[10px] font-black uppercase tracking-widest">Initiate Upload</span>
                                         </div>
                                     )}
                                     <input type="file" className="hidden" accept="image/*" {...register("logo")} />
                                 </label>
                             </div>
                             
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                                 <div className="space-y-1.5 focus-within:text-primary transition-colors">
-                                    <label className="text-sm font-medium text-foreground">Store Name</label>
+                                    <label className="text-[10px] font-black text-foreground uppercase tracking-widest">Nominal Identity</label>
                                     <input
-                                        placeholder="My Amazing Store"
-                                        className="w-full bg-surface border border-border rounded-xl px-4 py-3 outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all text-foreground"
-                                        {...register("name", { required: "Store name is required", minLength: { value: 4, message: "Min 4 characters" } })}
+                                        placeholder="Enter Store Name"
+                                        className="w-full bg-surface border border-border rounded-xl px-3 py-2.5 sm:px-4 sm:py-3 outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all text-xs sm:text-sm text-foreground font-black uppercase tracking-tight"
+                                        {...register("name", { required: "Required", minLength: { value: 4, message: "Min 4 chars" } })}
                                     />
-                                    {errors.name && <p className="text-destructive text-xs mt-1">{errors.name.message}</p>}
+                                    {errors.name && <p className="text-destructive text-[8px] font-black uppercase tracking-widest mt-1">{errors.name.message}</p>}
                                 </div>
                                 <div className="space-y-1.5 focus-within:text-primary transition-colors">
-                                    <label className="text-sm font-medium text-foreground">Store Type</label>
+                                    <label className="text-[10px] font-black text-foreground uppercase tracking-widest">Legal Entity</label>
                                     <select 
-                                        className="w-full bg-surface border border-border rounded-xl px-4 py-3 outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all text-foreground appearance-none"
+                                        className="w-full bg-surface border border-border rounded-xl px-3 py-2.5 sm:px-4 sm:py-3 outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all text-xs sm:text-sm text-foreground font-black uppercase appearance-none"
                                         {...register("type", { required: "Type is required" })}
                                     >
                                         <option value="Individual">Individual</option>
@@ -285,22 +271,22 @@ export default function ManageStore() {
                             </div>
 
                             <div className="space-y-1.5 focus-within:text-primary transition-colors">
-                                <label className="text-sm font-medium text-foreground">Description</label>
+                                <label className="text-[10px] font-black text-foreground uppercase tracking-widest">Narrative</label>
                                 <textarea
-                                    rows={4}
-                                    placeholder="Tell your customers what you sell..."
-                                    className="w-full bg-surface border border-border rounded-xl px-4 py-3 outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all text-foreground resize-none"
-                                    {...register("description", { required: "Description is required" })}
+                                    rows={3}
+                                    placeholder="Inventory specialization data..."
+                                    className="w-full bg-surface border border-border rounded-xl px-3 py-2.5 sm:px-4 sm:py-3 outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all text-xs sm:text-sm text-foreground font-black uppercase tracking-tight resize-none"
+                                    {...register("description", { required: "Required" })}
                                 />
-                                {errors.description && <p className="text-destructive text-xs mt-1">{errors.description.message}</p>}
+                                {errors.description && <p className="text-destructive text-[8px] font-black uppercase tracking-widest mt-1">{errors.description.message}</p>}
                             </div>
                             
-                            <div className="pt-4 border-t border-border flex justify-end gap-3 mt-6">
-                                <button type="button" disabled={isUpdating} onClick={() => setShowUpdateModal(false)} className="px-6 py-3 border border-border text-foreground font-medium rounded-xl hover:bg-muted transition-colors disabled:opacity-50">
-                                    Cancel
+                            <div className="pt-4 border-t border-border flex flex-col gap-2">
+                                <button type="submit" disabled={isUpdating} className="w-full py-4 bg-primary text-white font-black text-[10px] uppercase tracking-widest rounded-xl hover:bg-primary/90 flex items-center justify-center transition-all shadow-md active:scale-[0.98] disabled:opacity-70">
+                                    {isUpdating ? <div className="w-5 h-5 rounded-full border-2 border-white/30 border-t-white animate-spin" /> : "Save Intelligence"}
                                 </button>
-                                <button type="submit" disabled={isUpdating} className="px-8 py-3 bg-primary text-white font-bold rounded-xl hover:bg-primary/90 flex items-center justify-center transition-all shadow-md active:scale-[0.98] disabled:opacity-70 min-w-[150px]">
-                                    {isUpdating ? <div className="w-5 h-5 rounded-full border-2 border-white/30 border-t-white animate-spin" /> : "Save Changes"}
+                                <button type="button" disabled={isUpdating} onClick={() => setShowUpdateModal(false)} className="w-full py-3 text-muted-foreground font-black text-[10px] uppercase tracking-widest hover:text-foreground transition-colors">
+                                    Cancel
                                 </button>
                             </div>
                         </form>
@@ -312,41 +298,41 @@ export default function ManageStore() {
             {showDeleteModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 opacity-100 transition-opacity">
                     <div onClick={() => !isDeleting && setShowDeleteModal(false)} className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" />
-                    <div className="relative bg-background rounded-3xl shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200 text-center flex flex-col items-center p-8">
-                        <button onClick={() => setShowDeleteModal(false)} disabled={isDeleting} className="absolute right-4 top-4 p-2 rounded-full hover:bg-muted text-muted-foreground"><FiX className="w-5 h-5" /></button>
+                    <div className="relative bg-background rounded-3xl shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200 text-center flex flex-col items-center p-6 sm:p-10">
+                        <button onClick={() => setShowDeleteModal(false)} disabled={isDeleting} className="absolute right-4 top-4 p-1.5 rounded-full hover:bg-muted text-muted-foreground transition-colors"><FiX className="w-4 h-4 sm:w-5 sm:h-5" /></button>
                         
-                        <div className="w-16 h-16 bg-destructive/10 text-destructive rounded-full flex items-center justify-center mb-6 shadow-inner">
-                            <FiAlertTriangle className="w-8 h-8" />
+                        <div className="w-12 h-12 sm:w-16 sm:h-16 bg-destructive/10 text-destructive rounded-full flex items-center justify-center mb-6 shadow-inner">
+                            <FiAlertTriangle className="w-6 h-6 sm:w-8 sm:h-8" />
                         </div>
                         
-                        <h2 className="text-2xl font-bold text-foreground mb-2">Delete Store</h2>
-                        <p className="text-muted-foreground text-sm mb-8 leading-relaxed max-w-[280px]">
-                            You are about to <strong className="text-foreground">permanently</strong> delete your store. Please confirm your password.
+                        <h2 className="text-xl sm:text-2xl font-black text-foreground mb-1 uppercase tracking-tight">Danger Protocol</h2>
+                        <p className="text-[10px] sm:text-sm text-muted-foreground mb-8 leading-relaxed font-black uppercase tracking-widest opacity-60 max-w-[240px]">
+                            Authorize <strong className="text-destructive">Terminal Closure</strong> of your storefront identity.
                         </p>
                         
-                        <form onSubmit={onConfirmDelete} className="w-full space-y-6">
+                        <form onSubmit={onConfirmDelete} className="w-full space-y-4">
                             <div className="relative text-left focus-within:text-destructive transition-colors">
-                                <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
+                                <FiLock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
                                 <input
                                     type={showPassword ? "text" : "password"}
-                                    placeholder="Enter your password"
+                                    placeholder="Confirm Password"
                                     required
                                     minLength={5}
                                     value={deletePassword}
                                     onChange={(e) => setDeletePassword(e.target.value)}
-                                    className="w-full bg-surface border border-border rounded-xl pl-12 pr-12 py-3.5 outline-none focus:border-destructive focus:ring-1 focus:ring-destructive/50 transition-all text-foreground font-medium"
+                                    className="w-full bg-surface border border-border rounded-xl pl-10 pr-10 py-3 sm:py-3.5 outline-none focus:border-destructive focus:ring-1 focus:ring-destructive/50 transition-all text-[10px] sm:text-sm text-foreground font-black uppercase tracking-widest placeholder:opacity-50"
                                 />
-                                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
-                                    {showPassword ? <FiEyeOff className="w-5 h-5" /> : <FiEye className="w-5 h-5" />}
+                                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+                                    {showPassword ? <FiEyeOff className="w-4 h-4" /> : <FiEye className="w-4 h-4" />}
                                 </button>
                             </div>
                             
-                            <div className="flex gap-3">
-                                <button type="button" disabled={isDeleting} onClick={() => setShowDeleteModal(false)} className="flex-1 py-3.5 border border-border text-foreground font-semibold rounded-xl hover:bg-muted transition-colors disabled:opacity-50">
-                                    Cancel
+                            <div className="flex flex-col gap-2 pt-2">
+                                <button type="submit" disabled={isDeleting || !deletePassword} className="w-full py-3.5 bg-destructive text-white font-black text-[10px] uppercase tracking-widest rounded-xl hover:bg-destructive/90 transition-all shadow-md active:scale-[0.98] disabled:opacity-70 flex justify-center items-center">
+                                    {isDeleting ? <div className="w-5 h-5 rounded-full border-2 border-white/30 border-t-white animate-spin" /> : "Authorize Liquidation"}
                                 </button>
-                                <button type="submit" disabled={isDeleting || !deletePassword} className="flex-1 py-3.5 bg-destructive text-white font-bold rounded-xl hover:bg-destructive/90 transition-all shadow-md active:scale-[0.98] disabled:opacity-70 flex justify-center items-center">
-                                    {isDeleting ? <div className="w-5 h-5 rounded-full border-2 border-white/30 border-t-white animate-spin" /> : "Confirm"}
+                                <button type="button" disabled={isDeleting} onClick={() => setShowDeleteModal(false)} className="w-full py-2.5 text-muted-foreground font-black text-[10px] uppercase tracking-widest hover:text-foreground transition-colors">
+                                    Abort Protocol
                                 </button>
                             </div>
                         </form>

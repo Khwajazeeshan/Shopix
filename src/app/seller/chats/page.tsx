@@ -48,6 +48,7 @@ export default function SellerChatsPage() {
   const [fetchingMessages, setFetchingMessages] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [mobileView, setMobileView] = useState<"list" | "chat">("list");
 
   const messagesEndRef = React.useRef<HTMLDivElement>(null);
 
@@ -133,6 +134,7 @@ export default function SellerChatsPage() {
 
   const onSelectChat = async (conv: Conversation) => {
     setSelectedChat(conv);
+    setMobileView("chat");
     // Mark as read in UI immediately
     setConversations(prev => prev.map(c => c._id === conv._id ? { ...c, unreadCount: 0 } : c));
     try {
@@ -152,22 +154,22 @@ export default function SellerChatsPage() {
   return (
     <div className="flex h-screen bg-background font-sans overflow-hidden">
       {/* Sidebar List */}
-      <div className="w-full sm:w-80 lg:w-96 border-r border-border flex flex-col bg-surface/50 backdrop-blur-md">
-        <div className="p-6 border-b border-border">
-          <Link href="/store/dashboard" className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary transition-colors mb-6">
-            <FiArrowLeft className="w-4 h-4" /> Back to Dashboard
+      <div className={`${mobileView === "chat" ? "hidden" : "flex"} w-full sm:w-80 lg:w-96 border-r border-border flex-col bg-surface/50 backdrop-blur-md sm:flex`}>
+        <div className="p-4 sm:p-6 border-b border-border">
+          <Link href="/store/dashboard" className="inline-flex items-center gap-2 text-[10px] sm:text-sm font-black text-muted-foreground hover:text-primary transition-colors mb-4 sm:mb-6 uppercase tracking-widest">
+            <FiArrowLeft className="w-3 h-3 sm:w-4 sm:h-4" /> Exit to Dashboard
           </Link>
-          <h1 className="text-2xl font-bold text-foreground flex items-center gap-3">
-            <FiMessageCircle className="w-6 h-6 text-primary" /> Messages
+          <h1 className="text-lg sm:text-2xl font-black text-foreground flex items-center gap-2 sm:gap-3 uppercase tracking-tight">
+            <FiMessageCircle className="w-5 h-5 sm:w-6 sm:h-6 text-primary" /> Intelligence
           </h1>
-          <div className="mt-4 relative">
-            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
+          <div className="mt-3 sm:mt-4 relative">
+            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-3 h-3 sm:w-4 sm:h-4" />
             <input 
               type="text" 
-              placeholder="Search conversations..." 
+              placeholder="Search frequency..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-background border border-border rounded-xl outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 text-sm"
+              className="w-full pl-8 sm:pl-10 pr-4 py-2 bg-background border border-border rounded-xl outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 text-[10px] sm:text-sm font-black uppercase tracking-tight"
             />
           </div>
         </div>
@@ -187,12 +189,12 @@ export default function SellerChatsPage() {
                   selectedChat?._id === conv._id ? "bg-primary/10 border-l-4 border-l-primary" : ""
                 }`}
               >
-                <div className="flex items-start gap-4">
-                  <div className="relative w-12 h-12 rounded-full overflow-hidden border border-border bg-muted flex-shrink-0">
+                <div className="flex items-start gap-3 sm:gap-4">
+                  <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden border border-border bg-muted flex-shrink-0">
                     {conv.customerId.image ? (
                       <Image src={conv.customerId.image} alt={conv.customerId.name} fill className="object-cover" />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center font-bold text-lg text-muted-foreground">
+                      <div className="w-full h-full flex items-center justify-center font-black text-sm sm:text-lg text-muted-foreground uppercase">
                         {conv.customerId.name[0]}
                       </div>
                     )}
@@ -227,8 +229,7 @@ export default function SellerChatsPage() {
         </div>
       </div>
 
-      {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col bg-background relative">
+      <div className={`${mobileView === "list" ? "hidden" : "flex"} flex-1 flex flex-col bg-background relative sm:flex`}>
         {!selectedChat ? (
           <div className="flex-1 flex flex-col items-center justify-center p-8 text-center animate-in fade-in duration-500">
             <div className="w-20 h-20 bg-muted/50 rounded-3xl flex items-center justify-center mb-6 border border-border">
@@ -240,20 +241,26 @@ export default function SellerChatsPage() {
         ) : (
           <>
             {/* Header */}
-            <div className="h-20 border-b border-border bg-surface/80 backdrop-blur-md flex items-center justify-between px-6 z-10">
-              <div className="flex items-center gap-4">
-                <div className="relative w-10 h-10 rounded-full overflow-hidden border border-border shadow-sm">
+            <div className="h-16 sm:h-20 border-b border-border bg-surface/80 backdrop-blur-md flex items-center justify-between px-4 sm:px-6 z-10">
+              <div className="flex items-center gap-3 sm:gap-4">
+                <button 
+                    onClick={() => setMobileView("list")}
+                    className="sm:hidden p-2 -ml-2 text-muted-foreground hover:text-foreground"
+                >
+                    <FiArrowLeft className="w-5 h-5" />
+                </button>
+                <div className="relative w-8 h-8 sm:w-10 sm:h-10 rounded-full overflow-hidden border border-border shadow-sm">
                   {selectedChat.customerId.image ? (
                     <img src={selectedChat.customerId.image} alt="User" className="w-full h-full object-cover" />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-primary text-white font-bold">{selectedChat.customerId.name[0]}</div>
+                    <div className="w-full h-full flex items-center justify-center bg-primary text-white font-black text-xs">{selectedChat.customerId.name[0]}</div>
                   )}
-                  <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 border-2 border-surface rounded-full" />
+                  <div className="absolute bottom-0 right-0 w-2 h-2 sm:w-2.5 sm:h-2.5 bg-green-500 border-2 border-surface rounded-full" />
                 </div>
-                <div>
-                  <h2 className="font-bold text-foreground text-sm sm:text-base">{selectedChat.customerId.name}</h2>
-                  <p className="text-[10px] sm:text-xs text-muted-foreground flex items-center gap-1.5 font-medium tracking-wide">
-                    <Dot className="w-4 h-4 text-green-500 animate-pulse" /> ONLINE &bull; {selectedChat.productId.name}
+                <div className="min-w-0">
+                  <h2 className="font-black text-foreground text-xs sm:text-base truncate uppercase tracking-tight">{selectedChat.customerId.name}</h2>
+                  <p className="text-[8px] sm:text-xs text-muted-foreground flex items-center gap-1 font-black tracking-widest uppercase">
+                    <Dot className="w-3 h-3 sm:w-4 sm:h-4 text-green-500 animate-pulse" /> Active &bull; {selectedChat.productId.name.slice(0, 15)}...
                   </p>
                 </div>
               </div>
@@ -269,11 +276,11 @@ export default function SellerChatsPage() {
             </div>
 
             {/* Messages Area */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-muted/5 custom-scrollbar">
+            <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 bg-muted/5 custom-scrollbar">
               {fetchingMessages ? (
                 <div className="flex h-full items-center justify-center flex-col gap-3">
                   <div className="w-8 h-8 border-3 border-primary border-t-transparent rounded-full animate-spin" />
-                  <p className="text-sm font-medium text-muted-foreground">Loading chat history...</p>
+                  <p className="text-xs font-black text-muted-foreground uppercase tracking-widest">Hydrating Terminal...</p>
                 </div>
               ) : (
                 messages.map((msg) => {
@@ -283,18 +290,18 @@ export default function SellerChatsPage() {
                       key={msg._id}
                       className={`flex ${isMe ? "justify-end" : "justify-start"} animate-in slide-in-from-${isMe ? 'right' : 'left'}-2 duration-300`}
                     >
-                      <div className={`flex flex-col ${isMe ? "items-end" : "items-start"} max-w-[75%]`}>
+                      <div className={`flex flex-col ${isMe ? "items-end" : "items-start"} max-w-[85%] sm:max-w-[75%]`}>
                         <div
-                          className={`p-4 rounded-2xl shadow-sm text-sm ${
+                          className={`p-3 sm:p-4 rounded-2xl shadow-sm text-xs sm:text-sm ${
                             isMe
                               ? "bg-primary text-white rounded-tr-none"
-                              : "bg-surface border border-border text-foreground rounded-tl-none"
+                              : "bg-surface border border-border text-foreground rounded-tl-none font-black uppercase tracking-tight"
                           }`}
                         >
-                          <p className="leading-relaxed font-medium">{msg.message}</p>
+                          <p className="leading-relaxed font-black sm:font-medium">{msg.message}</p>
                         </div>
-                        <div className="flex items-center gap-1 mt-1.5 px-1 text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
-                          <FiClock className="w-2.5 h-2.5" />
+                        <div className="flex items-center gap-1 mt-1 px-1 text-[8px] sm:text-[10px] font-black text-muted-foreground uppercase tracking-widest opacity-60">
+                          <FiClock />
                           {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </div>
                       </div>
@@ -306,26 +313,26 @@ export default function SellerChatsPage() {
             </div>
 
             {/* Input Area */}
-            <form onSubmit={handleSendMessage} className="p-6 bg-surface border-t border-border shadow-2xl">
-              <div className="flex items-center gap-4 bg-background border border-border rounded-2xl pl-4 pr-2 py-2 focus-within:ring-2 focus-within:ring-primary/20 transition-all">
+            <form onSubmit={handleSendMessage} className="p-3 sm:p-6 bg-surface border-t border-border shadow-2xl">
+              <div className="flex items-center gap-2 sm:gap-4 bg-background border border-border rounded-xl sm:rounded-2xl pl-3 pr-1.5 py-1.5 sm:py-2 focus-within:ring-1 focus-within:ring-primary/20 transition-all">
                 <input
                   type="text"
                   value={inputMessage}
                   onChange={(e) => setInputMessage(e.target.value)}
-                  placeholder="Type your professional reply here..."
-                  className="flex-1 bg-transparent py-2 outline-none text-sm text-foreground"
+                  placeholder="Communicate..."
+                  className="flex-1 bg-transparent py-1 sm:py-2 outline-none text-[10px] sm:text-sm text-foreground font-black uppercase tracking-tight"
                 />
                 <button
                   type="submit"
                   disabled={!inputMessage.trim() || isSending}
-                  className="px-6 py-2.5 bg-primary text-white rounded-xl font-bold text-sm hover:bg-primary/90 transition-all shadow-md active:scale-95 disabled:opacity-50 flex items-center gap-2"
+                  className="p-2 sm:px-6 sm:py-2.5 bg-primary text-white rounded-lg sm:rounded-xl font-black text-xs hover:bg-primary/90 transition-all shadow-md active:scale-95 disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {isSending ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Send className="w-4 h-4" />}
-                  <span className="hidden sm:inline">Send Reply</span>
+                  <span className="hidden sm:inline uppercase tracking-widest">Send</span>
                 </button>
               </div>
-              <p className="text-[10px] text-muted-foreground mt-3 text-center font-medium uppercase tracking-widest flex items-center justify-center gap-2">
-                 <FiCheckSquare className="w-3 h-3 text-green-500" /> Messages are encrypted & secure
+              <p className="text-[7px] sm:text-[10px] text-muted-foreground mt-2 text-center font-black uppercase tracking-widest flex items-center justify-center gap-1.5 opacity-60">
+                 <FiCheckSquare className="text-green-500" /> SECURE ENCRYPTED CHANNEL
               </p>
             </form>
           </>

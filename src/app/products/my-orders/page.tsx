@@ -3,7 +3,7 @@ import { useState, useEffect } from "react"
 import axios from "axios"
 import Image from "next/image"
 import Link from "next/link"
-import { FiArrowLeft, FiPackage, FiTruck, FiCheckCircle, FiClock, FiCreditCard, FiStar, FiX, FiRefreshCcw, FiUpload, FiAlertCircle, FiRepeat } from "react-icons/fi"
+import { FiArrowLeft, FiPackage, FiTruck, FiCheckCircle, FiClock, FiCreditCard, FiStar, FiX, FiRefreshCcw, FiUpload, FiAlertCircle, FiRepeat, FiChevronDown, FiChevronUp } from "react-icons/fi"
 import { useRouter } from "next/navigation"
 import Navbar from "@/src/components/navbar/page"
 import { toast } from "react-hot-toast"
@@ -47,6 +47,7 @@ export default function MyOrders() {
     const [returnImages, setReturnImages] = useState<FileList | null>(null)
     const [submitting, setSubmitting] = useState(false)
     const [filterTab, setFilterTab] = useState("all")
+    const [expandedOrders, setExpandedOrders] = useState<string[]>([])
     const router = useRouter()
 
     const fetchOrders = async () => {
@@ -122,6 +123,14 @@ export default function MyOrders() {
         }
     }
 
+    const toggleOrderExpansion = (orderId: string) => {
+        setExpandedOrders(prev => 
+            prev.includes(orderId) 
+                ? prev.filter(id => id !== orderId) 
+                : [...prev, orderId]
+        )
+    }
+
     const filteredOrders = orders.filter(o => {
         if (filterTab === "all") return true;
         if (filterTab === "active") return ['new', 'progress'].includes(o.status);
@@ -143,30 +152,30 @@ export default function MyOrders() {
             <Navbar />
 
             <main className="flex-1 container mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12 max-w-5xl">
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 border-b border-border pb-8">
-                    <div className="flex gap-4 items-start">
-                        <Link href="/" className="mt-1 p-2 rounded-xl border border-border text-muted-foreground hover:text-foreground hover:bg-muted transition-colors hidden sm:block">
-                            <FiArrowLeft className="w-5 h-5" />
+                <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6 sm:mb-10 border-b border-border pb-6 sm:pb-8">
+                    <div className="flex gap-3 sm:gap-4 items-start">
+                        <Link href="/" className="mt-1 p-1.5 sm:p-2 rounded-lg sm:rounded-xl border border-border text-muted-foreground hover:text-foreground hover:bg-muted transition-colors">
+                            <FiArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
                         </Link>
                         <div>
-                            <h1 className="text-3xl font-bold tracking-tight text-foreground mb-2">Track My Orders</h1>
-                            <p className="text-muted-foreground">Your Personal Order Ledger & History</p>
+                            <h1 className="text-xl sm:text-3xl font-black tracking-tight text-foreground mb-1 uppercase tracking-widest">My Ledger</h1>
+                            <p className="text-xs sm:text-base text-muted-foreground">Order History & Transaction Records</p>
                         </div>
                     </div>
                 </div>
 
                 {/* Filter Tabs */}
                 {orders.length > 0 && (
-                    <div className="flex overflow-x-auto hidden-scrollbar gap-2 mb-8 p-1 bg-surface border border-border rounded-xl w-fit drop-shadow-sm">
+                    <div className="flex overflow-x-auto hidden-scrollbar gap-1.5 mb-6 p-1 bg-surface border border-border rounded-xl w-full sm:w-fit drop-shadow-sm">
                         {['all', 'active', 'completed', 'returns'].map((tab) => (
                             <button
                                 key={tab}
                                 onClick={() => setFilterTab(tab)}
-                                className={`px-5 py-2.5 rounded-lg text-sm font-semibold capitalize whitespace-nowrap transition-all ${
-                                    filterTab === tab ? "bg-background shadow-sm border border-border text-foreground" : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                                className={`px-3 sm:px-5 py-2 rounded-lg text-xs sm:text-sm font-black uppercase tracking-widest whitespace-nowrap transition-all ${
+                                    filterTab === tab ? "bg-primary text-white shadow-md shadow-primary/20" : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
                                 }`}
                             >
-                                {tab} Orders
+                                {tab}
                             </button>
                         ))}
                     </div>
@@ -192,10 +201,10 @@ export default function MyOrders() {
                     <div className="space-y-6">
                         {filteredOrders.map((order) => (
                             <div key={order._id} className="bg-surface border border-border rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-                                <div className="p-5 sm:p-6 lg:p-8">
-                                    <div className="flex flex-col md:flex-row gap-6 md:gap-8">
-                                        {/* Product Image */}
-                                        <div className="relative w-full md:w-48 aspect-square md:aspect-auto md:h-48 rounded-xl overflow-hidden bg-muted flex-shrink-0 border border-border">
+                                <div className="p-4 sm:p-6 lg:p-8">
+                                    <div className="flex gap-4 sm:gap-8 items-start">
+                                        {/* Product Image - Smaller on Mobile */}
+                                        <div className="relative w-20 h-20 sm:w-48 sm:h-48 rounded-lg sm:rounded-xl overflow-hidden bg-muted flex-shrink-0 border border-border">
                                             <Image 
                                                 src={order.productId?.image || "/placeholder.png"} 
                                                 alt={order.productId?.name || "Product"} 
@@ -204,125 +213,144 @@ export default function MyOrders() {
                                             />
                                         </div>
 
-                                        {/* Order Details */}
-                                        <div className="flex-1 flex flex-col justify-between">
-                                            <div className="flex flex-col md:flex-row md:justify-between gap-4 mb-6">
-                                                <div>
-                                                    <div className="flex items-center gap-2 text-xs font-bold text-primary uppercase tracking-widest mb-2">
-                                                        <div className="relative w-5 h-5 rounded-full overflow-hidden bg-muted">
-                                                            {order.storeId?.logo && <Image src={order.storeId?.logo} alt="Store" fill className="object-cover" />}
-                                                        </div>
-                                                        <span>{order.storeId?.name}</span>
-                                                    </div>
-                                                    <h3 className="text-xl font-bold text-foreground mb-1 line-clamp-1">{order.productId?.name}</h3>
-                                                    <p className="text-sm text-muted-foreground line-clamp-2 max-w-lg mb-2">
-                                                        {order.productId?.description}
-                                                    </p>
-                                                </div>
-                                                <div className="md:text-right bg-background p-3 rounded-xl border border-border h-fit md:min-w-[140px]">
-                                                    <p className="text-xs text-muted-foreground font-medium mb-1 uppercase tracking-wider">Order Reference</p>
-                                                    <p className="font-mono font-bold text-foreground text-sm mb-1">
-                                                        #{order._id.slice(-8).toUpperCase()}
-                                                    </p>
-                                                    <p className="text-xs text-muted-foreground whitespace-nowrap">
-                                                        Placed: {order.createdAt ? new Date(order.createdAt).toLocaleDateString() : 'N/A'}
-                                                    </p>
+                                        {/* Order Essentials */}
+                                        <div className="flex-1 min-w-0">
+                                            <div className="flex items-center gap-2 text-[8px] sm:text-[10px] font-black text-primary uppercase tracking-widest mb-1">
+                                                <span>{order.storeId?.name}</span>
+                                            </div>
+                                            <h3 className="text-sm sm:text-xl font-black text-foreground mb-0.5 sm:mb-1 truncate uppercase tracking-tight">{order.productId?.name}</h3>
+                                            <div className="text-base sm:text-xl font-black text-foreground">
+                                                <span className="text-[10px] sm:text-sm text-primary font-bold mr-0.5 uppercase">Price:</span>
+                                                Rs. {order.totalAmount.toLocaleString()}
+                                            </div>
+                                            
+                                            {/* Mobile Detail Toggle */}
+                                            <button 
+                                                onClick={() => toggleOrderExpansion(order._id)}
+                                                className="flex md:hidden items-center gap-1.5 mt-2 text-[10px] font-black text-primary uppercase tracking-widest hover:opacity-80 transition-opacity"
+                                            >
+                                                {expandedOrders.includes(order._id) ? (
+                                                    <><FiChevronUp className="w-3 h-3" /> Hide Details</>
+                                                ) : (
+                                                    <><FiChevronDown className="w-3 h-3" /> Show Details</>
+                                                )}
+                                            </button>
+                                        </div>
+
+                                        {/* Reference - Hidden on extreme small to save space if needed, or keeping it for sm+ */}
+                                        <div className="hidden lg:block text-right bg-background p-3 rounded-xl border border-border h-fit min-w-[140px] shadow-inner">
+                                            <p className="text-[10px] text-muted-foreground font-black mb-0.5 uppercase tracking-widest">Reference</p>
+                                            <p className="font-mono font-black text-foreground text-xs sm:text-sm mb-0.5">
+                                                #{order._id.slice(-8).toUpperCase()}
+                                            </p>
+                                            <p className="text-[10px] sm:text-xs text-muted-foreground whitespace-nowrap">
+                                                {order.createdAt ? new Date(order.createdAt).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' }) : 'N/A'}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    {/* Collapsible Content - Expanded by default on Desktop (md+) */}
+                                    <div className={`${expandedOrders.includes(order._id) ? 'block' : 'hidden'} md:block mt-6 pt-6 border-t border-border space-y-6`}>
+                                        <div className="flex flex-col lg:flex-row lg:justify-between gap-6">
+                                            <div className="flex-1 lg:hidden">
+                                                {/* Re-adding Reference for mobile inside expanded view */}
+                                                <div className="bg-muted/30 p-3 rounded-xl border border-border inline-block min-w-full sm:min-w-0">
+                                                    <p className="text-[10px] text-muted-foreground font-black mb-0.5 uppercase tracking-widest">Order Reference</p>
+                                                    <p className="font-mono font-black text-foreground text-sm">#{order._id.slice(-8).toUpperCase()}</p>
                                                 </div>
                                             </div>
-
-                                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-border">
-                                                <div className="bg-background rounded-lg p-3 border border-border">
-                                                    <span className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Qty</span>
-                                                    <p className="font-bold text-foreground">{order.quantity} Units</p>
+                                            
+                                            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4 w-full">
+                                                <div className="bg-background rounded-lg p-2 sm:p-3 border border-border">
+                                                    <span className="block text-[8px] sm:text-xs font-black text-muted-foreground uppercase tracking-widest mb-0.5 sm:mb-1">Qty</span>
+                                                    <p className="font-black text-foreground text-xs sm:text-sm">{order.quantity} units</p>
                                                 </div>
-                                                <div className="bg-background rounded-lg p-3 border border-border">
-                                                    <span className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Total</span>
-                                                    <p className="font-bold text-primary">Rs. {order.totalAmount.toLocaleString()}</p>
+                                                <div className="bg-background rounded-lg p-2 sm:p-3 border border-border">
+                                                    <span className="block text-[8px] sm:text-xs font-black text-muted-foreground uppercase tracking-widest mb-0.5 sm:mb-1">Total</span>
+                                                    <p className="font-black text-primary text-xs sm:text-sm">Rs. {order.totalAmount.toLocaleString()}</p>
                                                 </div>
-                                                <div className="bg-background rounded-lg p-3 border border-border">
-                                                    <span className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Payment</span>
-                                                    <div className="flex items-center gap-1.5 font-bold text-foreground">
-                                                        <FiCreditCard className="w-4 h-4 text-muted-foreground" />
-                                                        <p className="uppercase">{order.paymentMethod === 'cod' ? 'COD' : 'Online'}</p>
+                                                <div className="bg-background rounded-lg p-2 sm:p-3 border border-border">
+                                                    <span className="block text-[8px] sm:text-xs font-black text-muted-foreground uppercase tracking-widest mb-0.5 sm:mb-1">Method</span>
+                                                    <div className="flex items-center gap-1 font-black text-foreground text-[10px] sm:text-sm">
+                                                        <FiCreditCard className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 text-muted-foreground" />
+                                                        <p className="uppercase">{order.paymentMethod}</p>
                                                     </div>
                                                 </div>
-                                                <div className="bg-background rounded-lg p-3 border border-border">
-                                                    <span className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Status</span>
-                                                    <div className="flex items-center gap-1.5 font-bold capitalize text-foreground">
+                                                <div className="bg-background rounded-lg p-2 sm:p-3 border border-border">
+                                                    <span className="block text-[8px] sm:text-xs font-black text-muted-foreground uppercase tracking-widest mb-0.5 sm:mb-1">Status</span>
+                                                    <div className="flex items-center gap-1 font-black capitalize text-foreground text-[10px] sm:text-sm">
                                                         <StatusIcon status={order.status} />
                                                         <p>{order.status}</p>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    {/* Address & Status Bar */}
-                                    <div className="mt-6 pt-6 border-t border-border flex flex-col lg:flex-row gap-6 justify-between lg:items-center">
-                                        <div className="flex items-center gap-3 max-w-sm">
-                                            <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center shrink-0 border border-border">
-                                                <FiPackage className="w-5 h-5 text-muted-foreground" />
+                                        {/* Address & Status Bar */}
+                                        <div className="flex flex-col xl:flex-row gap-4 sm:gap-6 justify-between lg:items-center">
+                                            <div className="flex items-center gap-2 sm:gap-3 max-w-sm">
+                                                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-muted flex items-center justify-center shrink-0 border border-border">
+                                                    <FiPackage className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground" />
+                                                </div>
+                                                <div className="min-w-0">
+                                                    <span className="block text-[8px] sm:text-xs font-black text-muted-foreground uppercase tracking-widest">Shipping Destination</span>
+                                                    <p className="text-xs sm:text-sm font-bold text-foreground truncate">{order.billingAddress}</p>
+                                                </div>
                                             </div>
-                                            <div>
-                                                <span className="block text-xs font-bold text-muted-foreground uppercase tracking-wider mb-0.5">Shipping Address</span>
-                                                <p className="text-sm font-medium text-foreground truncate">{order.billingAddress}</p>
-                                            </div>
-                                        </div>
-                                        
-                                        <div className="flex items-center gap-4 flex-wrap">
-                                            <div className="flex items-center gap-2 bg-background px-4 py-2.5 rounded-full border border-border shadow-sm">
-                                                <StatusIcon status={order.status} />
-                                                <span className="text-sm font-semibold text-foreground">
-                                                    <StatusText status={order.status} />
-                                                </span>
-                                            </div>
-
-                                            {order.returnStatus !== 'none' && (
-                                                <div className={`flex items-center gap-2 px-4 py-2.5 rounded-full border shadow-sm ${
-                                                    order.returnStatus === 'processing' ? 'bg-orange-500/10 border-orange-500/20 text-orange-600' :
-                                                    order.returnStatus === 'successful' ? 'bg-green-500/10 border-green-500/20 text-green-600' :
-                                                    'bg-red-500/10 border-red-500/20 text-red-600'
-                                                }`}>
-                                                    {order.returnStatus === 'processing' ? <FiRefreshCcw className="w-4 h-4 animate-spin" /> : <FiAlertCircle className="w-4 h-4" />}
-                                                    <span className="text-sm font-bold">
-                                                        {order.returnStatus === 'processing' ? 'Return Processing' : 
-                                                         order.returnStatus === 'successful' ? 'Return Successful' : 
-                                                         'Return Failed/Declined'}
+                                            
+                                            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full lg:w-auto">
+                                                <div className="flex items-center gap-2 bg-background px-3 sm:px-4 py-2 rounded-full border border-border shadow-sm w-full sm:w-auto">
+                                                    <StatusIcon status={order.status} />
+                                                    <span className="text-[10px] sm:text-sm font-black text-foreground uppercase tracking-tighter">
+                                                        <StatusText status={order.status} />
                                                     </span>
                                                 </div>
-                                            )}
-                                        </div>
 
-                                        {order.status === 'completed' && (
-                                            <div className="flex flex-wrap items-center gap-3">
-                                                <button 
-                                                    onClick={() => router.push(`/products/productinfo?id=${order.productId._id}`)}
-                                                    className="px-4 py-2.5 bg-background border border-border text-foreground font-semibold text-sm rounded-xl hover:bg-muted transition-colors flex items-center gap-2"
-                                                >
-                                                    <FiRepeat className="w-4 h-4" /> Buy It Again
-                                                </button>
-                                                {order.returnStatus === 'none' && (
+                                                {order.returnStatus !== 'none' && (
+                                                    <div className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full border shadow-sm w-full sm:w-auto ${
+                                                        order.returnStatus === 'processing' ? 'bg-orange-500/10 border-orange-500/20 text-orange-600' :
+                                                        order.returnStatus === 'successful' ? 'bg-green-500/10 border-green-500/20 text-green-600' :
+                                                        'bg-red-500/10 border-red-500/20 text-red-600'
+                                                    }`}>
+                                                        {order.returnStatus === 'processing' ? <FiRefreshCcw className="w-3 h-3 animate-spin" /> : <FiAlertCircle className="w-3 h-3" />}
+                                                        <span className="text-[10px] sm:text-sm font-black uppercase">
+                                                            {order.returnStatus} Return
+                                                        </span>
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            {order.status === 'completed' && (
+                                                <div className="grid grid-cols-1 sm:flex items-center gap-2 w-full lg:w-auto">
+                                                    <button 
+                                                        onClick={() => router.push(`/products/productinfo?id=${order.productId._id}`)}
+                                                        className="px-3 py-2 bg-background border border-border text-foreground font-black text-[10px] uppercase tracking-widest rounded-lg hover:bg-muted transition-all flex items-center justify-center gap-1.5"
+                                                    >
+                                                        <FiRepeat className="w-3.5 h-3.5" /> Repeat
+                                                    </button>
+                                                    {order.returnStatus === 'none' && (
+                                                        <button 
+                                                            onClick={() => {
+                                                                setSelectedOrder(order)
+                                                                setShowReturnModal(true)
+                                                            }}
+                                                            className="px-3 py-2 bg-red-50 text-red-600 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 font-black text-[10px] uppercase tracking-widest rounded-lg hover:bg-red-100 transition-all"
+                                                        >
+                                                            Return
+                                                        </button>
+                                                    )}
                                                     <button 
                                                         onClick={() => {
                                                             setSelectedOrder(order)
-                                                            setShowReturnModal(true)
+                                                            setShowFeedbackModal(true)
                                                         }}
-                                                        className="px-4 py-2.5 bg-red-50 text-red-600 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 font-semibold text-sm rounded-xl hover:bg-red-100 dark:hover:bg-red-500/20 transition-colors"
+                                                        className="px-4 py-2 bg-primary text-white font-black text-[10px] uppercase tracking-widest rounded-lg hover:bg-primary/90 transition-all shadow-md shadow-primary/20 flex items-center justify-center gap-1.5"
                                                     >
-                                                        Request Return
+                                                        <FiStar className="w-3.5 h-3.5" /> Feedback
                                                     </button>
-                                                )}
-                                                <button 
-                                                    onClick={() => {
-                                                        setSelectedOrder(order)
-                                                        setShowFeedbackModal(true)
-                                                    }}
-                                                    className="px-5 py-2.5 bg-primary text-white font-semibold text-sm rounded-xl hover:bg-primary/90 transition-colors shadow-md shadow-primary/20 flex items-center gap-2"
-                                                >
-                                                    <FiStar className="w-4 h-4 fill-current" /> Give Feedback
-                                                </button>
-                                            </div>
-                                        )}
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -336,32 +364,32 @@ export default function MyOrders() {
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 opacity-100 transition-opacity">
                     <div className="absolute inset-0 bg-black/60 backdrop-blur-md transition-opacity" onClick={() => setShowFeedbackModal(false)}></div>
                     <div className="relative bg-background rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden animate-in zoom-in-95 duration-200">
-                        <div className="p-6">
-                            <div className="flex items-start justify-between mb-6">
+                        <div className="p-4 sm:p-6">
+                            <div className="flex items-start justify-between mb-4 sm:mb-6">
                                 <div>
-                                    <h2 className="text-2xl font-bold text-foreground mb-1">Product Feedback</h2>
-                                    <p className="text-sm text-muted-foreground font-medium truncate max-w-[280px]">{selectedOrder.productId.name}</p>
+                                    <h2 className="text-xl sm:text-2xl font-black text-foreground mb-0.5 uppercase tracking-tighter sm:tracking-normal">Product Feedback</h2>
+                                    <p className="text-[10px] sm:text-sm text-muted-foreground font-black truncate max-w-[200px] sm:max-w-[280px] uppercase tracking-widest">{selectedOrder.productId.name}</p>
                                 </div>
-                                <button onClick={() => setShowFeedbackModal(false)} className="p-2 bg-muted hover:bg-muted/80 rounded-full text-muted-foreground transition-colors">
-                                    <FiX className="w-5 h-5" />
+                                <button onClick={() => setShowFeedbackModal(false)} className="p-1.5 bg-muted hover:bg-muted/80 rounded-full text-muted-foreground transition-colors">
+                                    <FiX className="w-4 h-4 sm:w-5 sm:h-5" />
                                 </button>
                             </div>
 
                             <div className="space-y-6">
-                                <div className="text-center p-6 bg-surface border border-border rounded-2xl">
-                                    <p className="text-sm font-bold text-foreground mb-4 uppercase tracking-wider">Rate your experience</p>
-                                    <div className="flex justify-center gap-3 mb-2">
+                                <div className="text-center p-4 sm:p-6 bg-surface border border-border rounded-2xl">
+                                    <p className="text-[10px] sm:text-sm font-black text-foreground mb-3 sm:mb-4 uppercase tracking-widest">Rate Experience</p>
+                                    <div className="flex justify-center gap-2 sm:gap-3 mb-2">
                                         {[1, 2, 3, 4, 5].map((s) => (
                                             <button 
                                                 key={s} 
                                                 onClick={() => setRating(s)}
-                                                className="focus:outline-none transform hover:scale-110 transition-transform p-1"
+                                                className="focus:outline-none transform hover:scale-110 transition-transform p-0.5 sm:p-1"
                                             >
-                                                <FiStar className={`w-10 h-10 ${s <= rating ? 'fill-yellow-400 text-yellow-400' : 'text-border'}`} />
+                                                <FiStar className={`w-8 h-8 sm:w-10 sm:h-10 ${s <= rating ? 'fill-yellow-400 text-yellow-400' : 'text-border'}`} />
                                             </button>
                                         ))}
                                     </div>
-                                    <p className="text-sm font-medium text-muted-foreground mt-3 bg-background inline-block px-4 py-1.5 rounded-full border border-border">
+                                    <p className="text-[10px] sm:text-sm font-black text-muted-foreground mt-3 bg-background inline-block px-4 py-1.5 rounded-full border border-border uppercase tracking-widest">
                                         {rating === 1 && "Poor"}
                                         {rating === 2 && "Fair"}
                                         {rating === 3 && "Good"}
@@ -370,12 +398,12 @@ export default function MyOrders() {
                                     </p>
                                 </div>
 
-                                <div className="space-y-2 focus-within:text-primary transition-colors">
-                                    <label className="text-sm font-semibold text-foreground">Tell us more about the product</label>
+                                <div className="space-y-1.5 focus-within:text-primary transition-colors">
+                                    <label className="text-[10px] sm:text-sm font-black text-foreground uppercase tracking-widest">Commentary</label>
                                     <textarea 
-                                        className="w-full bg-surface border border-border rounded-xl px-4 py-3 outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all text-sm resize-none"
-                                        rows={4}
-                                        placeholder="Share your thoughts on quality, packaging, and performance..."
+                                        className="w-full bg-surface border border-border rounded-xl px-3 py-2.5 sm:px-4 sm:py-3 outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all text-xs sm:text-sm resize-none"
+                                        rows={3}
+                                        placeholder="Share product quality, packaging..."
                                         value={comment}
                                         onChange={(e) => setComment(e.target.value)}
                                     />
@@ -384,9 +412,9 @@ export default function MyOrders() {
                                 <button 
                                     onClick={handleFeedbackSubmit}
                                     disabled={submitting}
-                                    className="w-full py-4 bg-primary text-white font-bold rounded-xl hover:bg-primary/90 transition-all shadow-md active:scale-[0.98] disabled:opacity-70 flex justify-center items-center"
+                                    className="w-full py-4 bg-primary text-white font-black text-[10px] uppercase tracking-widest rounded-xl hover:bg-primary/90 transition-all shadow-md active:scale-[0.98] disabled:opacity-70 flex justify-center items-center"
                                 >
-                                    {submitting ? <div className="w-5 h-5 rounded-full border-2 border-white/30 border-t-white animate-spin" /> : "Confirm & Post Feedback"}
+                                    {submitting ? <div className="w-5 h-5 rounded-full border-2 border-white/30 border-t-white animate-spin" /> : "Publish Feedback"}
                                 </button>
                             </div>
                         </div>
@@ -399,49 +427,49 @@ export default function MyOrders() {
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 opacity-100 transition-opacity">
                     <div className="absolute inset-0 bg-black/60 backdrop-blur-md transition-opacity" onClick={() => setShowReturnModal(false)}></div>
                     <div className="relative bg-background rounded-3xl shadow-2xl w-full max-w-xl overflow-hidden animate-in zoom-in-95 duration-200 flex flex-col max-h-[90vh]">
-                        <div className="p-6 border-b border-border bg-muted/20">
+                        <div className="p-4 sm:p-6 border-b border-border bg-muted/20">
                             <div className="flex items-start justify-between">
                                 <div>
-                                    <h2 className="text-2xl font-bold text-foreground mb-1">Request Return</h2>
-                                    <p className="text-sm text-muted-foreground font-medium">Order: #{selectedOrder._id.slice(-8).toUpperCase()}</p>
+                                    <h2 className="text-xl sm:text-2xl font-black text-foreground mb-0.5 uppercase tracking-tighter sm:tracking-normal">Return Order</h2>
+                                    <p className="text-[10px] sm:text-sm text-muted-foreground font-black uppercase tracking-widest leading-none">ID: #{selectedOrder._id.slice(-8).toUpperCase()}</p>
                                 </div>
-                                <button onClick={() => setShowReturnModal(false)} className="p-2 bg-background border border-border hover:bg-muted rounded-full text-muted-foreground transition-colors">
-                                    <FiX className="w-5 h-5" />
+                                <button onClick={() => setShowReturnModal(false)} className="p-1.5 bg-background border border-border hover:bg-muted rounded-full text-muted-foreground transition-colors">
+                                    <FiX className="w-4 h-4 sm:w-5 sm:h-5" />
                                 </button>
                             </div>
                         </div>
 
-                        <div className="p-6 overflow-y-auto hidden-scrollbar space-y-6">
-                            <div className="bg-surface p-4 rounded-2xl border border-border flex flex-col md:flex-row divide-y md:divide-y-0 md:divide-x divide-border">
-                                <div className="flex-1 pb-3 md:pb-0 md:pr-4 flex flex-col">
-                                    <span className="text-xs text-muted-foreground uppercase font-semibold mb-1">Product</span>
-                                    <span className="font-medium text-foreground text-sm line-clamp-1">{selectedOrder.productId.name}</span>
+                        <div className="p-4 sm:p-6 overflow-y-auto hidden-scrollbar space-y-4 sm:space-y-6">
+                            <div className="bg-surface p-3 sm:p-4 rounded-2xl border border-border grid grid-cols-1 sm:grid-cols-3 gap-2 sm:divide-x divide-border">
+                                <div className="flex flex-col">
+                                    <span className="text-[8px] sm:text-xs text-muted-foreground uppercase font-black mb-0.5">Product</span>
+                                    <span className="font-bold text-foreground text-[10px] sm:text-sm truncate">{selectedOrder.productId.name}</span>
                                 </div>
-                                <div className="px-0 py-3 md:py-0 md:px-4 flex flex-col">
-                                    <span className="text-xs text-muted-foreground uppercase font-semibold mb-1">Quantity</span>
-                                    <span className="font-bold text-foreground">{selectedOrder.quantity} Units</span>
+                                <div className="sm:px-4 flex flex-col">
+                                    <span className="text-[8px] sm:text-xs text-muted-foreground uppercase font-black mb-0.5">Quantity</span>
+                                    <span className="font-bold text-foreground text-[10px] sm:text-sm">{selectedOrder.quantity} Units</span>
                                 </div>
-                                <div className="flex-1 pt-3 md:pt-0 md:pl-4 flex flex-col">
-                                    <span className="text-xs text-muted-foreground uppercase font-semibold mb-1">Price</span>
-                                    <span className="font-bold text-primary">Rs. {selectedOrder.totalAmount.toLocaleString()}</span>
+                                <div className="sm:pl-4 flex flex-col">
+                                    <span className="text-[8px] sm:text-xs text-muted-foreground uppercase font-black mb-0.5">Refund Value</span>
+                                    <span className="font-black text-primary text-[10px] sm:text-sm">Rs. {selectedOrder.totalAmount.toLocaleString()}</span>
                                 </div>
                             </div>
 
-                            <div className="space-y-2 focus-within:text-red-500 transition-colors">
-                                <label className="text-sm font-semibold text-foreground flex gap-1 items-center">
-                                    Reason for Return <span className="text-red-500 text-xs">(Mandatory)</span>
+                            <div className="space-y-1.5 focus-within:text-red-500 transition-colors">
+                                <label className="text-[10px] sm:text-sm font-black text-foreground flex gap-1 items-center uppercase tracking-widest">
+                                    Reason <span className="text-red-500 text-[8px]">(Mandatory)</span>
                                 </label>
                                 <textarea 
-                                    className="w-full bg-surface border border-border rounded-xl px-4 py-3 outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500/50 transition-all text-sm resize-none"
+                                    className="w-full bg-surface border border-border rounded-xl px-3 py-2.5 sm:px-4 sm:py-3 outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500/50 transition-all text-xs sm:text-sm resize-none"
                                     rows={3}
-                                    placeholder="Explain exactly why you want to return this product..."
+                                    placeholder="Explain the issue clearly..."
                                     value={returnReason}
                                     onChange={(e) => setReturnReason(e.target.value)}
                                 />
                             </div>
 
-                            <div className="space-y-2 focus-within:text-primary transition-colors">
-                                <label className="text-sm font-semibold text-foreground">Evidence Photos <span className="text-muted-foreground font-normal">(Optional but recommended)</span></label>
+                            <div className="space-y-1.5 focus-within:text-primary transition-colors">
+                                <label className="text-[10px] sm:text-sm font-black text-foreground uppercase tracking-widest">Evidence Photos <span className="text-muted-foreground font-normal">(Optional)</span></label>
                                 <div className="relative">
                                     <input 
                                         type="file" 
@@ -450,14 +478,13 @@ export default function MyOrders() {
                                         onChange={(e) => setReturnImages(e.target.files)}
                                         className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                                     />
-                                    <div className={`w-full border-2 border-dashed rounded-2xl p-8 flex flex-col items-center justify-center text-center transition-colors bg-background ${returnImages ? "border-primary bg-primary/5" : "border-border hover:border-primary/50"}`}>
-                                        <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-3 ${returnImages ? "bg-primary text-white" : "bg-muted text-muted-foreground"}`}>
-                                            <FiUpload className="w-5 h-5" />
+                                    <div className={`w-full border-2 border-dashed rounded-2xl p-4 sm:p-8 flex flex-col items-center justify-center text-center transition-colors bg-background ${returnImages ? "border-primary bg-primary/5" : "border-border hover:border-primary/50"}`}>
+                                        <div className={`w-8 h-8 sm:w-12 sm:h-12 rounded-full flex items-center justify-center mb-2 sm:mb-3 ${returnImages ? "bg-primary text-white" : "bg-muted text-muted-foreground"}`}>
+                                            <FiUpload className="w-4 h-4 sm:w-5 sm:h-5" />
                                         </div>
-                                        <p className="font-medium text-foreground mb-1">
-                                            {returnImages ? `${returnImages.length} Files Selected` : "Drop images or click to upload"}
+                                        <p className="font-black text-foreground text-[10px] sm:text-sm uppercase tracking-widest">
+                                            {returnImages ? `${returnImages.length} Selected` : "Upload Evidence"}
                                         </p>
-                                        <p className="text-xs text-muted-foreground">Clear photos showing the issue will speed up approval.</p>
                                     </div>
                                 </div>
                             </div>
@@ -465,9 +492,9 @@ export default function MyOrders() {
                             <button 
                                 onClick={handleReturnSubmit}
                                 disabled={submitting}
-                                className="w-full py-4 bg-foreground text-background font-bold rounded-xl hover:bg-foreground/90 transition-all shadow-md active:scale-[0.98] disabled:opacity-70 flex justify-center items-center mt-4"
+                                className="w-full py-4 bg-foreground text-background font-black text-[10px] uppercase tracking-widest rounded-xl hover:bg-foreground/90 transition-all shadow-md active:scale-[0.98] disabled:opacity-70 flex justify-center items-center mt-2"
                             >
-                                {submitting ? <div className="w-5 h-5 rounded-full border-2 border-background/30 border-t-background animate-spin" /> : "Submit Return Request"}
+                                {submitting ? <div className="w-5 h-5 rounded-full border-2 border-background/30 border-t-background animate-spin" /> : "Submit Request"}
                             </button>
                         </div>
                     </div>

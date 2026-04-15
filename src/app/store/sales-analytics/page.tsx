@@ -45,69 +45,69 @@ export default function SalesAnalytics() {
         <div className="min-h-screen bg-background font-sans flex flex-col">
             {/* Header */}
             <header className="w-full bg-surface/80 backdrop-blur-md border-b border-border sticky top-0 z-20 px-4 sm:px-8 h-20 flex items-center shadow-sm">
-                <div className="flex items-center gap-4 w-full max-w-7xl mx-auto pl-2">
-                    <Link href="/store/dashboard" className="p-2 border border-border rounded-xl text-muted-foreground hover:text-foreground hover:bg-muted transition-colors mr-2">
-                        <FiArrowLeft className="w-5 h-5" />
+                <div className="flex items-center gap-2 sm:gap-4 w-full max-w-7xl mx-auto pl-1 sm:pl-2">
+                    <Link href="/store/dashboard" className="p-1.5 sm:p-2 border border-border rounded-lg sm:rounded-xl text-muted-foreground hover:text-foreground hover:bg-muted transition-colors mr-1 sm:mr-2">
+                        <FiArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
                     </Link>
                     <div>
-                        <h1 className="text-xl sm:text-2xl font-bold text-foreground">Sales Analytics</h1>
-                        <p className="text-xs sm:text-sm text-muted-foreground hidden sm:block">Intelligence Dashboard</p>
+                        <h1 className="text-lg sm:text-2xl font-black text-foreground uppercase tracking-tighter sm:tracking-normal">Sales Analytics</h1>
+                        <p className="text-[10px] sm:text-sm text-muted-foreground hidden sm:block font-black uppercase tracking-widest">Intelligence Dashboard</p>
                     </div>
                 </div>
             </header>
 
             <main className="w-full max-w-7xl mx-auto px-4 sm:px-8 py-8 sm:py-12 flex-1">
                 {/* Summary Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 mb-8 sm:mb-10">
                     {/* Total Revenue */}
-                    <div className="bg-surface border border-border rounded-3xl p-6 sm:p-8 shadow-sm relative overflow-hidden group">
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-green-500/10 rounded-full blur-[60px] -z-10 translate-x-10 -translate-y-10 group-hover:bg-green-500/20 transition-colors duration-500" />
-                        <div className="w-12 h-12 bg-green-500/10 text-green-500 rounded-2xl flex items-center justify-center mb-6 shadow-inner">
-                            <FiDollarSign className="w-6 h-6" />
+                    <div className="bg-surface border border-border rounded-2xl sm:rounded-3xl p-4 sm:p-8 shadow-sm relative overflow-hidden group">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-green-500/10 rounded-full blur-[60px] -z-10 translate-x-10 -translate-y-10" />
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-500/10 text-green-500 rounded-xl sm:rounded-2xl flex items-center justify-center mb-4 sm:mb-6 shadow-inner">
+                            <FiDollarSign className="w-5 h-5 sm:w-6 sm:h-6" />
                         </div>
-                        <span className="text-sm font-semibold uppercase tracking-wider text-muted-foreground block mb-1">Net Revenue</span>
-                        <h2 className="text-3xl sm:text-4xl font-extrabold text-foreground mb-4">
+                        <span className="text-[10px] sm:text-sm font-black uppercase tracking-[0.2em] text-muted-foreground block mb-1">Net Revenue</span>
+                        <h2 className="text-2xl sm:text-4xl font-black text-foreground mb-4">
                             Rs. {data?.totalRevenue?.toLocaleString() || 0}
                         </h2>
-                        <p className="text-sm text-green-600 flex items-center gap-2 font-medium bg-green-500/10 py-1.5 px-3 rounded-lg inline-flex">
-                            <FiTrendingUp className="w-4 h-4" /> Delivered & Verified
+                        <p className="text-[10px] sm:text-sm text-green-600 flex items-center gap-1.5 font-black bg-green-500/10 py-1 sm:py-1.5 px-2 sm:px-3 rounded-lg inline-flex uppercase tracking-tighter sm:tracking-normal">
+                            <FiTrendingUp className="w-3 h-3 sm:w-4 sm:h-4" /> Delivered & Verified
                         </p>
                     </div>
 
                     {/* Total Volume */}
-                    <div className="bg-surface border border-border rounded-3xl p-6 sm:p-8 shadow-sm relative overflow-hidden group">
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-[60px] -z-10 translate-x-10 -translate-y-10 group-hover:bg-primary/20 transition-colors duration-500" />
-                        <div className="w-12 h-12 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mb-6 shadow-inner">
-                            <FiPackage className="w-6 h-6" />
+                    <div className="bg-surface border border-border rounded-2xl sm:rounded-3xl p-4 sm:p-8 shadow-sm relative overflow-hidden group">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-[60px] -z-10 translate-x-10 -translate-y-10" />
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary/10 text-primary rounded-xl sm:rounded-2xl flex items-center justify-center mb-4 sm:mb-6 shadow-inner">
+                            <FiPackage className="w-5 h-5 sm:w-6 sm:h-6" />
                         </div>
-                        <span className="text-sm font-semibold uppercase tracking-wider text-muted-foreground block mb-1">Total Volume</span>
-                        <h2 className="text-3xl sm:text-4xl font-extrabold text-foreground mb-4">
+                        <span className="text-[10px] sm:text-sm font-black uppercase tracking-[0.2em] text-muted-foreground block mb-1">Total Volume</span>
+                        <h2 className="text-2xl sm:text-4xl font-black text-foreground mb-4">
                             {data?.productWiseSales?.reduce((acc: number, curr: any) => acc + curr.totalQuantity, 0) || 0}
                         </h2>
-                        <p className="text-sm text-muted-foreground font-medium py-1.5 break-words">
-                            Total physical items sold and dispatched
+                        <p className="text-[10px] sm:text-sm text-muted-foreground font-black py-1 uppercase tracking-widest opacity-60">
+                            Volume items sold
                         </p>
                     </div>
 
                     {/* Top Performer */}
                     {topSellingProduct ? (
-                        <div className="bg-surface border border-border rounded-3xl p-6 sm:p-8 shadow-sm relative overflow-hidden group">
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-orange-500/10 rounded-full blur-[60px] -z-10 translate-x-10 -translate-y-10 group-hover:bg-orange-500/20 transition-colors duration-500" />
-                            <div className="w-12 h-12 bg-orange-500/10 text-orange-500 rounded-2xl flex items-center justify-center mb-6 shadow-inner">
-                                <FiBarChart2 className="w-6 h-6" />
+                        <div className="bg-surface border border-border rounded-2xl sm:rounded-3xl p-4 sm:p-8 shadow-sm relative overflow-hidden group">
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-orange-500/10 rounded-full blur-[60px] -z-10 translate-x-10 -translate-y-10" />
+                            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-orange-500/10 text-orange-500 rounded-xl sm:rounded-2xl flex items-center justify-center mb-4 sm:mb-6 shadow-inner">
+                                <FiBarChart2 className="w-5 h-5 sm:w-6 sm:h-6" />
                             </div>
-                            <span className="text-sm font-semibold uppercase tracking-wider text-muted-foreground block mb-1">Top Performer</span>
-                            <h2 className="text-xl font-extrabold text-foreground mb-4 truncate" title={topSellingProduct.name}>
+                            <span className="text-[10px] sm:text-sm font-black uppercase tracking-[0.2em] text-muted-foreground block mb-1">Top Performer</span>
+                            <h2 className="text-base sm:text-xl font-black text-foreground mb-4 truncate uppercase" title={topSellingProduct.name}>
                                 {topSellingProduct.name}
                             </h2>
-                            <p className="text-sm text-orange-600 flex items-center gap-2 font-medium bg-orange-500/10 py-1.5 px-3 rounded-lg inline-flex">
-                                Lead volume: {topSellingProduct.totalQuantity} units
+                            <p className="text-[10px] sm:text-sm text-orange-600 flex items-center gap-1.5 font-black bg-orange-500/10 py-1 sm:py-1.5 px-2 sm:px-3 rounded-lg inline-flex uppercase tracking-tighter sm:tracking-normal">
+                                {topSellingProduct.totalQuantity} Units Sold
                             </p>
                         </div>
                     ) : (
-                        <div className="bg-surface border border-dashed border-border rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col items-center justify-center text-center">
-                            <FiShoppingBag className="w-8 h-8 text-muted-foreground mb-4 opacity-50" />
-                            <p className="text-muted-foreground text-sm font-medium">No sales data yet</p>
+                        <div className="bg-surface border border-dashed border-border rounded-2xl sm:rounded-3xl p-4 sm:p-8 shadow-sm flex flex-col items-center justify-center text-center">
+                            <FiShoppingBag className="w-6 h-6 sm:w-8 sm:h-8 text-muted-foreground mb-4 opacity-50" />
+                            <p className="text-muted-foreground text-[10px] sm:text-sm font-black uppercase tracking-widest">No data yet</p>
                         </div>
                     )}
                 </div>
@@ -120,49 +120,60 @@ export default function SalesAnalytics() {
                     </div>
 
                     {data?.productWiseSales?.length > 0 ? (
-                        <div className="overflow-x-auto">
-                            <table className="w-full text-left whitespace-nowrap">
-                                <thead>
-                                    <tr className="bg-muted/50 border-b border-border">
-                                        <th className="px-6 py-4 font-semibold text-sm text-muted-foreground uppercase tracking-wider">Inventory Item</th>
-                                        <th className="px-6 py-4 font-semibold text-sm text-muted-foreground uppercase tracking-wider text-center">Status</th>
-                                        <th className="px-6 py-4 font-semibold text-sm text-muted-foreground uppercase tracking-wider text-right">Volume</th>
-                                        <th className="px-6 py-4 font-semibold text-sm text-muted-foreground uppercase tracking-wider text-right">Revenue Contribution</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-border">
-                                    {data.productWiseSales.map((product: any) => (
-                                        <tr key={product.productId} className="hover:bg-muted/30 transition-colors">
-                                            <td className="px-6 py-4">
-                                                <div className="flex items-center gap-4">
-                                                    <div className="relative w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 border border-border bg-background">
-                                                        <Image src={product.image} alt={product.name} fill className="object-cover" />
-                                                    </div>
-                                                    <span className="font-semibold text-foreground truncate max-w-[200px] sm:max-w-[300px]" title={product.name}>{product.name}</span>
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-4 text-center">
-                                                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-green-500/10 text-green-600 border border-green-500/20">
-                                                    Active
-                                                </span>
-                                            </td>
-                                            <td className="px-6 py-4 text-right">
-                                                <div className="flex flex-col items-end">
-                                                    <span className="font-bold text-foreground">{product.totalQuantity}</span>
-                                                    <span className="text-xs text-muted-foreground font-medium">Units Sold</span>
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-4 text-right">
-                                                <div className="flex flex-col items-end">
-                                                    <span className="font-bold text-foreground text-lg">Rs. {product.totalRevenue.toLocaleString()}</span>
-                                                    <span className="text-xs text-muted-foreground font-medium">Total Yield</span>
-                                                </div>
-                                            </td>
+                        <>
+                            {/* Desktop Table */}
+                            <div className="hidden sm:block overflow-x-auto">
+                                <table className="w-full text-left whitespace-nowrap">
+                                    <thead>
+                                        <tr className="bg-muted/50 border-b border-border">
+                                            <th className="px-6 py-4 font-black text-[10px] text-muted-foreground uppercase tracking-widest">Inventory Item</th>
+                                            <th className="px-6 py-4 font-black text-[10px] text-muted-foreground uppercase tracking-widest text-center">Status</th>
+                                            <th className="px-6 py-4 font-black text-[10px] text-muted-foreground uppercase tracking-widest text-right">Volume</th>
+                                            <th className="px-6 py-4 font-black text-[10px] text-muted-foreground uppercase tracking-widest text-right">Revenue</th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
+                                    </thead>
+                                    <tbody className="divide-y divide-border">
+                                        {data.productWiseSales.map((product: any) => (
+                                            <tr key={product.productId} className="hover:bg-muted/30 transition-colors">
+                                                <td className="px-6 py-4 text-xs font-black uppercase tracking-tight text-foreground truncate max-w-[200px]">{product.name}</td>
+                                                <td className="px-6 py-4 text-center">
+                                                    <span className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-green-500/10 text-green-600 border border-green-500/20">Active</span>
+                                                </td>
+                                                <td className="px-6 py-4 text-right font-black text-xs text-foreground">{product.totalQuantity} Units</td>
+                                                <td className="px-6 py-4 text-right font-black text-sm text-primary">Rs. {product.totalRevenue.toLocaleString()}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            {/* Mobile Card Stack */}
+                            <div className="sm:hidden divide-y divide-border">
+                                {data.productWiseSales.map((product: any) => (
+                                    <div key={product.productId} className="p-4 space-y-3 bg-background">
+                                        <div className="flex items-center gap-3">
+                                            <div className="relative w-10 h-10 rounded-lg overflow-hidden border border-border">
+                                                <Image src={product.image} alt={product.name} fill className="object-cover" />
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <h4 className="text-[10px] font-black uppercase tracking-tight text-foreground truncate">{product.name}</h4>
+                                                <span className="text-[8px] font-black uppercase tracking-widest bg-green-500/10 text-green-600 px-1.5 py-0.5 rounded-full">Delivered</span>
+                                            </div>
+                                        </div>
+                                        <div className="grid grid-cols-2 gap-2">
+                                            <div className="bg-muted/30 p-2 rounded-lg border border-border">
+                                                <span className="block text-[7px] font-black text-muted-foreground uppercase tracking-widest mb-0.5">Yield</span>
+                                                <span className="font-black text-primary text-[11px]">Rs. {product.totalRevenue.toLocaleString()}</span>
+                                            </div>
+                                            <div className="bg-muted/30 p-2 rounded-lg border border-border text-right">
+                                                <span className="block text-[7px] font-black text-muted-foreground uppercase tracking-widest mb-0.5">Volume</span>
+                                                <span className="font-black text-foreground text-[11px]">{product.totalQuantity} Pcs</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </>
                     ) : (
                         <div className="py-24 px-6 text-center">
                             <div className="w-20 h-20 bg-muted rounded-full flex items-center justify-center mx-auto mb-6">

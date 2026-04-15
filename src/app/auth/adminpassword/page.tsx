@@ -111,17 +111,26 @@ function AdminPasswordContent() {
                     {errors.confirmPassword?.message && <p className="text-destructive text-xs mt-1.5 ml-1">{errors.confirmPassword.message}</p>}
                 </div>
 
-                <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-full py-4 mt-6 bg-destructive text-destructive-foreground font-bold text-base rounded-xl hover:bg-destructive/90 transition-all hover:shadow-lg hover:shadow-destructive/20 active:scale-[0.98] disabled:opacity-70 flex justify-center items-center"
-                >
-                    {isSubmitting ? (
-                        <div className="w-6 h-6 rounded-full border-2 border-white/30 border-t-white animate-spin" />
-                    ) : (
-                        "Set New Password"
-                    )}
-                </button>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6">
+                    <button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="w-full py-4 bg-destructive text-destructive-foreground font-black text-xs uppercase tracking-widest rounded-xl hover:bg-destructive/90 transition-all hover:shadow-lg hover:shadow-destructive/20 active:scale-[0.98] disabled:opacity-70 flex justify-center items-center"
+                    >
+                        {isSubmitting ? (
+                            <div className="w-5 h-5 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                        ) : (
+                            "Set Password"
+                        )}
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => router.push("/auth/profile")}
+                        className="w-full py-4 bg-muted/50 text-foreground font-bold text-xs uppercase tracking-widest rounded-xl hover:bg-muted border border-border transition-all active:scale-[0.98] flex justify-center items-center"
+                    >
+                        Cancel
+                    </button>
+                </div>
             </form>
         </div>
     );

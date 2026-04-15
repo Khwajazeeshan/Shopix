@@ -41,7 +41,7 @@ export default function ForgetPassword() {
             <div className="w-full max-w-md relative z-10 animate-in fade-in slide-in-from-bottom-8 duration-1000">
                 <div className="bg-surface/60 backdrop-blur-2xl border border-white/20 dark:border-white/5 rounded-[2.5rem] px-6 py-10 sm:p-10 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] relative">
                     <Link 
-                        href="/" 
+                        href="/auth/login" 
                         className="absolute top-6 right-6 p-2.5 rounded-2xl text-muted-foreground hover:bg-muted/80 hover:text-foreground transition-all duration-300 border border-transparent hover:border-border/50 group"
                         title="Back to Home"
                     >

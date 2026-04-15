@@ -57,15 +57,16 @@ export default function ProductFilter({ categories, onFilterChange, maxPrice }: 
     <div className="relative z-40">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border text-sm font-medium transition-all ${isOpen || activeFilterCount > 0
+        className={`flex items-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-2 sm:py-2.5 rounded-xl border text-[10px] sm:text-sm font-black transition-all ${isOpen || activeFilterCount > 0
           ? "border-primary bg-primary/5 text-primary shadow-sm"
           : "border-border bg-background text-foreground hover:bg-muted"
           }`}
       >
-        <SlidersHorizontal className="w-4 h-4" />
-        <span>Filters</span>
+        <SlidersHorizontal className="w-3 h-3 sm:w-4 sm:h-4" />
+        <span className="hidden xs:inline">Filters</span>
+        <span className="xs:hidden">Filter</span>
         {activeFilterCount > 0 && (
-          <span className="flex items-center justify-center w-5 h-5 ml-1 rounded-full bg-primary text-white text-xs">
+          <span className="flex items-center justify-center w-4 h-4 sm:w-5 sm:h-5 ml-0.5 sm:ml-1 rounded-full bg-primary text-white text-[9px] sm:text-xs font-black">
             {activeFilterCount}
           </span>
         )}
@@ -74,151 +75,105 @@ export default function ProductFilter({ categories, onFilterChange, maxPrice }: 
       {isOpen && (
         <>
           <div
-            className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm lg:hidden transition-opacity"
+            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm lg:hidden animate-in fade-in duration-300"
             onClick={() => setIsOpen(false)}
           />
-          <div className="absolute right-0 mt-2 w-full sm:w-80 lg:w-96 bg-background rounded-2xl shadow-xl border border-border overflow-hidden z-50 transform origin-top-right transition-all">
-            <div className="p-4 border-b border-border flex justify-between items-center bg-muted/30">
-              <h2 className="font-semibold flex items-center gap-2 text-foreground">
-                <Filter className="w-4 h-4 text-primary" />
-                Refine Results
-              </h2>
-              <button
-                onClick={() => setIsOpen(false)}
-                className="p-1 rounded-full hover:bg-black/5 text-muted-foreground transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="p-5 overflow-y-auto max-h-[70vh] space-y-6">
-              {/* Category Filter */}
-              {categories.length > 0 && (
-                <div className="space-y-3">
-                  <label className="text-sm font-medium text-foreground">Categories</label>
-                  <div className="flex flex-wrap gap-2">
+          <div className="fixed lg:absolute bottom-0 lg:bottom-auto right-0 lg:mt-1 w-full sm:w-80 lg:w-96 bg-background rounded-t-xl lg:rounded-xl shadow-2xl border-t lg:border border-border/40 overflow-hidden z-[60] transform origin-bottom lg:origin-top-right transition-all animate-in slide-in-from-bottom duration-300">
+            <div className="p-2 border-b border-border/20 flex items-center gap-2">
+              <span className="text-[10px] font-black text-primary flex items-center gap-1 shrink-0">
+                <SlidersHorizontal className="w-3 h-3" />
+                Filter
+              </span>
+              <div className="flex-1 flex gap-1 overflow-x-auto no-scrollbar py-0.5">
                     {categories.map((cat) => (
                       <button
                         key={cat}
                         onClick={() => setSelectedCategory(selectedCategory === cat ? null : cat)}
-                        className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all border ${selectedCategory === cat
-                          ? "bg-primary border-primary text-white shadow-sm"
-                          : "bg-surface border-border text-muted-foreground hover:border-primary/50"
+                        className={`whitespace-nowrap px-2 py-0.5 rounded text-[8px] font-bold border transition-all ${selectedCategory === cat
+                          ? "bg-primary border-primary text-white"
+                          : "bg-muted/30 border-transparent text-muted-foreground"
                           }`}
                       >
                         {cat}
                       </button>
                     ))}
-                  </div>
-                </div>
-              )}
+              </div>
+              <button
+                onClick={() => setIsOpen(false)}
+                className="w-6 h-6 flex items-center justify-center rounded-full bg-muted/40 text-muted-foreground shrink-0"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            </div>
 
-              {/* Price Sort */}
-              <div className="space-y-3">
-                <label className="text-sm font-medium text-foreground flex items-center gap-2">
-                  <ArrowUpDown className="w-4 h-4" /> Sort Price
-                </label>
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    onClick={() => {
-                      setSortByPrice(sortByPrice === 'low-high' ? null : 'low-high');
-                      if (sortByPrice !== 'low-high') setShowMostSold(false);
-                    }}
-                    className={`flex items-center justify-center gap-2 px-3 py-2 text-sm rounded-lg border transition-all ${sortByPrice === 'low-high'
-                      ? "border-primary bg-primary/5 text-primary font-medium"
-                      : "border-border text-muted-foreground hover:bg-muted"
-                      }`}
-                  >
-                    Low to High
-                  </button>
-                  <button
-                    onClick={() => {
-                      setSortByPrice(sortByPrice === 'high-low' ? null : 'high-low');
-                      if (sortByPrice !== 'high-low') setShowMostSold(false);
-                    }}
-                    className={`flex items-center justify-center gap-2 px-3 py-2 text-sm rounded-lg border transition-all ${sortByPrice === 'high-low'
-                      ? "border-primary bg-primary/5 text-primary font-medium"
-                      : "border-border text-muted-foreground hover:bg-muted"
-                      }`}
-                  >
-                    High to Low
-                  </button>
+            <div className="p-2 space-y-2">
+              {/* Controls Row */}
+              <div className="grid grid-cols-2 gap-2 items-center">
+                <div className="flex gap-0.5">
+                   <button
+                      onClick={() => setSortByPrice(sortByPrice === 'low-high' ? null : 'low-high')}
+                      className={`flex-1 p-1 rounded border transition-all ${sortByPrice === 'low-high' ? "bg-primary border-primary text-white" : "border-border/30 text-muted-foreground"}`}
+                      title="Low to High"
+                    >
+                      <ArrowUpDown className="w-2.5 h-2.5 mx-auto" />
+                    </button>
+                    <button
+                      onClick={() => setSortByPrice(sortByPrice === 'high-low' ? null : 'high-low')}
+                      className={`flex-1 p-1 rounded border transition-all ${sortByPrice === 'high-low' ? "bg-primary border-primary text-white" : "border-border/30 text-muted-foreground"}`}
+                      title="High to Low"
+                    >
+                      <ArrowUpDown className="w-2.5 h-2.5 mx-auto rotate-180" />
+                    </button>
+                    <button
+                      onClick={() => setShowMostSold(!showMostSold)}
+                      className={`flex-1 p-1 rounded border transition-all ${showMostSold ? "bg-primary border-primary text-white" : "border-border/30 text-muted-foreground"}`}
+                      title="Show Bestsellers"
+                    >
+                      <TrendingUp className="w-2.5 h-2.5 mx-auto" />
+                    </button>
+                </div>
+
+                <div className="flex gap-0.5 bg-muted/20 p-1 rounded border border-border/10">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      onClick={() => setSelectedRating(selectedRating === star ? null : star)}
+                      className={`flex-1 transition-all ${selectedRating && selectedRating >= star ? "text-yellow-500" : "text-muted-foreground opacity-20"}`}
+                    >
+                      <Star className={`w-2.5 h-2.5 mx-auto ${selectedRating && selectedRating >= star ? "fill-current" : ""}`} />
+                    </button>
+                  ))}
                 </div>
               </div>
 
-              {/* Price Range */}
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <label className="text-sm font-medium text-foreground">Max Price</label>
-                  <span className="text-sm font-semibold text-primary">Rs. {currentMaxPrice.toLocaleString()}</span>
-                </div>
-                <input
+              {/* Price Line */}
+              <div className="flex items-center gap-3 bg-muted/10 p-1.5 rounded-lg border border-border/10">
+                 <span className="text-[8px] font-black text-primary whitespace-nowrap">Max: {currentMaxPrice.toLocaleString()}</span>
+                 <input
                   type="range"
                   min="0"
                   max={maxPrice || 100000}
                   step={Math.max((maxPrice || 100000) / 100, 1)}
                   value={currentMaxPrice}
                   onChange={(e) => setCurrentMaxPrice(Number(e.target.value))}
-                  className="w-full h-1.5 bg-muted rounded-lg appearance-none cursor-pointer accent-primary"
+                  className="flex-1 h-0.5 bg-muted rounded-full appearance-none cursor-pointer accent-primary"
                 />
-                <div className="flex justify-between text-xs text-muted-foreground">
-                  <span>Rs. 0</span>
-                  <span>Rs. {(maxPrice || 100000).toLocaleString()}</span>
-                </div>
-              </div>
-
-              {/* Rating */}
-              <div className="space-y-3">
-                <label className="text-sm font-medium text-foreground flex items-center gap-2">
-                  <Star className="w-4 h-4" /> Minimum Rating
-                </label>
-                <div className="flex gap-2">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <button
-                      key={star}
-                      onClick={() => setSelectedRating(selectedRating === star ? null : star)}
-                      className={`flex-1 flex justify-center items-center gap-1 py-1.5 rounded-md border transition-all ${selectedRating === star
-                        ? "border-yellow-400 bg-yellow-50 text-yellow-600 font-medium"
-                        : "border-border text-muted-foreground hover:bg-muted"
-                        }`}
-                    >
-                      {star}<Star className={`w-3 h-3 ${selectedRating === star ? "fill-yellow-500" : ""}`} />
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Bestsellers */}
-              <div className="pt-2">
-                <button
-                  onClick={() => {
-                    setShowMostSold(!showMostSold);
-                    if (!showMostSold) setSortByPrice(null);
-                  }}
-                  className={`w-full flex items-center justify-between p-3 rounded-xl border transition-all ${showMostSold
-                    ? "border-primary bg-primary/5 text-primary"
-                    : "border-border bg-surface text-foreground hover:border-primary/30"
-                    }`}
-                >
-                  <span className="flex items-center gap-2 font-medium text-sm">
-                    <TrendingUp className="w-4 h-4" />
-                    Show Bestsellers Only
-                  </span>
-                  <div className={`w-10 h-5 rounded-full relative transition-colors ${showMostSold ? "bg-primary" : "bg-muted"}`}>
-                    <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white transition-all ${showMostSold ? "left-5" : "left-1"}`} />
-                  </div>
-                </button>
               </div>
             </div>
 
-            {/* Footer */}
-            <div className="p-4 border-t border-border bg-muted/30">
+            {/* Mini Footer */}
+            <div className="p-1.5 border-t border-border/20 flex gap-1.5 bg-muted/5">
               <button
                 onClick={resetFilters}
-                className="w-full flex items-center justify-center gap-2 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                className="flex items-center justify-center h-7 w-7 rounded bg-muted/40 text-muted-foreground"
               >
-                <RefreshCw className="w-4 h-4" />
-                Reset all filters
+                <RefreshCw className="w-3 h-3" />
+              </button>
+              <button
+                onClick={() => setIsOpen(false)}
+                className="flex-1 bg-primary text-white font-black text-[9px] rounded py-1.5 shadow-sm active:scale-95 transition-all uppercase"
+              >
+                Apply
               </button>
             </div>
           </div>

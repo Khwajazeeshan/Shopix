@@ -16,6 +16,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { useSearchParams, useRouter } from "next/navigation"
 import { ArrowLeft, ShoppingBag, ShoppingCart, Package, Star, X, CreditCard, Minus, Plus, ShieldCheck, Truck, RotateCcw } from "lucide-react"
+import { useTheme } from "next-themes"
 import { useForm } from "react-hook-form"
 import { useAppDispatch } from "@/src/redux/hooks"
 import { addToCart } from "@/src/redux/slices/cartSlice"
@@ -41,7 +42,19 @@ function CheckoutForm({ productId, productPrice, maxQuantity, onSuccess, onClose
 }) {
     const stripe = useStripe();
     const elements = useElements();
+    const { theme } = useTheme();
+    const isDark = theme === 'dark';
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const stripeStyles = {
+        base: {
+            fontSize: '15px',
+            color: isDark ? '#ffffff' : '#09090b',
+            '::placeholder': { color: isDark ? '#a1a1aa' : '#71717a' },
+            fontFamily: 'Inter, system-ui, sans-serif',
+        },
+        invalid: { color: '#ef4444' },
+    };
 
     const { register, handleSubmit, watch, reset, setValue, formState: { errors } } = useForm<OrderFormInputs>({
         defaultValues: { quantity: 1, paymentMethod: "cod" }
@@ -184,20 +197,17 @@ function CheckoutForm({ productId, productPrice, maxQuantity, onSuccess, onClose
             </div>
 
             {paymentMethod === "online" && (
-                <div className="p-4 bg-surface border border-border rounded-xl space-y-4 drop-shadow-sm">
-                    <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-                        <ShieldCheck className="w-4 h-4 text-green-500" /> Secure Payment via Stripe
+                <div className="p-4 bg-muted/10 border border-border rounded-xl space-y-4 shadow-inner">
+                    <div className="flex items-center gap-2 text-[10px] font-black text-primary uppercase tracking-widest">
+                        <ShieldCheck className="w-3.5 h-3.5" /> Secure Card Commerce
                     </div>
 
                     {/* Card Number */}
-                    <div className="space-y-1.5">
-                        <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Card Number</label>
-                        <div className="bg-white dark:bg-zinc-900 px-4 py-3 rounded-xl border border-border focus-within:border-primary focus-within:ring-1 focus-within:ring-primary/50 transition-all">
+                    <div className="space-y-1.5 focus-within:text-primary transition-colors">
+                        <label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest pl-1">Card Number</label>
+                        <div className="bg-surface border border-border rounded-xl px-4 py-3 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary/50 transition-all">
                             <CardNumberElement options={{
-                                style: {
-                                    base: { fontSize: '15px', color: '#424770', '::placeholder': { color: '#aab7c4' } },
-                                    invalid: { color: '#9e2146' },
-                                },
+                                style: stripeStyles,
                                 showIcon: true,
                             }} />
                         </div>
@@ -205,31 +215,19 @@ function CheckoutForm({ productId, productPrice, maxQuantity, onSuccess, onClose
 
                     {/* Expiry + CVC */}
                     <div className="grid grid-cols-2 gap-3">
-                        <div className="space-y-1.5">
-                            <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Expiry Date</label>
-                            <div className="bg-white dark:bg-zinc-900 px-4 py-3 rounded-xl border border-border focus-within:border-primary focus-within:ring-1 focus-within:ring-primary/50 transition-all">
-                                <CardExpiryElement options={{
-                                    style: {
-                                        base: { fontSize: '15px', color: '#424770', '::placeholder': { color: '#aab7c4' } },
-                                        invalid: { color: '#9e2146' },
-                                    },
-                                }} />
+                        <div className="space-y-1.5 focus-within:text-primary transition-colors">
+                            <label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest pl-1">Expiry Date</label>
+                            <div className="bg-surface border border-border rounded-xl px-4 py-3 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary/50 transition-all">
+                                <CardExpiryElement options={{ style: stripeStyles }} />
                             </div>
                         </div>
-                        <div className="space-y-1.5">
-                            <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">CVC</label>
-                            <div className="bg-white dark:bg-zinc-900 px-4 py-3 rounded-xl border border-border focus-within:border-primary focus-within:ring-1 focus-within:ring-primary/50 transition-all">
-                                <CardCvcElement options={{
-                                    style: {
-                                        base: { fontSize: '15px', color: '#424770', '::placeholder': { color: '#aab7c4' } },
-                                        invalid: { color: '#9e2146' },
-                                    },
-                                }} />
+                        <div className="space-y-1.5 focus-within:text-primary transition-colors">
+                            <label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest pl-1">CVC Code</label>
+                            <div className="bg-surface border border-border rounded-xl px-4 py-3 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary/50 transition-all">
+                                <CardCvcElement options={{ style: stripeStyles }} />
                             </div>
                         </div>
                     </div>
-
-
                 </div>
             )}
 
@@ -408,14 +406,14 @@ function ProductContent() {
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
                     {/* Left: Product Image */}
-                    <div className="flex flex-col gap-4 sticky top-24 h-fit">
-                        <div className="relative w-full aspect-square bg-surface rounded-2xl overflow-hidden border border-border shadow-md group">
+                    <div className="flex flex-col gap-4 lg:sticky lg:top-24 h-fit">
+                        <div className="relative w-full aspect-[4/3] lg:aspect-square bg-surface rounded-xl sm:rounded-2xl overflow-hidden border border-border shadow-md group">
                             {product.image ? (
                                 <Image
                                     src={product.image}
                                     alt={product.name}
                                     fill
-                                    className="object-contain p-8 group-hover:scale-105 transition-transform duration-700 ease-out"
+                                    className="object-contain p-2 sm:p-8 group-hover:scale-105 transition-transform duration-700 ease-out"
                                 />
                             ) : (
                                 <div className="w-full h-full flex items-center justify-center bg-muted text-muted-foreground">
@@ -438,12 +436,12 @@ function ProductContent() {
                     {/* Right: Product Info */}
                     <div className="flex flex-col lg:pl-4">
                         <div className="mb-6">
-                            <div className="flex items-center gap-2 text-xs font-bold text-primary uppercase tracking-widest mb-3">
-                                <ShieldCheck className="w-4 h-4" /> Authentic Item
-                                <span className="text-muted-foreground px-2">|</span>
+                            <div className="flex items-center gap-2 text-[10px] font-bold text-primary uppercase tracking-[0.2em] mb-2 sm:mb-3">
+                                <ShieldCheck className="w-3.5 h-3.5" /> Authentic Item
+                                <span className="text-muted-foreground/30 px-1 sm:px-2">|</span>
                                 <span className="text-foreground">{product.category || "General"}</span>
                             </div>
-                            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-foreground tracking-tight mb-4 leading-tight">
+                            <h1 className="text-xl xs:text-2xl sm:text-4xl lg:text-5xl font-extrabold text-foreground tracking-tight mb-3 sm:mb-4 leading-tight">
                                 {product.name}
                             </h1>
                             <div className="flex items-center gap-4 flex-wrap">
@@ -475,64 +473,65 @@ function ProductContent() {
 
                         <div className="h-px w-full bg-border mb-6" />
 
-                        <div className="mb-8">
-                            <span className="block text-sm font-medium text-muted-foreground mb-1">Price</span>
-                            <div className="text-4xl font-black text-foreground mb-6">
-                                Rs. {product.price.toLocaleString()}
+                        <div className="mb-6 sm:mb-8">
+                            <span className="block text-[10px] sm:text-sm font-semibold text-muted-foreground uppercase tracking-widest mb-1">Price</span>
+                            <div className="text-3xl sm:text-4xl font-black text-foreground mb-4 sm:mb-6">
+                                <span className="text-lg sm:text-2xl mr-1 font-bold text-primary">Rs.</span>
+                                {product.price.toLocaleString()}
                             </div>
-                            <p className="text-muted-foreground leading-relaxed">
+                            <p className="text-xs sm:text-base text-muted-foreground leading-relaxed">
                                 {product.description || "No description provided for this product."}
                             </p>
                         </div>
 
                         {/* Features List */}
-                        <div className="grid grid-cols-2 gap-4 mb-10 text-sm">
-                            <div className="flex items-center gap-3 p-3 rounded-xl bg-surface border border-border">
-                                <div className="bg-background p-2 rounded-lg text-primary shadow-sm">
-                                    <Truck className="w-5 h-5" />
+                        <div className="grid grid-cols-2 gap-2 sm:gap-4 mb-6 sm:mb-10">
+                            <div className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 rounded-lg sm:rounded-xl bg-surface border border-border">
+                                <div className="bg-background p-1.5 sm:p-2 rounded-lg text-primary shadow-sm">
+                                    <Truck className="w-4 h-4 sm:w-5 sm:h-5" />
                                 </div>
-                                <span className="font-medium text-foreground">Fast Delivery</span>
+                                <span className="font-bold text-[10px] sm:text-sm text-foreground">Fast Delivery</span>
                             </div>
-                            <div className="flex items-center gap-3 p-3 rounded-xl bg-surface border border-border">
-                                <div className="bg-background p-2 rounded-lg text-primary shadow-sm">
-                                    <RotateCcw className="w-5 h-5" />
+                            <div className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 rounded-lg sm:rounded-xl bg-surface border border-border">
+                                <div className="bg-background p-1.5 sm:p-2 rounded-lg text-primary shadow-sm">
+                                    <RotateCcw className="w-4 h-4 sm:w-5 sm:h-5" />
                                 </div>
-                                <span className="font-medium text-foreground">7 Days Return</span>
+                                <span className="font-bold text-[10px] sm:text-sm text-foreground">7 Days Return</span>
                             </div>
                         </div>
 
                         {/* Actions */}
-                        <div className="bg-surface border border-border p-5 rounded-2xl mb-8 flex flex-col gap-4">
-                            <div className="flex justify-between items-center mb-1">
-                                <span className="font-semibold text-foreground flex items-center gap-2">
+                        <div className="bg-surface/50 sm:bg-surface border border-border p-3 sm:p-5 rounded-xl sm:rounded-2xl mb-6 sm:mb-8 flex flex-col gap-3 sm:gap-4">
+                            <div className="flex justify-between items-center">
+                                <span className="font-black text-[10px] sm:text-xs text-muted-foreground uppercase tracking-widest">
                                     Availability
                                 </span>
-                                <span className={`font-medium ${product.quantity > 0 ? "text-green-600" : "text-destructive"}`}>
-                                    {product.quantity > 0 ? `${product.quantity} in stock` : 'Out of stock'}
+                                <span className={`font-black text-[10px] sm:text-sm px-2 py-0.5 rounded-full ${product.quantity > 0 ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
+                                    {product.quantity > 0 ? `${product.quantity} In Stock` : 'Sold Out'}
                                 </span>
                             </div>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 mt-1 sm:mt-2">
                                 <button
                                     onClick={() => setShowOrderModal(true)}
                                     disabled={product.quantity === 0}
-                                    className="w-full py-4 px-6 bg-foreground text-background font-semibold rounded-xl hover:bg-foreground/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2 shadow-lg"
+                                    className="w-full py-3.5 sm:py-4 px-4 sm:px-6 bg-foreground text-background font-black text-xs sm:text-base rounded-lg sm:rounded-xl hover:bg-foreground/90 disabled:opacity-50 transition-all flex items-center justify-center gap-2 shadow-lg uppercase tracking-wider"
                                 >
-                                    <ShoppingCart className="w-5 h-5" /> Buy Now
-                                </button>
-                                <button
-                                    onClick={handleStartChat}
-                                    className="w-full py-4 px-6 bg-muted text-foreground border border-border font-semibold rounded-xl hover:bg-muted/70 transition-all flex items-center justify-center gap-2"
-                                >
-                                    <MessageSquare className="w-5 h-5" /> Chat with Seller
+                                    <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5" /> Buy Now
                                 </button>
                                 <button
                                     onClick={handleAddToCart}
                                     disabled={isAdding || product.quantity === 0}
-                                    className="w-full py-4 px-6 bg-primary/10 text-primary border border-primary/20 font-semibold rounded-xl hover:bg-primary/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
+                                    className="w-full py-3.5 sm:py-4 px-4 sm:px-6 bg-primary/10 text-primary border border-primary/20 font-black text-xs sm:text-base rounded-lg sm:rounded-xl hover:bg-primary/20 disabled:opacity-50 transition-all flex items-center justify-center gap-2 uppercase tracking-wider"
                                 >
-                                    <ShoppingBag className="w-5 h-5" />
+                                    <ShoppingBag className="w-4 h-4 sm:w-5 sm:h-5" />
                                     {isAdding ? "Adding..." : "Add to Cart"}
+                                </button>
+                                <button
+                                    onClick={handleStartChat}
+                                    className="w-full sm:col-span-2 py-2.5 sm:py-4 px-4 sm:px-6 bg-muted text-foreground border border-border font-bold text-xs sm:text-base rounded-lg sm:rounded-xl hover:bg-muted/70 transition-all flex items-center justify-center gap-2"
+                                >
+                                    <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5" /> Chat with Seller
                                 </button>
                             </div>
                         </div>
@@ -564,13 +563,12 @@ function ProductContent() {
                 </div>
 
                 {/* Reviews Section */}
-                <div id="reviews" className="mt-24 pt-16 border-t border-border scroll-mt-20">
-                    <div className="flex flex-col md:flex-row md:items-end justify-center gap-6 mb-12">
+                <div id="reviews" className="mt-10 sm:mt-24 pt-8 sm:pt-16 border-t border-border scroll-mt-20">
+                    <div className="flex flex-col md:flex-row md:items-end justify-center gap-4 sm:gap-6 mb-8 sm:mb-12">
                         <div>
-                            <h2 className="text-3xl font-bold text-foreground mb-2">Community Reviews</h2>
-                            <p className="text-muted-foreground">Ratings and unedited feedback from verified buyers.</p>
+                            <h2 className="text-xl sm:text-3xl font-black text-foreground mb-1.5 sm:mb-2 uppercase tracking-tight">Community Reviews</h2>
+                            <p className="text-[10px] sm:text-base text-muted-foreground">Feedback from verified buyers.</p>
                         </div>
-
                     </div>
 
                     {!reviews || reviews.length === 0 ? (
@@ -582,24 +580,24 @@ function ProductContent() {
                             <p className="text-muted-foreground max-w-md">Be the first to share your experience with this product. Your feedback helps other shoppers.</p>
                         </div>
                     ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                             {reviews.slice(0, visibleReviewsCount).map((review: any) => (
-                                <div key={review._id} className="bg-background border border-border p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
-                                    <div className="flex items-center gap-4 mb-4">
-                                        <div className="w-12 h-12 bg-primary/10 text-primary rounded-full flex items-center justify-center font-bold text-xl border border-primary/20">
+                                <div key={review._id} className="bg-background border border-border p-4 sm:p-6 rounded-xl sm:rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+                                    <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
+                                        <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary/10 text-primary rounded-full flex items-center justify-center font-black text-base sm:text-xl border border-primary/20">
                                             {review.userId?.name?.[0] || "A"}
                                         </div>
                                         <div>
-                                            <h4 className="font-bold text-foreground">{review.userId?.name || "Anonymous User"}</h4>
-                                            <p className="text-xs text-muted-foreground">{new Date(review.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                                            <h4 className="font-bold text-sm sm:text-base text-foreground">{review.userId?.name || "Anonymous User"}</h4>
+                                            <p className="text-[9px] sm:text-xs text-muted-foreground">{new Date(review.createdAt).toLocaleDateString()}</p>
                                         </div>
                                     </div>
-                                    <div className="flex items-center text-yellow-500 mb-3">
+                                    <div className="flex items-center text-yellow-500 mb-2 sm:mb-3">
                                         {[...Array(5)].map((_, i) => (
-                                            <Star key={i} className={`w-4 h-4 ${i < review.rating ? 'fill-current' : 'text-muted'}`} />
+                                            <Star key={i} className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${i < review.rating ? 'fill-current' : 'text-muted'}`} />
                                         ))}
                                     </div>
-                                    <p className="text-muted-foreground text-sm leading-relaxed truncate-multiline">
+                                    <p className="text-muted-foreground text-[11px] sm:text-sm leading-relaxed italic">
                                         "{review.comment}"
                                     </p>
                                 </div>
@@ -608,12 +606,12 @@ function ProductContent() {
                     )}
 
                     {reviews && reviews.length > 6 && (
-                        <div className="mt-10 flex justify-center">
+                        <div className="mt-8 flex justify-center">
                             <button
                                 onClick={() => setVisibleReviewsCount(visibleReviewsCount === 6 ? reviews.length : 6)}
-                                className="px-8 py-3 rounded-full border border-border bg-surface hover:bg-muted font-semibold text-foreground transition-all hover:shadow-md active:scale-[0.98]"
+                                className="px-6 py-2.5 rounded-full border border-border bg-surface hover:bg-muted font-black text-[10px] sm:text-sm text-foreground transition-all uppercase tracking-widest active:scale-95"
                             >
-                                {visibleReviewsCount === 6 ? "Show More Reviews" : "Hide Reviews"}
+                                {visibleReviewsCount === 6 ? "More Reviews" : "Hide Reviews"}
                             </button>
                         </div>
                     )}
@@ -678,22 +676,22 @@ function ProductContent() {
                         className="absolute inset-0 bg-black/60 backdrop-blur-md transition-opacity"
                         onClick={() => setShowOrderModal(false)}
                     />
-                    <div className="relative bg-background rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden transform transition-all scale-100 opacity-100 flex flex-col max-h-[90vh]">
-                        <div className="px-6 py-5 border-b border-border flex items-center justify-between bg-muted/20">
-                            <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                                <ShoppingCart className="w-5 h-5 text-primary" /> Secure Checkout
+                    <div className="relative bg-background rounded-b-none sm:rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden transform transition-all scale-100 opacity-100 flex flex-col max-h-[95vh] sm:max-h-[90vh] mt-auto sm:mt-0">
+                        <div className="px-4 sm:px-6 py-4 sm:py-5 border-b border-border flex items-center justify-between bg-muted/20">
+                            <h2 className="text-lg sm:text-xl font-bold text-foreground flex items-center gap-2 uppercase tracking-tight">
+                                <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5 text-primary" /> Secure Checkout
                             </h2>
-                            <button onClick={() => setShowOrderModal(false)} className="p-2 rounded-full hover:bg-muted text-muted-foreground transition-colors"><X className="w-5 h-5" /></button>
+                            <button onClick={() => setShowOrderModal(false)} className="p-1.5 sm:p-2 rounded-full hover:bg-muted text-muted-foreground transition-colors"><X className="w-4 h-4 sm:w-5 sm:h-5" /></button>
                         </div>
-                        <div className="p-6 overflow-y-auto">
+                        <div className="p-4 sm:p-6 overflow-y-auto custom-scrollbar">
                             {/* Order Summary Miniature */}
-                            <div className="flex items-center gap-4 p-4 mb-6 rounded-xl border border-border bg-surface">
-                                <div className="relative w-16 h-16 rounded-lg overflow-hidden bg-muted flex-shrink-0">
+                            <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 mb-4 sm:mb-6 rounded-lg sm:rounded-xl border border-border bg-surface">
+                                <div className="relative w-12 h-12 sm:w-16 sm:h-16 rounded-lg overflow-hidden bg-muted flex-shrink-0">
                                     {product.image && <Image src={product.image} alt={product.name} fill className="object-cover" />}
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                    <h3 className="font-semibold text-foreground truncate">{product.name}</h3>
-                                    <p className="text-primary font-bold">Rs. {product.price.toLocaleString()}</p>
+                                    <h3 className="font-bold text-xs sm:text-base text-foreground truncate">{product.name}</h3>
+                                    <p className="text-primary font-black text-sm sm:text-lg tracking-tight">Rs. {product.price.toLocaleString()}</p>
                                 </div>
                             </div>
 

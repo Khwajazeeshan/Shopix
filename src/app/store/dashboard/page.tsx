@@ -240,14 +240,14 @@ export default function StoreView() {
                             <p className="text-xs sm:text-sm text-muted-foreground hidden sm:block">Manage and view all items in your store</p>
                         </div>
                     </div>
-                    <div className="flex items-center gap-4">
-                        <Link href="/seller/chats" className="relative p-2 bg-muted rounded-full text-foreground hover:bg-muted/80 transition-colors group">
-                            <FiMessageSquare className="w-5 h-5 group-hover:text-primary transition-colors" />
-                            <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-primary rounded-full border-2 border-surface" />
+                    <div className="flex items-center gap-2 sm:gap-4">
+                        <Link href="/seller/chats" className="relative p-1.5 sm:p-2 bg-muted rounded-full text-foreground hover:bg-muted/80 transition-colors group">
+                            <FiMessageSquare className="w-4 h-4 sm:w-5 sm:h-5 group-hover:text-primary transition-colors" />
+                            <span className="absolute top-0 right-0 w-2 sm:w-2.5 h-2 sm:h-2.5 bg-primary rounded-full border-2 border-surface" />
                         </Link>
-                        <div className="bg-primary/10 text-primary px-3 py-1.5 rounded-lg text-sm font-semibold flex items-center gap-2">
-                            <FiPackage className="w-4 h-4" />
-                            {products.length} Items
+                        <div className="bg-primary/10 text-primary px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[10px] sm:text-sm font-black flex items-center gap-1.5 uppercase">
+                            <FiPackage className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                            {products.length} <span className="hidden xs:inline">Items</span>
                         </div>
                     </div>
                 </header>
@@ -256,14 +256,14 @@ export default function StoreView() {
                     {/* Background Detail */}
                     <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
 
-                    <div className="mb-8 relative max-w-md">
-                        <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground w-5 h-5" />
+                    <div className="mb-6 sm:mb-8 relative max-w-md">
+                        <FiSearch className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4 sm:w-5 sm:h-5" />
                         <input
                             type="text"
-                            placeholder="Search your inventory by name or description..."
+                            placeholder="Find items..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full pl-12 pr-4 py-3.5 bg-surface border border-border rounded-xl outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all text-foreground text-sm shadow-sm"
+                            className="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3.5 bg-surface border border-border rounded-xl outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all text-foreground text-xs sm:text-sm shadow-sm"
                         />
                     </div>
 
@@ -273,16 +273,16 @@ export default function StoreView() {
                             <p className="font-medium">Loading your inventory...</p>
                         </div>
                     ) : products.length > 0 ? (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 sm:gap-6">
                             {filteredProducts.length === 0 ? (
                                 <div className="col-span-full py-12 text-center text-muted-foreground bg-surface border border-dashed border-border rounded-2xl">
                                     <FiSearch className="w-8 h-8 mx-auto mb-3 opacity-50" />
-                                    <p>No products match your search query.</p>
+                                    <p>No matches found.</p>
                                 </div>
                             ) : (
                                 filteredProducts.map((product) => (
-                                    <div key={product._id} className="bg-surface border border-border rounded-2xl overflow-hidden hover:shadow-lg transition-all group flex flex-col">
-                                        <div className="relative w-full aspect-square bg-muted overflow-hidden">
+                                    <div key={product._id} className="bg-surface border border-border rounded-lg sm:rounded-2xl overflow-hidden hover:shadow-lg transition-all group flex flex-col">
+                                        <div className="relative w-full aspect-[2/3] sm:aspect-square bg-muted/50 overflow-hidden">
                                             {product.image ? (
                                                 <Image 
                                                     src={product.image} 
@@ -291,33 +291,34 @@ export default function StoreView() {
                                                     className="object-cover group-hover:scale-105 transition-transform duration-500"  
                                                 />
                                             ) : (
-                                                <div className="w-full h-full flex items-center justify-center text-muted-foreground/50">
-                                                    <FiPackage className="w-12 h-12" />
+                                                <div className="w-full h-full flex items-center justify-center text-muted-foreground/30">
+                                                    <FiPackage className="w-6 h-6 sm:w-12 sm:h-12" />
                                                 </div>
                                             )}
                                         </div>
-                                        <div className="p-5 flex flex-col flex-1">
-                                            <h3 className="font-bold text-foreground text-lg mb-1 truncate">{product.name}</h3>
-                                            <p className="text-muted-foreground text-sm line-clamp-2 mb-4 flex-1">{product.description}</p>
+                                        <div className="p-1.5 sm:p-5 flex flex-col flex-1">
+                                            <h3 className="font-bold text-foreground text-[9px] sm:text-lg mb-0.5 sm:mb-1 truncate uppercase tracking-tight">{product.name}</h3>
+                                            <p className="text-muted-foreground text-[8px] sm:text-sm line-clamp-1 sm:line-clamp-2 mb-1.5 sm:mb-4 flex-1">{product.description}</p>
                                             
-                                            <div className="flex justify-between items-end mb-4 pt-4 border-t border-border">
+                                            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-1 mb-2 sm:mb-4 pt-1 sm:pt-4 border-t border-border">
                                                 <div>
-                                                    <p className="text-xs text-muted-foreground font-medium mb-1">Price</p>
-                                                    <p className="font-black text-primary text-lg">Rs. {product.price.toLocaleString()}</p>
+                                                    <p className="text-[7px] sm:text-xs text-muted-foreground font-black uppercase tracking-widest hidden sm:block">Price</p>
+                                                    <p className="font-black text-primary text-[10px] sm:text-lg"><span className="text-[7px] sm:hidden mr-0.5">Rs.</span>{product.price.toLocaleString()}</p>
                                                 </div>
-                                                <div className="text-right">
-                                                    <p className="text-xs text-muted-foreground font-medium mb-1">In Stock</p>
-                                                    <p className="font-bold text-foreground">{product.quantity}</p>
+                                                <div className="sm:text-right">
+                                                    <p className="text-[7px] sm:text-xs text-muted-foreground font-black uppercase tracking-widest hidden sm:block">Stock</p>
+                                                    <p className="font-bold text-foreground text-[8px] sm:text-sm bg-muted sm:bg-transparent px-1 sm:px-0 rounded sm:rounded-none leading-none pt-0.5 sm:pt-0">Qty: {product.quantity}</p>
                                                 </div>
                                             </div>
                                             
                                             <button
                                                 onClick={() => handleDeleteProduct(product._id)}
                                                 disabled={deletingId === product._id}
-                                                className="w-full flex items-center justify-center gap-2 py-2.5 bg-destructive/10 text-destructive font-medium rounded-lg hover:bg-destructive hover:text-white transition-colors disabled:opacity-50"
+                                                className="w-full flex items-center justify-center gap-1 sm:gap-2 py-1.5 sm:py-2.5 bg-destructive/10 text-destructive font-bold text-[8px] sm:text-medium rounded sm:rounded-lg hover:bg-destructive hover:text-white transition-colors disabled:opacity-50 uppercase tracking-widest"
                                             >
-                                                {deletingId === product._id ? <FiRefreshCcw className="w-4 h-4 animate-spin" /> : <FiTrash2 className="w-4 h-4" />}
-                                                Delete Product
+                                                {deletingId === product._id ? <FiRefreshCcw className="w-3 h-3 animate-spin" /> : <FiTrash2 className="w-3 h-3 sm:w-4 sm:h-4" />}
+                                                <span className="hidden sm:inline">Delete Product</span>
+                                                <span className="inline sm:hidden">Del</span>
                                             </button>
                                         </div>
                                     </div>
@@ -350,19 +351,19 @@ export default function StoreView() {
                         onClick={() => !isSubmitting && setShowAddModal(false)} 
                     />
                     <div className="relative bg-background rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden animate-in zoom-in-95 duration-200 flex flex-col max-h-[90vh]">
-                        <div className="px-6 py-5 border-b border-border flex items-center justify-between bg-muted/30">
-                            <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                                <FiPlus className="w-5 h-5 text-primary" /> Add New Product
+                        <div className="px-4 py-4 sm:px-6 sm:py-5 border-b border-border flex items-center justify-between bg-muted/30">
+                            <h2 className="text-lg sm:text-xl font-black text-foreground flex items-center gap-2 uppercase tracking-tighter sm:tracking-normal">
+                                <FiPlus className="w-5 h-5 text-primary" /> New Item
                             </h2>
                             <button 
                                 onClick={() => setShowAddModal(false)} 
                                 disabled={isSubmitting}
-                                className="p-2 rounded-full hover:bg-muted text-muted-foreground transition-colors"
+                                className="p-1.5 rounded-full hover:bg-muted text-muted-foreground transition-colors"
                             >
                                 <FiX className="w-5 h-5" />
                             </button>
                         </div>
-                        <div className="p-6 sm:p-8 overflow-y-auto hidden-scrollbar">
+                        <div className="p-4 sm:p-8 overflow-y-auto hidden-scrollbar">
                             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                                 
                                 <div className="space-y-2">
@@ -372,14 +373,14 @@ export default function StoreView() {
                                             <div className="relative w-full aspect-video bg-muted">
                                                 <Image src={preview} alt="Preview" fill className="object-contain" />
                                                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white font-medium gap-2">
-                                                    <FiUploadCloud className="w-5 h-5" /> Change Image
+                                                    <FiUploadCloud className="w-5 h-5" /> Change
                                                 </div>
                                             </div>
                                         ) : (
-                                            <div className="py-12 flex flex-col items-center justify-center text-muted-foreground group-hover:text-primary transition-colors">
-                                                <FiUploadCloud className="w-10 h-10 mb-3" /> 
-                                                <span className="font-medium">Click to upload image</span>
-                                                <span className="text-xs text-muted-foreground mt-1">JPEG, PNG, WebP</span>
+                                            <div className="py-6 sm:py-12 flex flex-col items-center justify-center text-muted-foreground group-hover:text-primary transition-all">
+                                                <FiUploadCloud className="w-8 h-8 sm:w-10 sm:h-10 mb-2 sm:mb-3" /> 
+                                                <span className="font-black uppercase tracking-widest text-[10px] sm:text-sm">Upload Image</span>
+                                                <span className="text-[9px] sm:text-xs text-muted-foreground mt-1 uppercase opacity-60">JPEG, PNG, WebP</span>
                                             </div>
                                         )}
                                         <input
@@ -392,60 +393,60 @@ export default function StoreView() {
                                     {errors.image && <p className="text-destructive text-xs mt-1">{errors.image.message}</p>}
                                 </div>
                                 
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div className="space-y-1.5 focus-within:text-primary transition-colors">
-                                        <label className="text-sm font-medium text-foreground">Product Name</label>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-6">
+                                    <div className="space-y-1 sm:space-y-1.5 focus-within:text-primary transition-colors">
+                                        <label className="text-xs sm:text-sm font-black text-foreground uppercase tracking-widest">Name</label>
                                         <input
-                                            placeholder="e.g. Premium Leather Bag"
-                                            className="w-full bg-surface border border-border rounded-xl px-4 py-3 outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all text-foreground"
-                                            {...register("name", { required: "Product name is required" })}
+                                            placeholder="Product title"
+                                            className="w-full bg-surface border border-border rounded-xl px-3 py-2.5 sm:px-4 sm:py-3 outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all text-foreground text-xs sm:text-sm"
+                                            {...register("name", { required: "Name is required" })}
                                         />
-                                        {errors.name && <p className="text-destructive text-xs mt-1">{errors.name.message}</p>}
+                                        {errors.name && <p className="text-destructive text-[10px] mt-1 uppercase font-bold">{errors.name.message}</p>}
                                     </div>
-                                    <div className="space-y-1.5 focus-within:text-primary transition-colors">
-                                        <label className="text-sm font-medium text-foreground">Price (PKR)</label>
+                                    <div className="space-y-1 sm:space-y-1.5 focus-within:text-primary transition-colors">
+                                        <label className="text-xs sm:text-sm font-black text-foreground uppercase tracking-widest">Price (PKR)</label>
                                         <input
                                             type="number"
-                                            placeholder="e.g. 1500"
-                                            className="w-full bg-surface border border-border rounded-xl px-4 py-3 outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all text-foreground"
-                                            {...register("price", { required: "Price is required", min: { value: 0, message: "Price must be positive" }, valueAsNumber: true })}
+                                            placeholder="1500"
+                                            className="w-full bg-surface border border-border rounded-xl px-3 py-2.5 sm:px-4 sm:py-3 outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all text-foreground text-xs sm:text-sm"
+                                            {...register("price", { required: "Price is required", min: { value: 0, message: "Positive only" }, valueAsNumber: true })}
                                         />
-                                        {errors.price && <p className="text-destructive text-xs mt-1">{errors.price.message}</p>}
+                                        {errors.price && <p className="text-destructive text-[10px] mt-1 uppercase font-bold">{errors.price.message}</p>}
                                     </div>
-                                    <div className="space-y-1.5 focus-within:text-primary transition-colors">
-                                        <label className="text-sm font-medium text-foreground">Short Description</label>
+                                    <div className="space-y-1 sm:space-y-1.5 focus-within:text-primary transition-colors">
+                                        <label className="text-xs sm:text-sm font-black text-foreground uppercase tracking-widest">Tagline</label>
                                         <input
-                                            placeholder="Max 25 chars tagline"
-                                            className="w-full bg-surface border border-border rounded-xl px-4 py-3 outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all text-foreground"
-                                            {...register("description", { required: "Description is required", maxLength: { value: 25, message: "Max 25 characters" } })}
+                                            placeholder="Max 25 chars"
+                                            className="w-full bg-surface border border-border rounded-xl px-3 py-2.5 sm:px-4 sm:py-3 outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all text-foreground text-xs sm:text-sm"
+                                            {...register("description", { required: "Required", maxLength: { value: 25, message: "Max 25" } })}
                                         />
-                                        {errors.description && <p className="text-destructive text-xs mt-1">{errors.description.message}</p>}
+                                        {errors.description && <p className="text-destructive text-[10px] mt-1 uppercase font-bold">{errors.description.message}</p>}
                                     </div>
-                                    <div className="space-y-1.5 focus-within:text-primary transition-colors">
-                                        <label className="text-sm font-medium text-foreground">Available Quantity</label>
+                                    <div className="space-y-1 sm:space-y-1.5 focus-within:text-primary transition-colors">
+                                        <label className="text-xs sm:text-sm font-black text-foreground uppercase tracking-widest">In Stock</label>
                                         <input
                                             type="number"
-                                            placeholder="e.g. 50"
-                                            className="w-full bg-surface border border-border rounded-xl px-4 py-3 outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all text-foreground"
-                                            {...register("quantity", { required: "Quantity is required", min: { value: 1, message: "Min quantity is 1" }, valueAsNumber: true })}
+                                            placeholder="50"
+                                            className="w-full bg-surface border border-border rounded-xl px-3 py-2.5 sm:px-4 sm:py-3 outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all text-foreground text-xs sm:text-sm"
+                                            {...register("quantity", { required: "Required", min: { value: 1, message: "Min 1" }, valueAsNumber: true })}
                                         />
-                                        {errors.quantity && <p className="text-destructive text-xs mt-1">{errors.quantity.message}</p>}
+                                        {errors.quantity && <p className="text-destructive text-[10px] mt-1 uppercase font-bold">{errors.quantity.message}</p>}
                                     </div>
                                 </div>
                                 
-                                <div className="pt-4 mt-6 border-t border-border flex justify-end gap-3 pb-2">
+                                <div className="pt-4 mt-4 sm:mt-6 border-t border-border flex flex-col sm:flex-row justify-end gap-2 sm:gap-3 pb-2">
                                     <button 
                                         type="button" 
                                         onClick={() => setShowAddModal(false)}
                                         disabled={isSubmitting}
-                                        className="px-6 py-3 border border-border bg-background text-foreground font-medium rounded-xl hover:bg-muted transition-colors disabled:opacity-50"
+                                        className="order-2 sm:order-1 px-6 py-3 border border-border bg-background text-foreground font-black text-[10px] uppercase tracking-widest rounded-xl hover:bg-muted transition-colors disabled:opacity-50"
                                     >
                                         Cancel
                                     </button>
                                     <button 
                                         type="submit" 
                                         disabled={isSubmitting}
-                                        className="px-8 py-3 bg-primary text-white font-bold rounded-xl hover:bg-primary/90 transition-all shadow-md active:scale-[0.98] flex items-center justify-center disabled:opacity-70 min-w-[140px]"
+                                        className="order-1 sm:order-2 px-8 py-3 bg-primary text-white font-black text-[10px] uppercase tracking-widest rounded-xl hover:bg-primary/90 transition-all shadow-md active:scale-[0.98] flex items-center justify-center disabled:opacity-70 min-w-[140px]"
                                     >
                                         {isSubmitting ? <div className="w-5 h-5 rounded-full border-2 border-white/30 border-t-white animate-spin" /> : "Publish Item"}
                                     </button>

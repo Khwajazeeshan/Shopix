@@ -174,23 +174,26 @@ export default function Homepage() {
     e.preventDefault();
     e.stopPropagation();
 
-    dispatch(addToCart({
-      id: product._id,
-      name: product.name,
-      price: product.price,
-      quantity: 1,
-      imageUrl: product.image
-    }));
+    if (status !== "authenticated") {
+      toast.error("Please create an account first!");
+      return;
+    }
 
     try {
       const res = await axios.post("/api/cart", { productId: product._id });
       if (res.data.success) {
+        dispatch(addToCart({
+          id: product._id,
+          name: product.name,
+          price: product.price,
+          quantity: 1,
+          imageUrl: product.image
+        }));
         toast.success(`${product.name} added to cart!`);
       }
     } catch (err: any) {
       if (err.response?.status === 401) {
-        // Just state update if not logged in
-        toast.success(`${product.name} temporarily added to cart! Login to save.`);
+        toast.error("Please create an account first!");
       } else {
         toast.error(err.response?.data?.error || "Failed to add to cart");
       }
@@ -202,7 +205,7 @@ export default function Homepage() {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="relative px-4 sm:px-6 lg:px-8 pt-20 pb-24 lg:pt-32 lg:pb-32 overflow-x-clip">
+      <section className="relative px-4 sm:px-6 lg:px-8 pt-10 pb-10 lg:pt-32 lg:pb-32 overflow-x-clip">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/10 -z-10" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/20 blur-[120px] rounded-full -z-10 opacity-50" />
 
@@ -226,7 +229,7 @@ export default function Homepage() {
             Discover a handpicked selection of premium goods from verified global merchants. Elevate your everyday style effortlessly.
           </p>
 
-          <div className="relative max-w-2xl mx-auto flex items-center gap-4 mt-8 bg-background/80 backdrop-blur-xl p-2 rounded-2xl shadow-xl hover:shadow-2xl hover:scale-[1.01] border border-border/60 focus-within:ring-2 focus-within:ring-primary/50 transition-all duration-500 overflow-visible z-50">
+          <div className="relative max-w-2xl mx-auto flex items-center gap-4 mt-8 bg-background/80 backdrop-blur-xl p-2 rounded-2xl shadow-xl hover:shadow-2xl hover:scale-[1.01] border border-border/60 focus-within:ring-2 focus-within:ring-primary/50 transition-all duration-500 overflow-visible z-40">
             <div className="flex-1 flex items-center pl-4 gap-3">
               <Search className="w-5 h-5 text-muted-foreground" />
               <input
@@ -296,10 +299,10 @@ export default function Homepage() {
         </div>
 
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 grid-flow-dense gap-6 auto-rows-[340px]">
+          <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 grid-flow-dense gap-2 sm:gap-4 auto-rows-[220px] sm:auto-rows-[280px]">
             {[...Array(12)].map((_, i) => (
-              <div key={i} className={`flex flex-col gap-3 group bg-surface/50 rounded-3xl p-4 border border-border/50 animate-pulse ${getGridItemClass(i)}`}>
-                <div className="w-full flex-1 bg-muted rounded-2xl" />
+              <div key={i} className={`flex flex-col gap-1.5 sm:gap-3 group bg-surface/50 rounded-xl sm:rounded-3xl p-2 sm:p-4 border border-border/50 animate-pulse ${getGridItemClass(i)}`}>
+                <div className="w-full flex-1 bg-muted rounded-lg sm:rounded-2xl" />
                 <div className="h-5 bg-muted rounded w-3/4 mt-4" />
                 <div className="h-4 bg-muted rounded w-1/2" />
                 <div className="h-6 bg-muted rounded w-1/3 mt-auto" />
@@ -326,13 +329,13 @@ export default function Homepage() {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 grid-flow-dense gap-6 auto-rows-[340px]">
+          <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 grid-flow-dense gap-2 sm:gap-4 auto-rows-[220px] sm:auto-rows-[280px]">
             {filteredProducts.map((product: any, i: number) => (
               <Link
                 href={`/products/productinfo?id=${product._id}`}
                 key={product._id}
                 style={{ animationDelay: `${(i % 10) * 75}ms` }}
-                className={`group flex flex-col bg-background/60 backdrop-blur-lg rounded-3xl overflow-hidden border border-border/50 hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/20 transition-all duration-500 transform hover:-translate-y-2 animate-in fade-in zoom-in-95 slide-in-from-bottom-4 fill-mode-both ${getGridItemClass(i)}`}
+                className={`group flex flex-col bg-background/60 backdrop-blur-lg rounded-xl sm:rounded-3xl overflow-hidden border border-border/50 hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/20 transition-all duration-500 transform sm:hover:-translate-y-2 animate-in fade-in zoom-in-95 slide-in-from-bottom-4 fill-mode-both ${getGridItemClass(i)}`}
               >
                 {/* Image Container */}
                 <div className="relative w-full flex-1 bg-muted overflow-hidden">
@@ -341,7 +344,7 @@ export default function Homepage() {
                       src={product.image}
                       alt={product.name}
                       fill
-                      className="object-contain p-4 group-hover:scale-105 transition-transform duration-700 ease-in-out"
+                      className="object-contain p-1 sm:p-4 group-hover:scale-105 transition-transform duration-700 ease-in-out"
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-muted-foreground">No image</div>
@@ -363,54 +366,54 @@ export default function Homepage() {
                   {/* Wishlist Heart Button */}
                   <button
                     onClick={(e) => handleWishlistToggle(e, product)}
-                    className="absolute top-3 right-3 z-20 p-2 rounded-full bg-white/80 backdrop-blur-md text-muted-foreground hover:text-destructive hover:bg-white transition-all shadow-sm group/heart active:scale-90"
+                    className="absolute top-1 sm:top-3 right-1 sm:right-3 z-20 p-1 sm:p-2 rounded-lg sm:rounded-full bg-white/90 dark:bg-black/50 backdrop-blur-md text-muted-foreground hover:text-destructive hover:bg-white transition-all shadow-sm group/heart active:scale-90"
                   >
                     <Heart
-                      className={`w-4 h-4 transition-colors ${wishlistItems.some(item => item.productId === product._id)
+                      className={`w-2.5 h-2.5 sm:w-4 sm:h-4 transition-colors ${wishlistItems.some(item => item.productId === product._id)
                           ? "fill-destructive text-destructive"
                           : "group-hover/heart:text-destructive"
                         }`}
                     />
                   </button>
 
-                  {/* Quick Add Button (Hover) */}
-                  <div className="absolute bottom-4 left-0 right-0 flex justify-center opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-300 px-4 z-10">
+                  {/* Quick Add Button (Hover on Desktop, Always on Mobile) */}
+                  <div className="absolute bottom-1.5 sm:bottom-4 left-0 right-0 flex justify-center sm:opacity-0 sm:group-hover:opacity-100 sm:translate-y-4 sm:group-hover:translate-y-0 transition-all duration-300 px-1.5 sm:px-4 z-10">
                     <button
                       onClick={(e) => handleAddToCart(e, product)}
-                      className="w-full bg-white/90 backdrop-blur-sm text-gray-900 shadow-lg font-medium py-2.5 rounded-xl border border-white/20 hover:bg-white flex justify-center items-center gap-2 transform active:scale-95 transition-all"
+                      className="w-full bg-white/95 dark:bg-black/80 backdrop-blur-md text-gray-900 dark:text-white shadow-xl font-black py-1 sm:py-2.5 rounded-lg sm:rounded-xl border border-white/20 hover:bg-white flex justify-center items-center gap-1.5 transform active:scale-90 transition-all text-[8px] sm:text-xs uppercase tracking-tighter sm:tracking-normal"
                     >
-                      <ShoppingCart className="w-4 h-4" /> Quick Add
+                      <ShoppingCart className="w-2.5 h-2.5 sm:w-4 sm:h-4" /> 
+                      <span className="hidden xs:inline">Add</span>
                     </button>
                   </div>
                 </div>
 
                 {/* Content */}
-                <div className="p-4 flex flex-col">
-                  <div className="text-xs text-muted-foreground uppercase tracking-wider font-semibold mb-1 truncate">
+                <div className="p-1.5 sm:p-4 flex flex-col flex-1">
+                  <div className="text-[6px] sm:text-xs text-primary/70 uppercase tracking-[0.1em] font-black mb-0.5 truncate">
                     {product.category || "General"}
                   </div>
-                  <h3 className="font-semibold text-foreground text-base mb-1 line-clamp-2 group-hover:text-primary transition-colors min-h-[3rem]">
+                  <h3 className="font-bold text-foreground text-[8px] sm:text-base leading-tight mb-1 line-clamp-1 sm:line-clamp-2 group-hover:text-primary transition-colors min-h-[0.7rem] sm:min-h-[3rem]">
                     {product.name}
                   </h3>
 
-                  <div className="flex items-center gap-2 mb-3 mt-auto pt-2">
-                    <div className="flex items-center text-yellow-500 text-sm">
-                      <Star className="w-4 h-4 fill-current" />
-                      <span className="ml-1 text-foreground font-medium">{(product.rating || 0).toFixed(1)}</span>
+                  <div className="flex items-center gap-1 sm:gap-2 mb-1 sm:mb-3 mt-auto">
+                    <div className="flex items-center text-yellow-500 text-[8px] sm:text-sm">
+                      <Star className="w-2 h-2 sm:w-4 sm:h-4 fill-current" />
+                      <span className="ml-0.5 text-foreground font-black">{(product.rating || 0).toFixed(1)}</span>
                     </div>
-                    {product.sold > 0 && (
-                      <span className="text-xs text-muted-foreground border-l border-border pl-2">
-                        {product.sold} sold
-                      </span>
-                    )}
                   </div>
 
-                  <div className="flex items-center justify-between mt-auto">
-                    <span className="font-bold text-lg text-foreground">
-                      Rs. {product.price.toLocaleString()}
-                    </span>
+                  <div className="flex items-center justify-between mt-auto pt-1 border-t border-border/30">
+                    <p className="font-black text-foreground">
+                      <span className="text-[7px] sm:text-xs opacity-50 mr-0.5">Rs.</span>
+                      <span className="text-[9px] sm:text-lg">{product.price.toLocaleString()}</span>
+                    </p>
                   </div>
                 </div>
+                
+                {/* Visual Accent */}
+                <div className="h-0.5 w-0 sm:group-hover:w-full bg-primary transition-all duration-500 ease-out" />
               </Link>
             ))}
           </div>
