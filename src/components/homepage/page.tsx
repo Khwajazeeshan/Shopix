@@ -202,7 +202,7 @@ export default function Homepage() {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="relative px-4 sm:px-6 lg:px-8 pt-20 pb-24 lg:pt-32 lg:pb-32 overflow-hidden">
+      <section className="relative px-4 sm:px-6 lg:px-8 pt-20 pb-24 lg:pt-32 lg:pb-32 overflow-x-clip">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/10 -z-10" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/20 blur-[120px] rounded-full -z-10 opacity-50" />
 
@@ -226,7 +226,7 @@ export default function Homepage() {
             Discover a handpicked selection of premium goods from verified global merchants. Elevate your everyday style effortlessly.
           </p>
 
-          <div className="relative max-w-2xl mx-auto flex items-center gap-4 mt-8 bg-background/80 backdrop-blur-xl p-2 rounded-2xl shadow-xl hover:shadow-2xl hover:scale-[1.01] border border-border/60 focus-within:ring-2 focus-within:ring-primary/50 transition-all duration-500">
+          <div className="relative max-w-2xl mx-auto flex items-center gap-4 mt-8 bg-background/80 backdrop-blur-xl p-2 rounded-2xl shadow-xl hover:shadow-2xl hover:scale-[1.01] border border-border/60 focus-within:ring-2 focus-within:ring-primary/50 transition-all duration-500 overflow-visible z-50">
             <div className="flex-1 flex items-center pl-4 gap-3">
               <Search className="w-5 h-5 text-muted-foreground" />
               <input

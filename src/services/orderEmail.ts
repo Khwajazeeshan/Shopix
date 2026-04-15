@@ -61,15 +61,15 @@ const createTransport = () => {
 };
 
 const baseTemplate = (content: string) => `
-<div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #09090b; padding: 40px 20px; color: #ffffff;">
-    <div style="max-width: 600px; margin: 0 auto; background-color: #18181b; border: 1px solid #27272a; border-radius: 16px; padding: 40px; box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);">
-        <div style="text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid #27272a;">
-            <h1 style="font-size: 28px; font-weight: 900; margin: 0; letter-spacing: -1px; color: #ffffff;">SHOPIX</h1>
+<div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #09090b; padding: 20px 12px; color: #ffffff; width: 100% !important; min-width: 100% !important; box-sizing: border-box;">
+    <div style="width: 100%; max-width: 600px; margin: 0 auto; background-color: #18181b; border: 1px solid #27272a; border-radius: 16px; padding: 28px 20px; box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4); box-sizing: border-box;">
+        <div style="text-align: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid #27272a;">
+            <h1 style="font-size: 24px; font-weight: 900; margin: 0; letter-spacing: -1px; color: #ffffff;">SHOPIX</h1>
         </div>
-        <div style="margin-bottom: 30px;">
+        <div style="margin-bottom: 24px;">
             ${content}
         </div>
-        <div style="border-top: 1px solid #27272a; padding-top: 20px; text-align: center; color: #71717a; font-size: 12px; line-height: 1.5;">
+        <div style="border-top: 1px solid #27272a; padding-top: 16px; text-align: center; color: #71717a; font-size: 11px; line-height: 1.5;">
             &copy; ${new Date().getFullYear()} Shopix. All rights reserved.
         </div>
     </div>
@@ -91,34 +91,34 @@ export const sendOrderNotificationToSeller = async ({
 
         const itemsHtml = items.map(item => `
             <tr>
-                <td style="padding: 12px 0; color: #ffffff; border-bottom: 1px solid #27272a;">${item.name}</td>
-                <td style="padding: 12px 0; color: #a1a1aa; text-align: center; border-bottom: 1px solid #27272a;">${item.quantity}</td>
-                <td style="padding: 12px 0; color: #ffffff; text-align: right; border-bottom: 1px solid #27272a;">$${item.price.toFixed(2)}</td>
+                <td style="padding: 10px 4px; color: #ffffff; border-bottom: 1px solid #27272a; font-size: 13px; word-break: break-word;">${item.name}</td>
+                <td style="padding: 10px 4px; color: #a1a1aa; text-align: center; border-bottom: 1px solid #27272a; font-size: 13px; white-space: nowrap;">${item.quantity}</td>
+                <td style="padding: 10px 4px; color: #ffffff; text-align: right; border-bottom: 1px solid #27272a; font-size: 13px; white-space: nowrap;">$${item.price.toFixed(2)}</td>
             </tr>
         `).join("");
 
         const content = `
-            <div style="text-align: center; margin-bottom: 24px;">
-                <div style="display: inline-block; background-color: #10b9811a; color: #10b981; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding: 4px 12px; border-radius: 999px; margin-bottom: 16px; border: 1px solid #10b98133;">New Sale</div>
-                <h2 style="font-size: 24px; font-weight: 700; margin: 0; color: #ffffff;">Hello ${sellerName},</h2>
+            <div style="text-align: center; margin-bottom: 20px;">
+                <div style="display: inline-block; background-color: #10b9811a; color: #10b981; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding: 4px 12px; border-radius: 999px; margin-bottom: 14px; border: 1px solid #10b98133;">New Sale</div>
+                <h2 style="font-size: 20px; font-weight: 700; margin: 0; color: #ffffff;">Hello ${sellerName},</h2>
             </div>
-            <p style="color: #a1a1aa; font-size: 15px; margin-bottom: 24px; line-height: 1.6; text-align: center;">You've just received a new order! Here are the details for your prompt attention.</p>
+            <p style="color: #a1a1aa; font-size: 14px; margin-bottom: 20px; line-height: 1.6; text-align: center;">You've just received a new order! Here are the details for your prompt attention.</p>
             
-            <div style="background-color: #09090b; border: 1px solid #27272a; border-radius: 8px; padding: 20px; margin-bottom: 24px;">
-                <h3 style="font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #71717a; margin-top: 0; margin-bottom: 16px; border-bottom: 1px solid #27272a; padding-bottom: 8px;">Customer Details</h3>
-                <p style="color: #ffffff; font-size: 15px; margin: 0 0 4px; font-weight: 600;">${customerName}</p>
-                <p style="color: #a1a1aa; font-size: 14px; margin: 0 0 12px;">${customerEmail}</p>
-                ${shippingAddress ? `<p style="color: #a1a1aa; font-size: 14px; margin: 0; line-height: 1.5;"><strong style="color: #71717a;">Shipping:</strong><br>${shippingAddress}</p>` : ""}
+            <div style="background-color: #09090b; border: 1px solid #27272a; border-radius: 8px; padding: 16px; margin-bottom: 20px; box-sizing: border-box;">
+                <h3 style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #71717a; margin-top: 0; margin-bottom: 12px; border-bottom: 1px solid #27272a; padding-bottom: 8px;">Customer Details</h3>
+                <p style="color: #ffffff; font-size: 14px; margin: 0 0 4px; font-weight: 600; word-break: break-word;">${customerName}</p>
+                <p style="color: #a1a1aa; font-size: 13px; margin: 0 0 10px; word-break: break-all;">${customerEmail}</p>
+                ${shippingAddress ? `<p style="color: #a1a1aa; font-size: 13px; margin: 0; line-height: 1.5; word-break: break-word;"><strong style="color: #71717a;">Shipping:</strong><br>${shippingAddress}</p>` : ""}
             </div>
 
-            <div style="background-color: #09090b; border: 1px solid #27272a; border-radius: 8px; padding: 20px; margin-bottom: 32px;">
-                <h3 style="font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #71717a; margin-top: 0; margin-bottom: 16px;">Order Summary (#${orderId.slice(-6).toUpperCase()})</h3>
-                <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+            <div style="background-color: #09090b; border: 1px solid #27272a; border-radius: 8px; padding: 16px; margin-bottom: 24px; box-sizing: border-box;">
+                <h3 style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #71717a; margin-top: 0; margin-bottom: 14px;">Order Summary (#${orderId.slice(-6).toUpperCase()})</h3>
+                <table style="width: 100%; border-collapse: collapse; font-size: 13px; table-layout: fixed;">
                     <thead>
                         <tr>
-                            <th style="padding: 0 0 12px; color: #71717a; text-align: left; font-weight: 600; border-bottom: 1px solid #27272a;">Product</th>
-                            <th style="padding: 0 0 12px; color: #71717a; text-align: center; font-weight: 600; border-bottom: 1px solid #27272a;">Qty</th>
-                            <th style="padding: 0 0 12px; color: #71717a; text-align: right; font-weight: 600; border-bottom: 1px solid #27272a;">Price</th>
+                            <th style="padding: 0 4px 10px; color: #71717a; text-align: left; font-weight: 600; border-bottom: 1px solid #27272a; font-size: 12px; width: 50%;">Product</th>
+                            <th style="padding: 0 4px 10px; color: #71717a; text-align: center; font-weight: 600; border-bottom: 1px solid #27272a; font-size: 12px; width: 20%;">Qty</th>
+                            <th style="padding: 0 4px 10px; color: #71717a; text-align: right; font-weight: 600; border-bottom: 1px solid #27272a; font-size: 12px; width: 30%;">Price</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -126,15 +126,15 @@ export const sendOrderNotificationToSeller = async ({
                     </tbody>
                     <tfoot>
                         <tr>
-                            <td colspan="2" style="padding: 16px 0 0; color: #71717a; text-align: left; font-weight: 600;">Total Amount:</td>
-                            <td style="padding: 16px 0 0; color: #10b981; text-align: right; font-weight: 800; font-size: 18px;">$${totalAmount.toFixed(2)}</td>
+                            <td colspan="2" style="padding: 14px 4px 0; color: #71717a; text-align: left; font-weight: 600; font-size: 13px;">Total Amount:</td>
+                            <td style="padding: 14px 4px 0; color: #10b981; text-align: right; font-weight: 800; font-size: 16px;">$${totalAmount.toFixed(2)}</td>
                         </tr>
                     </tfoot>
                 </table>
             </div>
 
             <div style="text-align: center;">
-                <a href="${getDomain()}/store/track-orders" style="display: inline-block; background-color: #ffffff; color: #000000; font-weight: 700; font-size: 15px; padding: 14px 32px; border-radius: 8px; text-decoration: none;">Manage Orders</a>
+                <a href="${getDomain()}/store/track-orders" style="display: inline-block; background-color: #ffffff; color: #000000; font-weight: 700; font-size: 14px; padding: 12px 28px; border-radius: 8px; text-decoration: none; max-width: 100%; box-sizing: border-box;">Manage Orders</a>
             </div>
         `;
 
@@ -178,24 +178,24 @@ export const sendOrderStatusUpdateToCustomer = async ({
         }
 
         const content = `
-            <div style="text-align: center; margin-bottom: 24px;">
-                <h2 style="font-size: 24px; font-weight: 700; margin: 0; color: ${statusColor};">${statusTitle}</h2>
+            <div style="text-align: center; margin-bottom: 20px;">
+                <h2 style="font-size: 20px; font-weight: 700; margin: 0; color: ${statusColor}; word-break: break-word;">${statusTitle}</h2>
             </div>
-            <p style="color: #a1a1aa; font-size: 15px; margin-bottom: 24px; line-height: 1.6;">
+            <p style="color: #a1a1aa; font-size: 14px; margin-bottom: 20px; line-height: 1.6; word-break: break-word;">
                 Hello ${customerName},<br><br>
                 ${statusMessage}
             </p>
             
-            <div style="background-color: #09090b; border: 1px solid #27272a; border-radius: 8px; padding: 20px; text-align: center; margin-bottom: 32px;">
-                <p style="color: #71717a; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 8px;">Order Number</p>
-                <p style="color: #ffffff; font-size: 20px; font-weight: 800; letter-spacing: 2px; margin: 0;">#${orderId.toUpperCase()}</p>
+            <div style="background-color: #09090b; border: 1px solid #27272a; border-radius: 8px; padding: 16px; text-align: center; margin-bottom: 24px; box-sizing: border-box;">
+                <p style="color: #71717a; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px;">Order Number</p>
+                <p style="color: #ffffff; font-size: 16px; font-weight: 800; letter-spacing: 1px; margin: 0; word-break: break-all;">#${orderId.toUpperCase()}</p>
             </div>
 
-            <div style="text-align: center; margin-bottom: 32px;">
-                <a href="${getDomain()}/products/my-orders" style="display: inline-block; background-color: #ffffff; color: #000000; font-weight: 700; font-size: 15px; padding: 14px 32px; border-radius: 8px; text-decoration: none;">Track My Order</a>
+            <div style="text-align: center; margin-bottom: 24px;">
+                <a href="${getDomain()}/products/my-orders" style="display: inline-block; background-color: #ffffff; color: #000000; font-weight: 700; font-size: 14px; padding: 12px 28px; border-radius: 8px; text-decoration: none; max-width: 100%; box-sizing: border-box;">Track My Order</a>
             </div>
 
-            <p style="color: #71717a; font-size: 13px; text-align: center; margin: 0; line-height: 1.5;">
+            <p style="color: #71717a; font-size: 12px; text-align: center; margin: 0; line-height: 1.5;">
                 If you have any questions, feel free to reply to this email or contact our support team.
             </p>
         `;
@@ -226,31 +226,31 @@ export const sendReturnRequestToSeller = async ({
         const transport = createTransport();
 
         const content = `
-            <div style="text-align: center; margin-bottom: 24px;">
-                <div style="display: inline-block; background-color: #f59e0b1a; color: #f59e0b; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding: 4px 12px; border-radius: 999px; margin-bottom: 16px; border: 1px solid #f59e0b33;">Action Required</div>
-                <h2 style="font-size: 24px; font-weight: 700; margin: 0; color: #ffffff;">Return Request</h2>
+            <div style="text-align: center; margin-bottom: 20px;">
+                <div style="display: inline-block; background-color: #f59e0b1a; color: #f59e0b; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding: 4px 12px; border-radius: 999px; margin-bottom: 14px; border: 1px solid #f59e0b33;">Action Required</div>
+                <h2 style="font-size: 20px; font-weight: 700; margin: 0; color: #ffffff;">Return Request</h2>
             </div>
-            <p style="color: #a1a1aa; font-size: 15px; margin-bottom: 24px; line-height: 1.6;">Hello ${sellerName}, a customer has submitted a request to return <strong style="color: #ffffff;">${productName}</strong> from their order.</p>
+            <p style="color: #a1a1aa; font-size: 14px; margin-bottom: 20px; line-height: 1.6; word-break: break-word;">Hello ${sellerName}, a customer has submitted a request to return <strong style="color: #ffffff;">${productName}</strong> from their order.</p>
             
-            <div style="background-color: #09090b; border: 1px solid #27272a; border-radius: 8px; padding: 20px; margin-bottom: 32px;">
-                <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+            <div style="background-color: #09090b; border: 1px solid #27272a; border-radius: 8px; padding: 16px; margin-bottom: 24px; box-sizing: border-box;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
                     <tr>
-                        <td style="padding: 8px 0; color: #71717a; width: 120px;">Customer:</td>
-                        <td style="padding: 8px 0; color: #ffffff; font-weight: 600;">${customerName}</td>
+                        <td style="padding: 6px 0; color: #71717a; width: 35%;">Customer:</td>
+                        <td style="padding: 6px 0; color: #ffffff; font-weight: 600; word-break: break-word;">${customerName}</td>
                     </tr>
                     <tr>
-                        <td style="padding: 8px 0; color: #71717a;">Order ID:</td>
-                        <td style="padding: 8px 0; color: #ffffff; font-weight: 600;">#${orderId}</td>
+                        <td style="padding: 6px 0; color: #71717a;">Order ID:</td>
+                        <td style="padding: 6px 0; color: #ffffff; font-weight: 600; word-break: break-all;">#${orderId}</td>
                     </tr>
                 </table>
-                <div style="margin-top: 16px; border-top: 1px dashed #27272a; padding-top: 16px;">
-                    <p style="color: #71717a; font-size: 13px; font-weight: 600; margin: 0 0 8px;">Reason for Return:</p>
-                    <p style="color: #a1a1aa; font-size: 14px; margin: 0; line-height: 1.5; font-style: italic;">"${reason}"</p>
+                <div style="margin-top: 14px; border-top: 1px dashed #27272a; padding-top: 14px;">
+                    <p style="color: #71717a; font-size: 12px; font-weight: 600; margin: 0 0 6px;">Reason for Return:</p>
+                    <p style="color: #a1a1aa; font-size: 13px; margin: 0; line-height: 1.5; font-style: italic; word-break: break-word;">"${reason}"</p>
                 </div>
             </div>
 
             <div style="text-align: center;">
-                <a href="${getDomain()}/store/return-orders" style="display: inline-block; background-color: #ffffff; color: #000000; font-weight: 700; font-size: 15px; padding: 14px 32px; border-radius: 8px; text-decoration: none;">Review Request</a>
+                <a href="${getDomain()}/store/return-orders" style="display: inline-block; background-color: #ffffff; color: #000000; font-weight: 700; font-size: 14px; padding: 12px 28px; border-radius: 8px; text-decoration: none; max-width: 100%; box-sizing: border-box;">Review Request</a>
             </div>
         `;
 
@@ -286,21 +286,21 @@ export const sendReturnOutcomeToCustomer = async ({
             : `After reviewing your case, the seller has declined the return request for <strong style="color: #ffffff;">${productName}</strong>.`;
 
         const content = `
-            <div style="text-align: center; margin-bottom: 24px;">
-                <h2 style="font-size: 24px; font-weight: 700; margin: 0; color: ${color};">${title}</h2>
+            <div style="text-align: center; margin-bottom: 20px;">
+                <h2 style="font-size: 20px; font-weight: 700; margin: 0; color: ${color};">${title}</h2>
             </div>
-            <p style="color: #a1a1aa; font-size: 15px; margin-bottom: 24px; line-height: 1.6;">
+            <p style="color: #a1a1aa; font-size: 14px; margin-bottom: 20px; line-height: 1.6; word-break: break-word;">
                 Hello ${customerName},<br><br>
                 ${message}
             </p>
             
-            <div style="background-color: #09090b; border: 1px solid #27272a; border-radius: 8px; padding: 20px; text-align: center; margin-bottom: 32px;">
-                <p style="color: #71717a; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 8px;">Order Number</p>
-                <p style="color: #ffffff; font-size: 20px; font-weight: 800; letter-spacing: 2px; margin: 0;">#${orderId}</p>
+            <div style="background-color: #09090b; border: 1px solid #27272a; border-radius: 8px; padding: 16px; text-align: center; margin-bottom: 24px; box-sizing: border-box;">
+                <p style="color: #71717a; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 6px;">Order Number</p>
+                <p style="color: #ffffff; font-size: 16px; font-weight: 800; letter-spacing: 1px; margin: 0; word-break: break-all;">#${orderId}</p>
             </div>
 
             <div style="text-align: center;">
-                <a href="${getDomain()}/products/my-orders" style="display: inline-block; background-color: #ffffff; color: #000000; font-weight: 700; font-size: 15px; padding: 14px 32px; border-radius: 8px; text-decoration: none;">View Order Status</a>
+                <a href="${getDomain()}/products/my-orders" style="display: inline-block; background-color: #ffffff; color: #000000; font-weight: 700; font-size: 14px; padding: 12px 28px; border-radius: 8px; text-decoration: none; max-width: 100%; box-sizing: border-box;">View Order Status</a>
             </div>
         `;
 
