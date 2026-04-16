@@ -1,0 +1,107 @@
+/* Admin Dashboard Responsive Enhancements */
+
+/* Hide default scrollbars for a cleaner look */
+.hidden-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hidden-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Global adjustments for small screens (≤ 450px) */
+@media (max-width: 450px) {
+  .p-8, .p-10 { padding: 1.5rem !important; }
+}
+
+/* Hardcore responsiveness for very tight viewports (≤ 320px) */
+@media (max-width: 320px) {
+  /* Drastic padding reduction */
+  .p-4, .p-6, .p-8, .p-10, .px-4, .sm\:p-6, .sm\:p-10, .lg\:p-8 { 
+    padding: 0.75rem !important; 
+  }
+  
+  .py-8, .py-12, .py-24 {
+    padding-top: 1.5rem !important;
+    padding-bottom: 1.5rem !important;
+  }
+
+  /* Font size scaling */
+  h1.text-3xl, h1.text-4xl { font-size: 1.25rem !important; }
+  h2.text-xl, h2.text-2xl { font-size: 1.1rem !important; }
+  .text-5xl { font-size: 2rem !important; }
+  
+  /* Layout forcing */
+  .flex-row, .sm\:flex-row, .md\:flex-row, .lg\:flex-row {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+  
+  .grid-cols-2, .md\:grid-cols-2, .lg\:grid-cols-3 {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Specific Component Fixes */
+  .shrink-0 { flex-shrink: 1 !important; } /* Allow icons/images to shrink if needed */
+  
+  /* Buttons and Interaction */
+  button, .inline-flex {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  /* Header adjustments */
+  header div.flex {
+     gap: 0.5rem !important;
+  }
+
+  /* Cards and Images */
+  .w-32.h-32, .w-24.h-24 {
+    width: 80px !important;
+    height: 80px !important;
+  }
+
+  /* Stats Cards */
+  .text-5xl.font-black {
+    font-size: 2rem !important;
+    line-height: 1 !important;
+  }
+
+  /* Admin Header Identity */
+  header .flex.flex-col.sm\:flex-row {
+     gap: 0.75rem !important;
+  }
+  
+  header .bg-background {
+    padding: 0.75rem !important;
+  }
+  
+  header p.font-bold {
+    font-size: 0.85rem !important;
+    word-break: break-all !important;
+  }
+
+  /* Navigation Button */
+  nav a {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  /* Table Adjustments */
+  table th, table td {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+    font-size: 0.75rem !important;
+  }
+}
+
+/* Specific Dashboard Section Overrides */
+.admin-dashboard-root .text-3xl {
+  letter-spacing: -0.02em !important;
+}
+
+/* Smooth transitions for responsive changes */
+* {
+  transition: padding 0.2s ease, font-size 0.2s ease, grid-gap 0.2s ease;
+}
+

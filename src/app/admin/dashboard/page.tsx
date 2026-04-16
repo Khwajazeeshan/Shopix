@@ -6,6 +6,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { FiUsers, FiShoppingBag, FiActivity, FiArrowLeft, FiShield } from "react-icons/fi"
 import Loader from "@/src/components/Loader"
+import '@/src/app/admin/admin.css';
 
 export default function AdminDashboard() {
     const router = useRouter()
@@ -32,7 +33,7 @@ export default function AdminDashboard() {
     if (loading) return <Loader />
 
     return (
-        <div className="min-h-screen bg-background font-sans p-4 sm:p-6 lg:p-8">
+        <div className="min-h-screen bg-background font-sans p-4 sm:p-6 lg:p-8 admin-dashboard-root">
             <main className="max-w-6xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
                 <nav className="mb-4">
                     <Link href="/" className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary transition-colors bg-surface px-4 py-2 rounded-lg border border-border w-fit shadow-sm">
@@ -55,13 +56,13 @@ export default function AdminDashboard() {
                     </h1>
                     
                     <div className="flex flex-col sm:flex-row gap-4 sm:gap-8">
-                        <div className="bg-background px-5 py-3 rounded-xl border border-border shadow-sm flex-1">
+                        <div className="bg-background px-5 py-3 rounded-xl border border-border shadow-sm flex-1 min-w-0">
                             <p className="text-xs text-muted-foreground font-semibold mb-1 uppercase tracking-wider">Website</p>
-                            <p className="font-bold text-foreground">Shopix Marketplace</p>
+                            <p className="font-bold text-foreground truncate">Shopix Marketplace</p>
                         </div>
-                        <div className="bg-background px-5 py-3 rounded-xl border border-border shadow-sm flex-1">
+                        <div className="bg-background px-5 py-3 rounded-xl border border-border shadow-sm flex-1 min-w-0">
                             <p className="text-xs text-muted-foreground font-semibold mb-1 uppercase tracking-wider">Identity</p>
-                            <p className="font-bold text-foreground">{stats?.admin?.email}</p>
+                            <p className="font-bold text-foreground break-all">{stats?.admin?.email}</p>
                         </div>
                     </div>
                 </header>

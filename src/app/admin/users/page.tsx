@@ -5,6 +5,7 @@ import { toast } from "react-hot-toast"
 import { FiX, FiLock, FiAlertTriangle, FiArrowLeft, FiUser, FiShoppingBag, FiTrash2, FiSearch } from "react-icons/fi"
 import Link from "next/link"
 import Loader from "@/src/components/Loader"
+import '@/src/app/admin/admin.css';
 
 export default function AdminUsers() {
     const [loading, setLoading] = useState(true)

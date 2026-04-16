@@ -78,6 +78,26 @@
   ::file-selector-button {
     border-color: var(--color-border, currentColor);
   }
+
+  button, 
+  [role="button"],
+  input[type="button"],
+  input[type="submit"] {
+    cursor: pointer !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Universal subtle hover lift for all buttons */
+  button:hover, 
+  [role="button"]:hover {
+    filter: brightness(1.05);
+  }
+
+  /* Universal press feedback */
+  button:active, 
+  [role="button"]:active {
+    transform: scale(0.98);
+  }
 }
 
 body {

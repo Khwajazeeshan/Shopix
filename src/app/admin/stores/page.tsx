@@ -4,6 +4,7 @@ import axios from "axios"
 import { toast } from "react-hot-toast"
 import Image from "next/image"
 import Link from "next/link"
+import '@/src/app/admin/admin.css';
 import { FiArrowLeft, FiSearch, FiAlertTriangle, FiX, FiCheck, FiCheckCircle, FiLock, FiTrash2, FiEye, FiShoppingBag, FiInfo } from "react-icons/fi"
 
 export default function AdminStores() {

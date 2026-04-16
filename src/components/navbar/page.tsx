@@ -258,6 +258,17 @@ export default function Navbar() {
 
                                        
 
+                                        {user.role === "admin" && (
+                                            <Link 
+                                                href="/admin/dashboard" 
+                                                className="flex items-center gap-4 w-full text-base font-black bg-primary/10 text-primary px-4 py-4 rounded-2xl transition-all mt-4"
+                                                onClick={() => setIsMobileMenuOpen(false)}
+                                            >
+                                                <LayoutDashboard className="w-5 h-5" />
+                                                <span>Admin Dashboard</span>
+                                            </Link>
+                                        )}
+
                                         {user.role === "seller" && (
                                             <Link 
                                                 href={hasStore ? "/store/dashboard" : "/store/create"} 

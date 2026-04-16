@@ -6,6 +6,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { FiArrowLeft, FiPackage, FiInfo, FiTag, FiClock, FiCheckCircle, FiXCircle, FiTrash2 } from "react-icons/fi"
 import Loader from "@/src/components/Loader"
+import '@/src/app/admin/admin.css';
 
 export default function ViewStoreAdmin({ params }: { params: Promise<{ id: string }> }) {
     const resolvedParams = React.use(params);
