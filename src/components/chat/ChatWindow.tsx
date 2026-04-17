@@ -102,7 +102,7 @@ export default function ChatWindow({
   };
 
   return (
-    <div className="fixed top-2 right-2 bottom-2 left-2 sm:top-auto sm:left-auto sm:bottom-6 sm:right-6 w-auto sm:w-[400px] h-auto sm:h-[500px] sm:max-h-[85vh] bg-background/80 sm:bg-surface/90 backdrop-blur-2xl border border-border sm:rounded-3xl shadow-2xl z-[100] flex flex-col overflow-hidden animate-in slide-in-from-bottom sm:slide-in-from-bottom-5 fade-in duration-500 rounded-2xl">
+    <div className="fixed top-16 right-2 bottom-2 left-2 sm:top-auto sm:left-auto sm:bottom-6 sm:right-6 w-auto sm:w-[400px] h-auto sm:h-[500px] sm:max-h-[85vh] bg-background/80 sm:bg-surface/90 backdrop-blur-2xl border border-border sm:rounded-3xl shadow-2xl z-[9999] flex flex-col overflow-hidden animate-in slide-in-from-bottom sm:slide-in-from-bottom-5 fade-in duration-500 rounded-2xl">
       {/* Header */}
       <div className="bg-primary px-4 py-3 sm:p-4 text-white flex items-center justify-between shadow-lg relative z-10">
         <div className="flex items-center gap-2 sm:gap-3">
@@ -165,10 +165,10 @@ export default function ChatWindow({
             return (
               <div
                 key={msg._id}
-                className={`flex ${isMe ? "justify-end" : "justify-start"} animate-in fade-in slide-in-from-bottom-1 duration-300`}
+                className={`flex ${isMe ? "justify-end" : "justify-start"} animate-in fade-in slide-in-from-bottom-1 duration-300 w-full`}
               >
                 <div
-                  className={`max-w-[85%] sm:max-w-[80%] p-2.5 sm:p-3 rounded-xl sm:rounded-2xl shadow-sm text-xs sm:text-sm ${
+                  className={`max-w-[95%] p-2.5 sm:p-3 rounded-xl sm:rounded-2xl shadow-sm text-xs sm:text-sm ${
                     isMe
                       ? "bg-primary text-white rounded-tr-none"
                       : "bg-surface border border-border text-foreground rounded-tl-none font-medium"

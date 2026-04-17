@@ -50,7 +50,7 @@ const Chatbot = () => {
     if (!mounted || pathname !== '/') return null;
 
     return (
-        <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-[100] flex flex-col items-end pointer-events-none font-sans">
+        <div className="fixed top-20 right-4 sm:top-auto sm:bottom-6 sm:right-6 z-[9999] flex flex-col items-end pointer-events-none font-sans">
             {/* Chat Window */}
             <div className={`pointer-events-auto transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] origin-bottom-right mb-4 
                 w-[calc(100vw-2rem)] xs:w-[340px] sm:w-[400px] 
@@ -96,11 +96,11 @@ const Chatbot = () => {
                     )}
 
                     {chat.map((msg, i) => (
-                        <div key={i} className={`flex gap-2 max-w-[90%] animate-in fade-in slide-in-from-bottom-2 duration-500 ${msg.role === 'user' ? 'self-end flex-row-reverse' : 'self-start'}`}>
+                        <div key={i} className={`flex gap-2 w-full items-start animate-in fade-in slide-in-from-bottom-2 duration-500 ${msg.role === 'user' ? 'justify-end flex-row-reverse' : 'justify-start'}`}>
                             <div className={`w-9 h-9 shrink-0 rounded-2xl flex items-center justify-center border transition-transform duration-300 hover:scale-110 ${msg.role === 'user' ? 'bg-primary text-white border-primary/20 shadow-lg shadow-primary/20' : 'bg-surface text-primary border-border/50 shadow-md'}`}>
                                 {msg.role === 'user' ? <FiUser className="w-4.5 h-4.5" /> : <FiBox className="w-4.5 h-4.5" />}
                             </div>
-                            <div className={`p-4 rounded-[1.5rem] text-[13px] leading-relaxed font-medium shadow-sm border transition-all hover:shadow-md ${
+                            <div className={`max-w-[75%] p-4 rounded-[1.5rem] text-[13px] leading-relaxed font-medium shadow-sm border transition-all hover:shadow-md ${
                                 msg.role === 'user' 
                                 ? 'bg-gradient-to-br from-primary via-primary to-primary-foreground text-white border-transparent rounded-tr-none' 
                                 : 'bg-surface/90 backdrop-blur-md border-border/50 text-foreground rounded-tl-none'
@@ -111,11 +111,11 @@ const Chatbot = () => {
                     ))}
 
                     {isTyping && (
-                        <div className="flex gap-3 max-w-[85%] self-start animate-in fade-in duration-300">
+                        <div className="flex gap-3 w-full justify-start items-start animate-in fade-in duration-300">
                              <div className="w-9 h-9 shrink-0 rounded-2xl flex items-center justify-center border bg-surface text-primary border-border/50 shadow-md">
                                 <FiBox className="w-4.5 h-4.5" />
                             </div>
-                            <div className="px-5 py-4 rounded-[1.5rem] bg-surface/90 backdrop-blur-md border border-border/50 rounded-tl-none shadow-sm flex items-center gap-2">
+                            <div className="max-w-[75%] px-5 py-4 rounded-[1.5rem] bg-surface/90 backdrop-blur-md border border-border/50 rounded-tl-none shadow-sm flex items-center gap-2">
                                 <div className="w-1.5 h-1.5 bg-primary/70 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
                                 <div className="w-1.5 h-1.5 bg-primary/70 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
                                 <div className="w-1.5 h-1.5 bg-primary/70 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />

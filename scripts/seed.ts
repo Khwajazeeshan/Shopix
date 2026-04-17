@@ -20,8 +20,8 @@ import Wishlist from "../src/models/wishlist";
 import Cart from "../src/models/cart";
 
 const NUM_SELLERS = 10;
-const PRODUCTS_PER_STORE = 5;
-const NUM_CUSTOMERS = 30;
+const PRODUCTS_PER_STORE = 3;
+const NUM_CUSTOMERS = 15;
 const SEED_PASSWORD = "password123"; // Fixed password for testing
 // Images logic will rely on dynamically generated categories below
 

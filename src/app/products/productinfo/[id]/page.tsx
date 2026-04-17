@@ -5,6 +5,7 @@ import { toast } from "react-hot-toast"
 import Image from "next/image"
 import Link from "next/link"
 import { FiArrowLeft, FiShoppingBag, FiPackage, FiStar, FiUser, FiCheckCircle } from "react-icons/fi"
+import { useSession } from "next-auth/react"
 import Loader from "@/src/components/Loader"
 import Navbar from "@/src/components/navbar/page"
 import Footer from "@/src/components/footer/page"
@@ -12,9 +13,26 @@ import Footer from "@/src/components/footer/page"
 export default function ProductInfo({ params }: { params: Promise<{ id: string }> }) {
     const resolvedParams = React.use(params);
     const productId = resolvedParams.id;
+    const { status } = useSession();
 
     const [loading, setLoading] = useState(true)
     const [data, setData] = useState<any>(null)
+
+    const handleOrderNow = () => {
+        if (status !== "authenticated") {
+            toast.error("Please create account first!");
+            return;
+        }
+        // Add order logic here
+    };
+
+    const handleAddToCart = () => {
+        if (status !== "authenticated") {
+            toast.error("Please create account first!");
+            return;
+        }
+        // Add to cart logic here
+    };
 
     const fetchProductDetails = async () => {
         try {
@@ -108,10 +126,10 @@ export default function ProductInfo({ params }: { params: Promise<{ id: string }
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-auto pt-4">
-                            <button className="w-full py-4 px-6 bg-foreground text-background font-bold rounded-xl hover:bg-foreground/90 transition-all shadow-lg active:scale-[0.98] flex items-center justify-center gap-2 text-lg">
+                            <button onClick={handleOrderNow} className="w-full py-4 px-6 bg-foreground text-background font-bold rounded-xl hover:bg-foreground/90 transition-all shadow-lg active:scale-[0.98] flex items-center justify-center gap-2 text-lg">
                                 Order Now
                             </button>
-                            <button className="w-full py-4 px-6 bg-primary/10 text-primary border border-primary/20 font-bold rounded-xl hover:bg-primary/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2 text-lg">
+                            <button onClick={handleAddToCart} className="w-full py-4 px-6 bg-primary/10 text-primary border border-primary/20 font-bold rounded-xl hover:bg-primary/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2 text-lg">
                                 <FiShoppingBag className="w-5 h-5" />
                                 Add to Cart
                             </button>
