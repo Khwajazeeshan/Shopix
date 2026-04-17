@@ -269,7 +269,7 @@ function ProductContent() {
     const [chatConversationId, setChatConversationId] = useState<string | null>(null)
     const [showChat, setShowChat] = useState(false)
     const [visibleReviewsCount, setVisibleReviewsCount] = useState(6)
-    const { data: session }: any = useSession()
+    const { data: session, status }: any = useSession()
 
     const fetchProductDetails = async () => {
         if (!productId) return;
@@ -289,11 +289,12 @@ function ProductContent() {
     }
 
     const handleAddToCart = async () => {
-        if (!session) {
+        if (status === 'unauthenticated') {
             toast.error("Please log in to add items to cart");
             router.push("/auth/login");
             return;
         }
+        if (status === 'loading') return;
         if (!data) return;
         setIsAdding(true)
         try {
@@ -346,11 +347,12 @@ function ProductContent() {
     };
 
     const handleStartChat = async () => {
-        if (!session) {
+        if (status === 'unauthenticated') {
             toast.error("Please login to chat with seller");
             router.push("/auth/login");
             return;
         }
+        if (status === 'loading') return;
 
         try {
             const response = await axios.post("/api/chat/conversation", {
@@ -372,10 +374,10 @@ function ProductContent() {
     }, [productId])
 
     useEffect(() => {
-        if (searchParams.get("openChat") === "true" && data && session) {
+        if (searchParams.get("openChat") === "true" && data && status === 'authenticated') {
             handleStartChat();
         }
-    }, [searchParams, data, session]);
+    }, [searchParams, data, status]);
 
     if (loading) return <Loader />
     if (!data) return (
@@ -519,11 +521,12 @@ function ProductContent() {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 mt-1 sm:mt-2">
                                 <button
                                     onClick={() => {
-                                        if (!session) {
+                                        if (status === 'unauthenticated') {
                                             toast.error("Please log in to place an order");
                                             router.push("/auth/login");
                                             return;
                                         }
+                                        if (status === 'loading') return;
                                         setShowOrderModal(true);
                                     }}
                                     disabled={product.quantity === 0}

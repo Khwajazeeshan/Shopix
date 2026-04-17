@@ -19,18 +19,20 @@ export default function ProductInfo({ params }: { params: Promise<{ id: string }
     const [data, setData] = useState<any>(null)
 
     const handleOrderNow = () => {
-        if (status !== "authenticated") {
+        if (status === "unauthenticated") {
             toast.error("Please create account first!");
             return;
         }
+        if (status === "loading") return;
         // Add order logic here
     };
 
     const handleAddToCart = () => {
-        if (status !== "authenticated") {
+        if (status === "unauthenticated") {
             toast.error("Please create account first!");
             return;
         }
+        if (status === "loading") return;
         // Add to cart logic here
     };
 
