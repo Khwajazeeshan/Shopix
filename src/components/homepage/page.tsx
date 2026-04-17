@@ -16,12 +16,7 @@ import { useAppSelector } from "../../redux/hooks";
 import { useSession } from "next-auth/react";
 
 const getGridItemClass = (index: number) => {
-  // Deterministic masonry / bento-grid pattern based on absolute index
-  const pattern = index % 14;
-  if (pattern === 0) return "sm:col-span-2 sm:row-span-2"; // Large hero feature
-  if (pattern === 4) return "sm:col-span-2 sm:row-span-1"; // Wide banner
-  if (pattern === 8) return "sm:row-span-2";               // Tall portrait
-  if (pattern === 11) return "sm:col-span-2 sm:row-span-2";// Large feature
+  // All cards have uniform height
   return "col-span-1 row-span-1";
 };
 
@@ -376,16 +371,7 @@ export default function Homepage() {
                     />
                   </button>
 
-                  {/* Quick Add Button (Hover on Desktop, Always on Mobile) */}
-                  <div className="absolute bottom-1.5 sm:bottom-4 left-0 right-0 flex justify-center sm:opacity-0 sm:group-hover:opacity-100 sm:translate-y-4 sm:group-hover:translate-y-0 transition-all duration-300 px-1.5 sm:px-4 z-10">
-                    <button
-                      onClick={(e) => handleAddToCart(e, product)}
-                      className="w-full bg-white/95 dark:bg-black/80 backdrop-blur-md text-gray-900 dark:text-white shadow-xl font-black py-1 sm:py-2.5 rounded-lg sm:rounded-xl border border-white/20 hover:bg-white flex justify-center items-center gap-1.5 transform active:scale-90 transition-all text-[8px] sm:text-xs uppercase tracking-tighter sm:tracking-normal"
-                    >
-                      <ShoppingCart className="w-2.5 h-2.5 sm:w-4 sm:h-4" /> 
-                      <span className="hidden xs:inline">Add</span>
-                    </button>
-                  </div>
+
                 </div>
 
                 {/* Content */}
