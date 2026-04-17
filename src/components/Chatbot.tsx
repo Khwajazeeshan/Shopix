@@ -50,7 +50,7 @@ const Chatbot = () => {
     if (!mounted || pathname !== '/') return null;
 
     return (
-        <div className="fixed top-20 right-4 sm:top-auto sm:bottom-6 sm:right-6 z-[9999] flex flex-col items-end pointer-events-none font-sans">
+        <div className="fixed bottom-6 right-4 sm:bottom-6 sm:right-6 z-[9999] flex flex-col items-end pointer-events-none font-sans">
             {/* Chat Window */}
             <div className={`pointer-events-auto transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] origin-bottom-right mb-4 
                 w-[calc(100vw-2rem)] xs:w-[340px] sm:w-[400px] 
