@@ -38,7 +38,7 @@ export async function DELETE(request: NextRequest) {
     await connectDB();
     try {
         const userIdFromToken = VerifyToken(request);
-        const admin = await User.findById(userIdFromToken);
+        const admin = await User.findById(userIdFromToken).select("+password");
         if (!admin || admin.role !== "admin") {
             return NextResponse.json({ error: "Unauthorized. Admin access only.", success: false }, { status: 403 });
         }

@@ -686,17 +686,17 @@ function ProductContent() {
 
             {/* Order Modal */}
             {showOrderModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 opacity-100 transition-opacity">
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 opacity-100 transition-opacity pt-20 sm:pt-0">
                     <div
                         className="absolute inset-0 bg-black/60 backdrop-blur-md transition-opacity"
                         onClick={() => setShowOrderModal(false)}
                     />
-                    <div className="relative bg-background rounded-b-none sm:rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden transform transition-all scale-100 opacity-100 flex flex-col max-h-[95vh] sm:max-h-[90vh] mt-auto sm:mt-0">
-                        <div className="px-4 sm:px-6 py-4 sm:py-5 border-b border-border flex items-center justify-between bg-muted/20">
+                    <div className="relative bg-background rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden transform transition-all scale-100 opacity-100 flex flex-col max-h-[90vh]">
+                        <div className="px-4 sm:px-6 py-4 sm:py-5 border-b border-border flex items-center justify-between bg-muted/20 flex-shrink-0">
                             <h2 className="text-lg sm:text-xl font-bold text-foreground flex items-center gap-2 uppercase tracking-tight">
                                 <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5 text-primary" /> Secure Checkout
                             </h2>
-                            <button onClick={() => setShowOrderModal(false)} className="p-1.5 sm:p-2 rounded-full hover:bg-muted text-muted-foreground transition-colors"><X className="w-4 h-4 sm:w-5 sm:h-5" /></button>
+                            <button onClick={() => setShowOrderModal(false)} className="p-1.5 sm:p-2 rounded-full hover:bg-muted text-muted-foreground transition-colors flex-shrink-0"><X className="w-4 h-4 sm:w-5 sm:h-5" /></button>
                         </div>
                         <div className="p-4 sm:p-6 overflow-y-auto custom-scrollbar">
                             {/* Order Summary Miniature */}

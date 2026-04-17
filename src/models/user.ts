@@ -24,9 +24,12 @@ const userSchema: Schema<IUser> = new mongoose.Schema(
             type: String,
             required: [true, "Please provide an email"],
             unique: true,
+            lowercase: true,
+            trim: true,
         },
         password: {
             type: String,
+            select: false, // Exclude from queries by default
         },
         isVerified: {
             type: Boolean,
@@ -48,6 +51,8 @@ const userSchema: Schema<IUser> = new mongoose.Schema(
     }
 );
 
-const User: Model<IUser> = mongoose.models.User || mongoose.model<IUser>("User", userSchema);
+// Prevent model recompilation error in serverless environments
+const User: Model<IUser> = 
+    mongoose.models.User || mongoose.model<IUser>("User", userSchema);
 
 export default User;

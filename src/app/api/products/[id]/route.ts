@@ -75,7 +75,7 @@ export async function DELETE(
         }
 
         const { id } = await params;
-        const user = await User.findById(userId);
+        const user = await User.findById(userId).select("+password");
         if (!user) {
             return NextResponse.json({ error: "User not found", success: false }, { status: 404 });
         }

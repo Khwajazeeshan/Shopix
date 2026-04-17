@@ -21,20 +21,23 @@ const productSchema: Schema<IProduct> = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: "Store",
             required: true,
+            index: true,
         },
         sellerId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
             required: true,
+            index: true,
         },
         name: {
             type: String,
             required: [true, "Product name is required"],
+            trim: true,
         },
         description: {
             type: String,
             required: [true, "Description is required"],
-            maxlength: [25, "Description must be max 25 characters"],
+            maxlength: [250, "Description must be max 250 characters"],
         },
         price: {
             type: Number,
@@ -59,6 +62,7 @@ const productSchema: Schema<IProduct> = new mongoose.Schema(
             type: String,
             required: [true, "Category is required"],
             default: "General",
+            index: true,
         },
         rating: {
             type: Number,
@@ -72,6 +76,12 @@ const productSchema: Schema<IProduct> = new mongoose.Schema(
     }
 );
 
-const Product: Model<IProduct> = mongoose.models.Product || mongoose.model<IProduct>("Product", productSchema);
+// Add indexes for common queries
+productSchema.index({ createdAt: -1 });
+productSchema.index({ price: 1 });
+
+// Prevent model recompilation error in serverless environments
+const Product: Model<IProduct> = 
+    mongoose.models.Product || mongoose.model<IProduct>("Product", productSchema);
 
 export default Product;

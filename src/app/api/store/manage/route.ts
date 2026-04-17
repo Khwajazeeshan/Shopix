@@ -94,7 +94,7 @@ export async function DELETE(request: NextRequest) {
             return NextResponse.json({ error: "Password is required", success: false }, { status: 400 });
         }
 
-        const user = await User.findById(userId);
+        const user = await User.findById(userId).select("+password");
         if (!user) {
             return NextResponse.json({ error: "User not found", success: false }, { status: 404 });
         }

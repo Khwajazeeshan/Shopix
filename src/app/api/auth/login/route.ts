@@ -25,8 +25,8 @@ export async function POST(request: NextRequest) {
             }, { status: 429 });
         }
 
-        // Find user
-        const user = await User.findOne({ email });
+        // Find user and explicitly select password field (it's excluded by default for security)
+        const user = await User.findOne({ email }).select("+password");
         if (!user) {
             return NextResponse.json({ message: "User not found", success: false }, { status: 404 });
         }

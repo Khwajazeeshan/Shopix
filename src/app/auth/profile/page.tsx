@@ -6,12 +6,15 @@ import { useRouter } from "next/navigation"
 import Link from "next/link";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { signOut } from "next-auth/react";
+import { useAppDispatch } from "@/src/redux/hooks";
+import { logout as reduxLogout } from "@/src/redux/slices/authSlice";
 import Loader from "@/src/components/Loader"
 import Navbar from "@/src/components/navbar/page"
 import { User, Shield, ShieldAlert, LogOut, Key, Trash2, Edit3, CheckCircle, AlertCircle, X, ArrowLeft, ArrowRight } from "lucide-react"
 
 export default function Profile() {
     const router = useRouter()
+    const dispatch = useAppDispatch()
     const [user, setUser] = useState<any>(null)
     const [showPopup, setShowPopup] = useState(false)
     const [password, setPassword] = useState("")
@@ -21,6 +24,7 @@ export default function Profile() {
     const [editForm, setEditForm] = useState({ name: "", role: "" })
     const [updating, setUpdating] = useState(false)
     const [showPasswordPopup, setShowPasswordPopup] = useState(false)
+    const [isLoggingOut, setIsLoggingOut] = useState(false)
 
     useEffect(() => {
         const getUser = async () => {
@@ -40,15 +44,30 @@ export default function Profile() {
     }, [router])
 
     const handleLogout = async () => {
+        setIsLoggingOut(true)
         try {
+            // Step 1: Sign out from NextAuth
             await signOut({ redirect: false });
+            
+            // Step 2: Clear JWT cookie via custom logout API
             const { data } = await axios.get("/api/auth/logout")
+            
             if (data.success) {
+                // Step 3: Clear Redux state (auth, cart, wishlist, ui)
+                dispatch(reduxLogout())
+                
+                // Step 4: Clear local storage and session storage
+                localStorage.clear()
+                sessionStorage.clear()
+                
                 toast.success(data.message)
-                router.push("/auth/login")
+                
+                // Step 5: Force full page reload to clear all in-memory state
+                window.location.href = "/auth/login"
             }
         } catch (error: any) {
             toast.error(error.response?.data?.message || "Logout failed")
+            setIsLoggingOut(false)
         }
     }
 
@@ -191,13 +210,22 @@ export default function Profile() {
 
                                 <button
                                     onClick={handleLogout}
-                                    className="flex flex-col items-start p-5 rounded-2xl border border-border hover:border-destructive/50 hover:bg-destructive/5 transition-all text-left group"
+                                    disabled={isLoggingOut}
+                                    className={`flex flex-col items-start p-5 rounded-2xl border border-border transition-all text-left group ${
+                                        isLoggingOut
+                                            ? "opacity-50 cursor-not-allowed"
+                                            : "hover:border-destructive/50 hover:bg-destructive/5"
+                                    }`}
                                 >
                                     <div className="w-10 h-10 rounded-full bg-destructive/10 text-destructive flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                                         <LogOut className="w-5 h-5" />
                                     </div>
-                                    <span className="font-bold text-foreground mb-1">Log Out Session</span>
-                                    <span className="text-xs text-muted-foreground">Sign out of your active session on this device.</span>
+                                    <span className="font-bold text-foreground mb-1">
+                                        {isLoggingOut ? "Please wait..." : "Log Out Session"}
+                                    </span>
+                                    <span className="text-xs text-muted-foreground">
+                                        {isLoggingOut ? "Signing you out..." : "Sign out of your active session on this device."}
+                                    </span>
                                 </button>
                             </div>
                         </div>
