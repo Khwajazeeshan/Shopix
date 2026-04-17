@@ -96,13 +96,13 @@ const Chatbot = () => {
                     )}
 
                     {chat.map((msg, i) => (
-                        <div key={i} className={`flex gap-2 w-full items-start animate-in fade-in slide-in-from-bottom-2 duration-500 ${msg.role === 'user' ? 'justify-end flex-row-reverse' : 'justify-start'}`}>
+                        <div key={i} className={`flex gap-2 w-full items-start animate-in fade-in slide-in-from-bottom-2 duration-500 ${msg.role === 'user' ? 'flex-row-reverse' : 'justify-start'}`}>
                             <div className={`w-9 h-9 shrink-0 rounded-2xl flex items-center justify-center border transition-transform duration-300 hover:scale-110 ${msg.role === 'user' ? 'bg-primary text-white border-primary/20 shadow-lg shadow-primary/20' : 'bg-surface text-primary border-border/50 shadow-md'}`}>
                                 {msg.role === 'user' ? <FiUser className="w-4.5 h-4.5" /> : <FiBox className="w-4.5 h-4.5" />}
                             </div>
                             <div className={`max-w-[75%] p-4 rounded-[1.5rem] text-[13px] leading-relaxed font-medium shadow-sm border transition-all hover:shadow-md ${
                                 msg.role === 'user' 
-                                ? 'bg-gradient-to-br from-primary via-primary to-primary-foreground text-white border-transparent rounded-tr-none' 
+                                ? 'bg-gradient-to-br from-primary via-primary to-primary-foreground text-white border-transparent rounded-tr-none ml-auto' 
                                 : 'bg-surface/90 backdrop-blur-md border-border/50 text-foreground rounded-tl-none'
                             }`}>
                                 {msg.content}
