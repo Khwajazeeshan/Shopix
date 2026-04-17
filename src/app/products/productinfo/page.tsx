@@ -15,6 +15,7 @@ import { toast } from "react-hot-toast"
 import Image from "next/image"
 import Link from "next/link"
 import { useSearchParams, useRouter } from "next/navigation"
+import { useSession } from "next-auth/react"
 import { ArrowLeft, ShoppingBag, ShoppingCart, Package, Star, X, CreditCard, Minus, Plus, ShieldCheck, Truck, RotateCcw } from "lucide-react"
 import { useTheme } from "next-themes"
 import { useForm } from "react-hook-form"
@@ -25,7 +26,6 @@ import Navbar from "@/src/components/navbar/page"
 import Footer from "@/src/components/footer/page"
 import ChatWindow from "@/src/components/chat/ChatWindow"
 import { MessageSquare } from "lucide-react"
-import { useSession } from "next-auth/react"
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISH_KEY!);
 
@@ -289,6 +289,11 @@ function ProductContent() {
     }
 
     const handleAddToCart = async () => {
+        if (!session) {
+            toast.error("Please log in to add items to cart");
+            router.push("/auth/login");
+            return;
+        }
         if (!data) return;
         setIsAdding(true)
         try {
@@ -513,7 +518,14 @@ function ProductContent() {
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 mt-1 sm:mt-2">
                                 <button
-                                    onClick={() => setShowOrderModal(true)}
+                                    onClick={() => {
+                                        if (!session) {
+                                            toast.error("Please log in to place an order");
+                                            router.push("/auth/login");
+                                            return;
+                                        }
+                                        setShowOrderModal(true);
+                                    }}
                                     disabled={product.quantity === 0}
                                     className="w-full py-3.5 sm:py-4 px-4 sm:px-6 bg-foreground text-background font-black text-xs sm:text-base rounded-lg sm:rounded-xl hover:bg-foreground/90 disabled:opacity-50 transition-all flex items-center justify-center gap-2 shadow-lg uppercase tracking-wider"
                                 >
