@@ -78,3 +78,62 @@ These are built-in features active behind the scenes across all scopes of the pr
 - **Production Reliability & Testing:** Integrated unit testing (Jest), End-to-End testing (Playwright), and real-time error tracking (Sentry).
 - **Docker Ready:** Built-in multi-stage `Dockerfile` and `docker-compose.yml` configs ensure 5-minute cold bootstraps for containerized deployment hosting.
 - **Tokenized JWT Guards:** Unauthorized access attempts to protected dashboard screens are properly handled natively by deep Next-Auth session intercepts.
+
+---
+
+## 📸 Screenshots
+
+Here is a visual overview of the Shopix platform's core interfaces:
+
+### 🏠 Homepage
+![Homepage](./screenshots/homepage.png)
+*A beautiful masonry and bento-grid display showcase of the global product marketplace.*
+
+### 🤖 AI Chatbot Assistant
+![AI Chatbot Assistant](./screenshots/AIChatbotAssistant.png)
+*Instant support assistant trained to help users navigate shopping and platform inquiries.*
+
+### 🛒 Wishlist Page
+![Wishlist Page](./screenshots/WishlistPage.png)
+*A dedicated space for users to save and manage their favorite products for later purchase.*
+
+### 👤 User Profile
+![User Profile](./screenshots/ProfilePAge.png)
+*A centralized dashboard for customers to manage their account details and settings.*
+
+### 📝 Checkout & Order Form
+![Order Form](./screenshots/Order%20Form.png)
+*Seamless and secure checkout interface for completing product purchases.*
+
+### 🔔 Real-time Notifications
+![Notifications](./screenshots/Notifications.png)
+*Integrated notification system providing real-time updates on orders and account activities.*
+
+### 💬 Live Chat with Seller
+![Chat with Seller](./screenshots/ChatwithSeller.png)
+*Instant messaging interface allowing direct communication between buyers and sellers.*
+
+### 📊 Seller Store Dashboard
+![Seller Store Dashboard](./screenshots/SellerStoreDashboard.png)
+*Comprehensive merchant dashboard for managing inventory, orders, and store performance.*
+
+### 📈 Sales Analytics
+![Sales Analytics](./screenshots/SalesAnalytics.png)
+*Visualized data insights and trends regarding store revenue and order volume.*
+
+### 🛡️ Admin Global Dashboard
+![Admin Dashboard](./screenshots/AdminDashboard.png)
+*Master oversight panel providing macroscopic insights into platform-wide activity and revenue.*
+
+### 👥 Admin User Management
+![Admin User Management](./screenshots/AdminUserManagement.png)
+*Dedicated interface for administrators to moderate and manage the platform's user base.*
+
+### 🏬 Admin Store Management
+![Admin Store Management](./screenshots/AdminStoreManagement.png)
+*Tools for administrators to oversee store statuses and enforce platform guidelines.*
+
+### 📋 Admin Store Review
+![Admin Store Review](./screenshots/AdminReviewingStore.png)
+*Vetting interface for administrators to evaluate and approve or reject new store applications.*
+
